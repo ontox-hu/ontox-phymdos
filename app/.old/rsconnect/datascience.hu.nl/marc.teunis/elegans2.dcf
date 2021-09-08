@@ -1,0 +1,13 @@
+name: elegans2
+title: elegans2
+username: marc.teunis
+account: marc.teunis
+server: datascience.hu.nl
+hostUrl: https://datascience.hu.nl/rsconnect/__api__
+appId: 29
+bundleId: 70
+url: https://datascience.hu.nl:443/rsconnect/celegans/
+when: 1610178998.39384
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: debug.R|tests/data_test.csv|tests/data_test.R|tests/test_preform_dunnett.R

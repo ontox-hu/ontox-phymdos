@@ -1,3 +1,5 @@
+!!!SBtab	Document='example001'
+!!SBtab Document='example001'	TableID='ex_01' TableName='liver_bile_example' TableType='Relation' SBtabVersion='1.0'
 !From	!To	!Enzyme	!Relation
 cholesterol	7a-HO-cholesterol	CYP7A1	converts
 7a-HO-cholesterol	7a-HO-4-cholesten-3-one	3B-HSO	converts

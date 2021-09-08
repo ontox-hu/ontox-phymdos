@@ -1,0 +1,13 @@
+name: ontox_data_entry_dashboard
+title: ontox_data_entry_dashboard
+username: marc.teunis
+account: marc.teunis
+server: datascience.hu.nl
+hostUrl: https://datascience.hu.nl/rsconnect/__api__
+appId: 109
+bundleId: 523
+url: https://datascience.hu.nl:443/rsconnect/ontox-physmap-data-entry/
+when: 1624825659.8921
+lastSyncTime: 1624825659.8921
+asMultiple: FALSE
+asStatic: FALSE

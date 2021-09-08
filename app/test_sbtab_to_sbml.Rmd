@@ -1,0 +1,126 @@
+---
+title: "Test table to SBtab to SBML"
+author: "Marie Corradi"
+date: "10/08/2021"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reticulate)
+conda_create("ontox-app", python_version = "3.8")
+conda_install("ontox-app", "sbtab", pip = TRUE)
+use_condaenv("ontox-app", required = TRUE)
+```
+
+```{r}
+file_test <- here::here('app','ontox_data_entry_dashboard','test.tsv')
+onetable_test <- here::here('app','ontox_data_entry_dashboard','sbtab_table_specifications','reaction_example.tsv')
+file_out <- here::here('app','ontox_data_entry_dashboard','test_data','hynne_model.xml')
+
+# Counts max number of columns
+no_col <- max(count.fields(file_test, sep = "\t"))
+# Import table including white lines to separate tables. Do not forget to account for different number of columns in different tables
+#t1 <- read.table(file_test, sep="\t", fill=TRUE, header=FALSE, quote="", blank.lines.skip=FALSE, col.names=paste0("V", seq(1:no_col)))
+
+#write.table(t1,here::here('app','ontox_data_entry_dashboard','test_data','hynne_model2.tsv'), row.names=FALSE, col.names=FALSE, quote=F, sep="\t")
+
+# Convert table to string that can be recognized as SBtab object later on - broken?
+# temp <- toString(t1)
+# temp <- paste(do.call(paste, c(temp, sep="\t")), collapse="\n")
+
+#file_test2 <- here::here('app','ontox_data_entry_dashboard','test_data','hynne_model2.tsv')
+```
+
+# For an entire model
+
+```{python}
+import sbtab
+import libsbml
+from sbtab import SBtab
+from sbtab import validatorSBtab
+from sbtab import sbtab2sbml
+from pathlib import Path
+
+# from SBtab import SBtabTable
+# from validatorSBtab import ValidateTable
+# from sbtab2sbml import SBtabDocument
+
+
+# Read in TSV file containing SBtab info and definitions file
+sbtab_file   = open(r.file_test,'r')
+file_content = sbtab_file.read()
+sbtab_file.close()
+
+# def_file = open("/home/marie.corradi/ontoxr/app/ontox_data_entry_dashboard/definitions.tsv", "r")
+# def_file_content = def_file.read()
+# def_file.close()
+
+# Make SBtab object
+Sd = SBtab.SBtabDocument()
+Sd.set_filename('test.tsv')
+Sd.set_name('test')
+Sd.add_sbtab_string(file_content,filename='test.tsv')
+
+def_tabl = SBtab.SBtabDocument()
+def_tabl.set_filename('definitions.tsv')
+def_tabl.set_filename('definitions')
+Sd.add_sbtab_string(def_file_content,filename='definitions.tsv')
+
+# Validate the SBtab file and save warnings
+V_obj = validatorSBtab.ValidateDocument(Sd) #, def_tabl
+warnings = V_obj.validate_document()
+print(warnings)
+
+# Convert SBtab file to SBML
+Cd = sbtab2sbml.SBtabDocument(Sd)
+(sbml, warnings) = Cd.convert_to_sbml('31')
+
+# Save SBML xml file (overwrites existing file with the same name)
+myfile = open("test_fromapp.xml", "w")
+myfile.write(sbml)
+myfile.close()
+
+#source_python('table_to_sbml.py')
+```
+
+# For one table only
+
+```{python}
+import sbtab
+import libsbml
+from sbtab import SBtab
+from sbtab import validatorSBtab
+from sbtab import sbtab2sbml
+from pathlib import Path
+
+
+# Read in TSV file containing SBtab info
+sbtab_file   = open(r.onetable_test,'r')
+file_content = sbtab_file.read()
+sbtab_file.close()
+
+# Make SBtab object
+St = SBtab.SBtabTable()
+St.set_filename('reaction_example.tsv')
+St.add_sbtab_string(file_content)
+
+# Validate the SBtab file and save warnings
+V_table = validatorSBtab.ValidateTable(St)
+warnings = V_table.validate_document()
+print(warnings)
+
+# Convert SBtab file to SBML
+Cd = sbtab2sbml.SBtabDocument(Sd)
+(sbml, warnings) = Cd.convert_to_sbml('31')
+
+# Save SBML xml file (overwrites existing file with the same name)
+myfile = open("test_hynne.xml", "w")
+myfile.write(sbml)
+myfile.close
+```
+
+
+```{r}
+sessionInfo()
+```
+

@@ -1,0 +1,5 @@
+!! SBTab Reaction example
+!!SBtab TableID='t_01' SBtabVersion='1.1' TableTitle='Ex 1 - Reaction' TableType='Reaction'			
+ID,ReactionFormula,Identifiers:kegg.reaction,Gene:Symbol		
+R1,tATP + F6P <=> ADP + F16P,R00658,pfk		
+R2,tF16P + H2O <=> F6P + Pi,R01015,fbp
