@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+  <model id="liver_bile_template" name="liver_bile_template">
+    <listOfCompartments>
+      <compartment id="Liver" name="Liver" size="1" constant="true"/>
+      <compartment id="Ileum" name="Ileum" size="1" constant="true"/>
+      <compartment id="Colon" name="Colon" size="1" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="cholesterol" name="cholesterol" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="E7aHOcholesterol" name="7a-HO-cholesterol" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="E7aHO4cholesten3one" name="7a-HO-4-cholesten-3-one" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="E7a12aOH24cholesten3one" name="7a, 12a-(OH)2-4-cholesten-3-one" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="E3a7a12aHO35Bcholestenoicacid" name="3a, 7a, 12a-(HO)3-5B-cholestenoic_acid" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="E3a7a12aHO3cholanoicacid" name="3a,7a,12a-(HO)3-cholanoic_acid (cholic_acis) (TCA)" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="CA" name="CA" compartment="Ileum" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="DCA" name="DCA" compartment="Colon" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species name="7a-HO-cholesterol" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+  </model>
+</sbml>

@@ -1,0 +1,31 @@
+!!!SBtab Document="To test the app and discover how it works (default)"
+!!SBtab TableID="t_1" SBtabVersion="1.0" Document="To test the app and discover how it works (default)" TableType="Reaction" TableName="Reaction"
+!Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Modifier	!Name	!Type	!Symbol	!ID	!SBML:reaction:id	!ReactionFormula	!Location	!Enzyme	!Model	!Pathway	!SubreactionOf	!IsComplete	!IsReversible	!IsInEquilibrium	!IsExchangeReaction	!Flux	!IsNonEnzymatic	!KineticLaw	!Gene	!Operon	!Enzyme:SBML:species:id	!Enzyme:SBML:parameter:id	!BuildReaction	!BuildEnzyme	!BuildEnzymeProduction	!SBOTerm	!Identifiers
+			https://doi.org/10.1016/j.livres.2017.05.001			CYP7A1	Enzyme		CYP7A1		cholesterol <=> 7a-HO-cholesterol		CYP7A1																			
+			https://doi.org/10.1016/j.livres.2017.05.001			3?-HSO	Enzyme		E3BHSO		7a-HO-cholesterol <=> 7a-HO-4-cholesten-3-one		3?-HSO																			
+			https://doi.org/10.1016/j.livres.2017.05.001			CYP8B1	Enzyme		CYP8B1		7a-HO-4-cholesten-3-one <=> 7a, 12a-(OH)2-4-cholesten-3-one		CYP8B1																			
+			https://doi.org/10.1016/j.livres.2017.05.001			CYP27A1	Enzyme		CYP27A1		7a, 12a-(OH)2-4-cholesten-3-one <=> 3a, 7a, 12a-(HO)3-5B-cholestenoic_acid		CYP27A1																			
+			https://doi.org/10.1016/j.livres.2017.05.001			NA	Enzyme		NA		3a, 7a, 12a-(HO)3-5B-cholestenoic_acid <=> 3a,7a,12a-(HO)3-cholanoic_acid (cholic_acis) (TCA)																					
+			https://doi.org/10.1016/j.livres.2017.05.001			BSH	Enzyme		BSH		3a,7a,12a-(HO)3-cholanoic_acid (cholic_acis) (TCA) <=> CA		BSH																			
+			https://doi.org/10.1016/j.livres.2017.05.001			7a-de-HO-ase	Enzyme		E7adeHOase		CA <=> DCA		7a-de-HO-ase																			
+
+!!SBtab TableID="t_2" SBtabVersion="1.0" Document="To test the app and discover how it works (default)" TableType="Compound" TableName="Compound"
+!Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Name	!Type	!Symbol	!ID	!SBML:species:id	!SBML:speciestype:id	!InitialValue	!Unit	!Location	!State	!CompoundSumFormula	!StructureFormula	!Charge	!Mass	!IsConstant	!EnzymeRole	!RegulatorRole	!SBOTerm	!Identifiers
+			https://doi.org/10.1016/j.livres.2017.05.001		cholesterol			cholesterol					Liver							converts			
+			https://doi.org/10.1016/j.livres.2017.05.001		7a-HO-cholesterol			E7aHOcholesterol					Liver							converts			
+			https://doi.org/10.1016/j.livres.2017.05.001		7a-HO-4-cholesten-3-one			E7aHO4cholesten3one					Liver							synthesizes			
+			https://doi.org/10.1016/j.livres.2017.05.001		7a, 12a-(OH)2-4-cholesten-3-one			E7a12aOH24cholesten3one					Liver							oxidates			
+			https://doi.org/10.1016/j.livres.2017.05.001		3a, 7a, 12a-(HO)3-5B-cholestenoic_acid			E3a7a12aHO35Bcholestenoicacid					Liver							conjugates			
+			https://doi.org/10.1016/j.livres.2017.05.001		3a,7a,12a-(HO)3-cholanoic_acid (cholic_acis) (TCA)			E3a7a12aHO3cholanoicacid					Liver							deconjugates			
+			https://doi.org/10.1016/j.livres.2017.05.001		CA			CA					Ileum							converts			
+			https://doi.org/10.1016/j.livres.2017.05.001		DCA			DCA					Colon										
+
+!!SBtab TableID="t_3" SBtabVersion="1.0" Document="To test the app and discover how it works (default)" TableType="Enzyme" TableName="Enzyme"
+!Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Name	!Type	!Symbol	!ID	!CatalysedReaction	!KineticLaw	!Pathway	!Gene	!Identifiers
+			https://doi.org/10.1016/j.livres.2017.05.001		CYP7A1	Enzyme		CYP7A1	cholesterol <=> 7a-HO-cholesterol				
+			https://doi.org/10.1016/j.livres.2017.05.001		3?-HSO	Enzyme		E3BHSO	7a-HO-cholesterol <=> 7a-HO-4-cholesten-3-one				
+			https://doi.org/10.1016/j.livres.2017.05.001		CYP8B1	Enzyme		CYP8B1	7a-HO-4-cholesten-3-one <=> 7a, 12a-(OH)2-4-cholesten-3-one				
+			https://doi.org/10.1016/j.livres.2017.05.001		CYP27A1	Enzyme		CYP27A1	7a, 12a-(OH)2-4-cholesten-3-one <=> 3a, 7a, 12a-(HO)3-5B-cholestenoic_acid				
+			https://doi.org/10.1016/j.livres.2017.05.001		NA	Enzyme		NA	3a, 7a, 12a-(HO)3-5B-cholestenoic_acid <=> 3a,7a,12a-(HO)3-cholanoic_acid (cholic_acis) (TCA)				
+			https://doi.org/10.1016/j.livres.2017.05.001		BSH	Enzyme		BSH	3a,7a,12a-(HO)3-cholanoic_acid (cholic_acis) (TCA) <=> CA				
+			https://doi.org/10.1016/j.livres.2017.05.001		7a-de-HO-ase	Enzyme		E7adeHOase	CA <=> DCA				

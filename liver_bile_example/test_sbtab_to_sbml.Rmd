@@ -13,7 +13,7 @@ use_condaenv("ontox-app", required = TRUE)
 ```
 
 ```{r}
-file_test <- here::here('liver_bile_example','liver_bile_relations.tsv')
+file_test <- here::here('liver_bile_example','liver_bile_template.tsv')
 
 # t1 <- read.table(file_test, sep="\t", fill=TRUE, header=FALSE, quote="")
 # 
@@ -44,9 +44,9 @@ sbtab_file.close()
 
 # Make SBtab object
 Sd = SBtab.SBtabDocument()
-Sd.set_filename('liver_bile_relations.tsv')
-Sd.set_name('liver_bile_example')
-Sd.add_sbtab_string(file_content,filename='liver_bile_relations.tsv')
+Sd.set_filename('liver_bile_template.tsv')
+Sd.set_name('liver_bile_template')
+Sd.add_sbtab_string(file_content,filename='liver_bile_template.tsv')
 
 # Validate the SBtab file and save warnings
 V_obj = validatorSBtab.ValidateDocument(Sd)
@@ -55,10 +55,10 @@ print(warnings)
 
 # Convert SBtab file to SBML
 Cd = sbtab2sbml.SBtabDocument(Sd)
-(sbml, warnings) = Cd.convert_to_sbml('31')
+(sbml, warnings) = Cd.convert_to_sbml('24')
 
 # Save SBML xml file (overwrites existing file with the same name)
-myfile = open("liver_bile_relations.xml", "w")
+myfile = open("liver_bile_template.xml", "w")
 myfile.write(sbml)
 myfile.close()
 ```
