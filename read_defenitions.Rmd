@@ -1,0 +1,297 @@
+---
+title: "test"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Packages
+```{r packages}
+library(tidyverse)
+library(here)
+
+```
+
+
+## Data load
+```{r load}
+sbtab_defenitions <- read_tsv(
+  here(
+    "definitions.tsv"
+  ), 
+  comment = "!!"
+)
+```
+
+
+## Clean column labels
+```{r clean}
+colnames(sbtab_defenitions) <- c("name", 
+                                 "type", 
+                                 "parent", 
+                                 "isshortname", 
+                                 "format", 
+                                 "description"
+                                 )
+```
+
+
+## Sort tables by parent 
+```{r sort}
+compartment_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Compartment"
+    ) %>% 
+  transmute(
+    name
+    )
+
+compound_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Compound"
+    ) %>% 
+  transmute(
+    name
+    )
+
+config_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Config"
+    ) %>% 
+  transmute(
+    name
+    )
+
+definition_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Definition"
+    ) %>% 
+  transmute(
+    name
+    )
+
+enzyme_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Enzyme"
+    ) %>% 
+  transmute(
+    name
+    )
+
+fbcobjective_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "FbcObjective"
+    ) %>% 
+  transmute(
+    name
+    )
+
+gene_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Gene"
+    ) %>% 
+  transmute(
+    name
+    )
+
+layout_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Layout"
+    ) %>% 
+  transmute(
+    name
+    )
+
+measurement_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Measurement"
+    ) %>% 
+  transmute(
+    name
+    )
+
+options_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Options"
+    ) %>% 
+  transmute(
+    name
+    )
+
+position_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Position"
+    ) %>% 
+  transmute(
+    name
+    )
+
+protein_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Protein"
+    ) %>% 
+  transmute(
+    name
+    )
+
+quantity_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Quantity"
+    ) %>% 
+  transmute(
+    name
+    )
+
+quantityinfo_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "QuantityInfo"
+    ) %>% 
+  transmute(
+    name
+    )
+
+quantitymatrix_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "QuantityMatrix"
+    ) %>% 
+  transmute(
+    name
+    )
+
+reaction_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Reaction"
+    ) %>% 
+  transmute(
+    name
+    )
+
+reactionstoichiometry_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "ReactionStoichiometry"
+    ) %>% 
+  transmute(
+    name
+    )
+
+regulator_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Regulator"
+    ) %>% 
+  transmute(
+    name
+    )
+
+relation_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "Relation"
+    ) %>% 
+  transmute(
+    name
+    )
+
+rxnconcontingencylist_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "rxnconContingencyList"
+    ) %>% 
+  transmute(
+    name
+    )
+
+rxnconreactionlist_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "rxnconReactionList"
+    ) %>% 
+  transmute(
+    name
+    )
+
+sparsematrix_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "SparseMatrix"
+    ) %>% 
+  transmute(
+    name
+    )
+
+sparsematrixcolumn_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "SparseMatrixColumn"
+    ) %>% 
+  transmute(
+    name
+    )
+
+sparsematrixordered_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "SparseMatrixOrdered"
+    ) %>% 
+  transmute(
+    name
+    )
+
+sparsematrixrow_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "SparseMatrixRow"
+    ) %>% 
+  transmute(
+    name
+    )
+
+stoichiometricmatrix_cols <- sbtab_defenitions %>%
+  filter(
+    parent == "StoichiometricMatrix"
+    ) %>% 
+  transmute(
+    name
+    )
+
+```
+
+
+## Convert sorted tables to CSV
+```{r convert}
+#Create function for better reproducibility 
+df_to_csv <- function(df, path){
+  readr::write_csv(
+    df,
+    file = here::here(
+      path,
+      paste0(deparse(substitute(df)), ".csv"
+             )
+    )
+  )
+  }
+
+#Use function to write the sorted tables to CSV
+df_to_csv(compound_cols, "columns")
+df_to_csv(compartment_cols, "columns")
+df_to_csv(config_cols, "columns")
+df_to_csv(definition_cols, "columns")
+df_to_csv(enzyme_cols, "columns")
+df_to_csv(fbcobjective_cols, "columns")
+df_to_csv(gene_cols, "columns")
+df_to_csv(layout_cols, "columns")
+df_to_csv(measurement_cols, "columns")
+df_to_csv(options_cols, "columns")
+df_to_csv(position_cols, "columns")
+df_to_csv(protein_cols, "columns")
+df_to_csv(quantity_cols, "columns")
+df_to_csv(quantityinfo_cols, "columns")
+df_to_csv(quantitymatrix_cols, "columns")
+df_to_csv(reaction_cols, "columns")
+df_to_csv(reactionstoichiometry_cols, "columns")
+df_to_csv(regulator_cols, "columns")
+df_to_csv(relation_cols, "columns")
+df_to_csv(rxnconcontingencylist_cols, "columns")
+df_to_csv(rxnconreactionlist_cols, "columns")
+df_to_csv(sparsematrix_cols, "columns")
+df_to_csv(sparsematrixcolumn_cols, "columns")
+df_to_csv(sparsematrixordered_cols, "columns")
+df_to_csv(sparsematrixrow_cols, "columns")
+df_to_csv(stoichiometricmatrix_cols, "columns")
+```
+
