@@ -16,8 +16,8 @@ sbtab_definitions <- sbtab_definitions %>%
 split_def_tables <- split(sbtab_definitions, as_factor(sbtab_definitions$`!IsPartOf`))
 #names(split_def_tables) <- levels(as_factor(sbtab_definitions$`!IsPartOf`))
 table_names <- names(split_def_tables)
-names(table_names) <- c(1:12)
-table_names <- as.list(table_names)
+table_names_df <- tibble(names(split_def_tables))
+names(table_names_df) <- "name"
 
 ## test for function
 df_ori = split_def_tables[[1]]

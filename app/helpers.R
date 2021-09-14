@@ -4,6 +4,7 @@ library(shinydashboard)
 library(shiny)
 library(data.table)
 library(rhandsontable)
+library(shinyjs)
 
 source(
   "sbtab_tables.R"
@@ -62,11 +63,18 @@ displayTabContent <- function(tableTitle){
     fluidRow(
       span(textOutput(paste0(tableTitle,"Meta")), style = "color:red"),
       br(),
-      rHandsontableOutput(tableTitle, height = 200, width = 1000)
+      rHandsontableOutput(tableTitle, height = 400, width = "100%")
     ),
-    fluidRow(DT::dataTableOutput(paste0(
-      "Description", tableTitle
-    )), width = 1000)
+    fluidRow(
+      column(
+        10,
+        DT::dataTableOutput(
+          paste0(
+            "Description", 
+            tableTitle), 
+          width = "100%"), 
+        offset = 0)
+    )
   )
 }
 

@@ -1,138 +1,146 @@
-source("helpers.R")
+# credit: adapted from https://mgei.github.io/post/dynamic-shinydashboard/
+source(
+  "helpers.R"
+)
 
+options(stringsAsFactors = FALSE)
+
+# static tab list
+tab_list_ui <- function() {
+  # concatenate static tabs
+  items <- c(
+    list(
+      tabItem(
+        tabName = "setup",
+        uiOutput("mysetup")
+      )
+    ),
+    lapply(1:12, function(id) {
+      tabItem(
+        tabName = paste0("tab_", id), 
+        uiOutput(paste0("sub_", id))
+      )
+    })
+  )
+  # render
+  do.call(tabItems, items)
+}
+
+# dynamic sub menu
+update_submenu <- function(local) {
+  lapply(split(local$subitems, seq(nrow(local$subitems))), function(x) {
+    menuSubItem(x$name, tabName = paste0("tab_", x$id))
+  })
+}
+
+# ui
 ui <- dashboardPage(
   dashboardHeader(),
   dashboardSidebar(
-    uiOutput("mysidebar")
+    sidebarMenuOutput("mysidebar")
   ),
   dashboardBody(
-    uiOutput("mycontent")
+    tab_list_ui()
   )
-  
 )
 
+# server
 server <- function(input, output, session) {
   
   # This is to get the desired menuItem selected initially. 
   # selected=T seems not to work with a dynamic sidebarMenu.
   observeEvent(session, {
-    updateTabItems(session, "tabs", selected = "initial")
+    updateTabItems(session, "tabs", selected = "setup")
   })
   
-  # Use reactive values when working with Shiny.
-  subitems <- reactiveVal(value = table_names)
+  # render setup
+  output$mysetup <- renderUI({
+    tagList(
+      selectInput("add_subitem", "Add subitem",
+                  choices = table_names),
+      actionButton("add", "add!"),
+      selectInput("rm_subitem", "Remove subitem",
+                  choices = local$subitems$name),
+      actionButton("rm", "remove!")
+    )
+  })
+  
+  # store dynamic tab list and dynamic contents
+  local <- reactiveValues(
+    empty_tabs = as.list(1:12),
+    current_tabs = list(),
+    subitems = data.frame(id = integer(), name = character())
+  )
   
   # dynamic sidebar menu #
-  output$mysidebar <- renderUI({
-    sidebarMenu(id = "tabs",
-                menuItem("Start", tabName = "initial", icon = icon("star"), selected = T),
-                menuItem("Subs", id = "subs", tabName = "subs",  icon = icon("dashboard"), 
-                         startExpanded = F,
-                         lapply(subitems(), function(x) {
-                           menuSubItem(x, tabName = paste0("sub_", x)) } )),
-                menuItem("Setup", tabName = "setup")
-    )
-  })
-  
-  # dynamic content #
-  output$mycontent <- renderUI({
-    
-    itemsSubs <- lapply(subitems(), function(x){
-      tabItem(tabName = paste0("sub_", x), uiOutput(paste0("sub_", x)))
-    })
-    
-    items <- c(
-      list(
-        tabItem(tabName = "initial",
-                "Welcome on the initial page!"
-        )
+  output$mysidebar <- renderMenu({
+    sidebarMenu(
+      id = "tabs",
+      menuItem(
+        "Setup", tabName = "setup", 
+        icon = icon("gear"), selected = T
       ),
-      
-      itemsSubs,
-      
-      list(
-        tabItem(tabName = "setup",
-                
-                selectInput("add_subitem", "Add subitem", choices = subitems()),
-                actionButton("add", "Add table"),
-                
-                selectInput("rm_subitem", "Remove subitem", choices = subitems()),
-                actionButton("rm", "Remove Table")
-        )
+      menuItem(
+        "Subs", id = "subs", tabName = "subs", 
+        icon = icon("dashboard"), startExpanded = T,
+        update_submenu(local)
       )
     )
-    
-    do.call(tabItems, items)
   })
   
-  # dynamic content in the dynamic subitems #
-  observe({ 
-    lapply(subitems(), function(x){
-      output[[paste0("sub_", x)]] <- renderUI ({
-        list(fluidRow(
-          box("hello"),
-          #rHandsontableOutput(table_names["Reaction"], height = 200, width = 1000)
-          #displayTabContent(table_names[[1]])
-        )
-        )
-      })
-      # output[[table_names[[1]]]] <- outputTable(table_names[[1]])
-      # output[[paste0("Description",table_names[[1]])]] <- outputTableDescription(table_names[[1]])
-      # 
-      # output[[table_names[[2]]]] <- outputTable(table_names[[2]])
-      # output[[paste0("Description",table_names[[2]])]] <- outputTableDescription(table_names[[2]])
-      # 
-      # output[[table_names[[3]]]] <- outputTable(table_names[[3]])
-      # output[[paste0("Description",table_names[[3]])]] <- outputTableDescription(table_names[[3]])
-      # 
-      # output[[table_names[[4]]]] <- outputTable(table_names[[4]])
-      # output[[paste0("Description",table_names[[4]])]] <- outputTableDescription(table_names[[4]])
-      # 
-      # output[[table_names[[5]]]] <- outputTable(table_names[[5]])
-      # output[[paste0("Description",table_names[[5]])]] <- outputTableDescription(table_names[[5]])
-      # 
-      # output[[table_names[[6]]]] <- outputTable(table_names[[6]])
-      # output[[paste0("Description",table_names[[6]])]] <- outputTableDescription(table_names[[6]])
-      # 
-      # output[[table_names[[7]]]] <- outputTable(table_names[[7]])
-      # output[[paste0("Description",table_names[[7]])]] <- outputTableDescription(table_names[[7]])
-      # 
-      # output[[table_names[[8]]]] <- outputTable(table_names[[8]])
-      # output[[paste0("Description",table_names[[8]])]] <- outputTableDescription(table_names[[8]])
-      # 
-      # output[[table_names[[9]]]] <- outputTable(table_names[[9]])
-      # output[[paste0("Description",table_names[[9]])]] <- outputTableDescription(table_names[[9]])
-      # 
-      # output[[table_names[[10]]]] <- outputTable(table_names[[10]])
-      # output[[paste0("Description",table_names[[10]])]] <- outputTableDescription(table_names[[10]])
-      # 
-      # output[[table_names[[11]]]] <- outputTable(table_names[[11]])
-      # output[[paste0("Description",table_names[[11]])]] <- outputTableDescription(table_names[[11]])
-      # 
-      # output[[table_names[[12]]]] <- outputTable(table_names[[12]])
-      # output[[paste0("Description",table_names[[12]])]] <- outputTableDescription(table_names[[12]])
-    })
+  # debugging
+  observe({
+    print(paste0("current tabs = ", 
+                 paste0(unlist(local$current_tabs), collapse = " ")))
+    print(paste0("empty tabs = ", 
+                 paste0(unlist(local$empty_tabs), collapse = " ")))
   })
   
-  # add and remove tabs
+  # add a tab
   observeEvent(input$add, {
     req(input$add_subitem)
-    
-    s <- c(subitems(), input$add_subitem)
-    subitems(s)
-    
+    req(length(local$empty_tabs) > 0)
+    # id of next tab to fill
+    id <- min(unlist(local$empty_tabs))
+    # update empty/current tab lists
+    local$empty_tabs <- local$empty_tabs[-which(local$empty_tabs == id)]
+    local$current_tabs <- append(local$current_tabs, id)
+    # tab name
+    subitem <- input$add_subitem
+    local$subitems <- rbind(local$subitems, 
+                            data.frame(id = id, name = subitem))
     updateTabItems(session, "tabs", selected = "setup")
+    
+    # dynamic content in the dynamic subitem
+    output[[ paste0("sub_", id) ]] <- renderUI ({
+      list(
+        fluidRow(
+          displayTabContent(table_names[which(table_names_df$name == subitem)])
+        )
+      )
+    })
+    
+    # update dynamic content in the created subitem
+     output[[table_names[which(table_names_df$name == subitem)]]] <- outputTable(table_names[which(table_names_df$name == subitem)])
+     output[[paste0("Description", table_names[which(table_names_df$name == subitem)])]] <- outputTableDescription(table_names[which(table_names_df$name == subitem)])
   })
   
+  # remove a tab
   observeEvent(input$rm, {
     req(input$rm_subitem)
-    
-    s <- subitems()[-which(subitems() == input$rm_subitem)]
-    subitems(s)
-    
+    req(length(local$empty_tabs) < 10)
+    # id of tab to fill
+    subitem_ind <- which(local$subitems$name == input$rm_subitem)
+    subitem <- local$subitems[subitem_ind,]
+    # update empty/current tab lists
+    local$empty_tabs <- append(local$empty_tabs, subitem$id)
+    local$current_tabs <- local$current_tabs[-which(local$current_tabs == subitem$id)]
+    # reset deleted tab
+    shinyjs::reset(paste0("sub_", subitem$id))
+    # tab name
+    local$subitems <- local$subitems[-subitem_ind,]
     updateTabItems(session, "tabs", selected = "setup")
   })
-  
 }
 
 shinyApp(ui, server)
