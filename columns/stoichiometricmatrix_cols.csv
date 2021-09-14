@@ -1,6 +1,2 @@
-name
-ReactionID
-Stoichiometry
-Substrate
-Product
-Location
+ReactionID,Stoichiometry,Substrate,Product,Location
+ReactionID,Stoichiometry,Substrate,Product,Location

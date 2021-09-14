@@ -7,7 +7,7 @@ library(rhandsontable)
 
 source(
   "sbtab_tables.R"
-  )
+)
 
 
 #' @title Export app sbtab table to SbTab S4 object
@@ -53,7 +53,7 @@ displayMenuItemUI <- function(id){
       icon = icon("dashboard")
     )
   )
-
+  
 }
 
 displayTabContent <- function(tableTitle){

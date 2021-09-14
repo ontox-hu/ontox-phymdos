@@ -20,7 +20,7 @@ library(here)
 ```{r load}
 sbtab_defenitions <- read_tsv(
   here(
-    "definitions.tsv"
+    "columns", "definitions.tsv"
   ), 
   comment = "!!"
 )
@@ -29,225 +29,136 @@ sbtab_defenitions <- read_tsv(
 
 ## Clean column labels
 ```{r clean}
-colnames(sbtab_defenitions) <- c("name", 
-                                 "type", 
-                                 "parent", 
-                                 "isshortname", 
-                                 "format", 
-                                 "description"
+colnames(sbtab_defenitions) <- c("ComponentName", 
+                                 "ComponentType", 
+                                 "IsPartOf", 
+                                 "Format", 
+                                 "Description"
                                  )
 ```
 
 
-## Sort tables by parent 
+## Sort tables by IsPartOf 
 ```{r sort}
 compartment_cols <- sbtab_defenitions %>%
   filter(
-    parent == "Compartment"
+    IsPartOf == "Compartment"
     ) %>% 
   transmute(
-    name
-    )
+    ComponentName
+    ) %>% 
+  t() %>% as_tibble()
+colnames(compartment_cols) <- compartment_cols[1,]
 
 compound_cols <- sbtab_defenitions %>%
   filter(
-    parent == "Compound"
+    IsPartOf == "Compound"
     ) %>% 
   transmute(
-    name
-    )
-
-config_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "Config"
+    ComponentName
     ) %>% 
-  transmute(
-    name
-    )
+  t() %>% as_tibble()
+colnames(compound_cols) <- compound_cols[1,]
 
 definition_cols <- sbtab_defenitions %>%
   filter(
-    parent == "Definition"
+    IsPartOf == "Definition"
     ) %>% 
   transmute(
-    name
-    )
+    ComponentName
+    ) %>% 
+  t() %>% as_tibble()
+colnames(definition_cols) <- definition_cols[1,]
 
 enzyme_cols <- sbtab_defenitions %>%
   filter(
-    parent == "Enzyme"
+    IsPartOf == "Enzyme"
     ) %>% 
   transmute(
-    name
-    )
-
-fbcobjective_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "FbcObjective"
+    ComponentName
     ) %>% 
-  transmute(
-    name
-    )
+  t() %>% as_tibble()
+colnames(enzyme_cols) <- enzyme_cols[1,]
 
 gene_cols <- sbtab_defenitions %>%
   filter(
-    parent == "Gene"
+    IsPartOf == "Gene"
     ) %>% 
   transmute(
-    name
-    )
-
-layout_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "Layout"
+    ComponentName
     ) %>% 
-  transmute(
-    name
-    )
-
-measurement_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "Measurement"
-    ) %>% 
-  transmute(
-    name
-    )
-
-options_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "Options"
-    ) %>% 
-  transmute(
-    name
-    )
-
-position_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "Position"
-    ) %>% 
-  transmute(
-    name
-    )
+  t() %>% as_tibble()
+colnames(gene_cols) <- gene_cols[1,]
 
 protein_cols <- sbtab_defenitions %>%
   filter(
-    parent == "Protein"
+    IsPartOf == "Protein"
     ) %>% 
   transmute(
-    name
-    )
+    ComponentName
+    ) %>% 
+  t() %>% as_tibble()
+colnames(protein_cols) <- protein_cols[1,]
 
 quantity_cols <- sbtab_defenitions %>%
   filter(
-    parent == "Quantity"
+    IsPartOf == "Quantity"
     ) %>% 
   transmute(
-    name
-    )
-
-quantityinfo_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "QuantityInfo"
+    ComponentName
     ) %>% 
-  transmute(
-    name
-    )
+  t() %>% as_tibble()
+colnames(quantity_cols) <- quantity_cols[1,]
 
 quantitymatrix_cols <- sbtab_defenitions %>%
   filter(
-    parent == "QuantityMatrix"
+    IsPartOf == "QuantityMatrix"
     ) %>% 
   transmute(
-    name
-    )
+    ComponentName
+    ) %>% 
+  t() %>% as_tibble()
+colnames(quantitymatrix_cols) <- quantitymatrix_cols[1,]
 
 reaction_cols <- sbtab_defenitions %>%
   filter(
-    parent == "Reaction"
+    IsPartOf == "Reaction"
     ) %>% 
   transmute(
-    name
-    )
-
-reactionstoichiometry_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "ReactionStoichiometry"
+    ComponentName
     ) %>% 
-  transmute(
-    name
-    )
+  t() %>% as_tibble()
+colnames(reaction_cols) <- reaction_cols[1,]
 
 regulator_cols <- sbtab_defenitions %>%
   filter(
-    parent == "Regulator"
+    IsPartOf == "Regulator"
     ) %>% 
   transmute(
-    name
-    )
+    ComponentName
+    ) %>% 
+  t() %>% as_tibble()
+colnames(regulator_cols) <- regulator_cols[1,]
 
 relation_cols <- sbtab_defenitions %>%
   filter(
-    parent == "Relation"
+    IsPartOf == "Relation"
     ) %>% 
   transmute(
-    name
-    )
-
-rxnconcontingencylist_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "rxnconContingencyList"
+    ComponentName
     ) %>% 
-  transmute(
-    name
-    )
-
-rxnconreactionlist_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "rxnconReactionList"
-    ) %>% 
-  transmute(
-    name
-    )
-
-sparsematrix_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "SparseMatrix"
-    ) %>% 
-  transmute(
-    name
-    )
-
-sparsematrixcolumn_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "SparseMatrixColumn"
-    ) %>% 
-  transmute(
-    name
-    )
-
-sparsematrixordered_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "SparseMatrixOrdered"
-    ) %>% 
-  transmute(
-    name
-    )
-
-sparsematrixrow_cols <- sbtab_defenitions %>%
-  filter(
-    parent == "SparseMatrixRow"
-    ) %>% 
-  transmute(
-    name
-    )
+  t() %>% as_tibble()
+colnames(relation_cols) <- relation_cols[1,]
 
 stoichiometricmatrix_cols <- sbtab_defenitions %>%
   filter(
-    parent == "StoichiometricMatrix"
+    IsPartOf == "StoichiometricMatrix"
     ) %>% 
   transmute(
-    name
-    )
+    ComponentName
+    ) %>% 
+  t() %>% as_tibble()
+colnames(stoichiometricmatrix_cols) <- stoichiometricmatrix_cols[1,] 
 
 ```
 
@@ -269,29 +180,15 @@ df_to_csv <- function(df, path){
 #Use function to write the sorted tables to CSV
 df_to_csv(compound_cols, "columns")
 df_to_csv(compartment_cols, "columns")
-df_to_csv(config_cols, "columns")
 df_to_csv(definition_cols, "columns")
 df_to_csv(enzyme_cols, "columns")
-df_to_csv(fbcobjective_cols, "columns")
 df_to_csv(gene_cols, "columns")
-df_to_csv(layout_cols, "columns")
-df_to_csv(measurement_cols, "columns")
-df_to_csv(options_cols, "columns")
-df_to_csv(position_cols, "columns")
 df_to_csv(protein_cols, "columns")
 df_to_csv(quantity_cols, "columns")
-df_to_csv(quantityinfo_cols, "columns")
 df_to_csv(quantitymatrix_cols, "columns")
 df_to_csv(reaction_cols, "columns")
-df_to_csv(reactionstoichiometry_cols, "columns")
 df_to_csv(regulator_cols, "columns")
 df_to_csv(relation_cols, "columns")
-df_to_csv(rxnconcontingencylist_cols, "columns")
-df_to_csv(rxnconreactionlist_cols, "columns")
-df_to_csv(sparsematrix_cols, "columns")
-df_to_csv(sparsematrixcolumn_cols, "columns")
-df_to_csv(sparsematrixordered_cols, "columns")
-df_to_csv(sparsematrixrow_cols, "columns")
 df_to_csv(stoichiometricmatrix_cols, "columns")
 ```
 

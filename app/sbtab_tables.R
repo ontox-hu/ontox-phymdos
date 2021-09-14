@@ -3,19 +3,21 @@
 library(tidyverse)
 ## tables: 
 sbtab_definitions <- readr::read_tsv("definitions.tsv", 
-  skip = 1, col_names = TRUE
+                                     skip = 1, col_names = TRUE
 )
 
 ## recode `Type` column
-sbtab_definitions$`!Format` %>% unique()
+#sbtab_definitions$`!Format` %>% unique()
 sbtab_definitions <- sbtab_definitions %>%
   mutate(r_format = ifelse(`!Format` == "string", "character", `!Format`)) %>%
   mutate(r_format = ifelse(`!Format` == "float", "double", r_format)) %>%
   mutate(r_format = ifelse(`!Format` == "Boolean", "logical", r_format)) 
 
 split_def_tables <- split(sbtab_definitions, as_factor(sbtab_definitions$`!IsPartOf`))
-names(split_def_tables) <- levels(as_factor(sbtab_definitions$`!IsPartOf`))
+#names(split_def_tables) <- levels(as_factor(sbtab_definitions$`!IsPartOf`))
 table_names <- names(split_def_tables)
+names(table_names) <- c(1:12)
+table_names <- as.list(table_names)
 
 ## test for function
 df_ori = split_def_tables[[1]]
@@ -42,7 +44,7 @@ make_sbtab_table_on_definition <- function(df_ori){
     if(type_char == "character"){
       df[,table_column] <- df[, table_column] %>% as.character()
     } 
-     
+    
     if(type_char == "logical"){
       df[,table_column] <- df[,table_column] %>% as.logical()
     }
@@ -52,9 +54,9 @@ make_sbtab_table_on_definition <- function(df_ori){
     }
     
     df[, table_column]
-  
-  }  
     
+  }  
+  
   #change_col_type(df = table_spine, table_column = names(table_spine[,1]))
   
   df_fin <- map_df(
@@ -68,8 +70,8 @@ make_sbtab_table_on_definition <- function(df_ori){
   
   return(df_fin)
   
-  }
-  
+}
+
 map(
   .x = split_def_tables,
   make_sbtab_table_on_definition
