@@ -7,14 +7,15 @@ sbtab_definitions <- readr::read_tsv("definitions.tsv",
 )
 
 ## recode `Type` column
-#sbtab_definitions$`!Format` %>% unique()
 sbtab_definitions <- sbtab_definitions %>%
   mutate(r_format = ifelse(`!Format` == "string", "character", `!Format`)) %>%
   mutate(r_format = ifelse(`!Format` == "float", "double", r_format)) %>%
   mutate(r_format = ifelse(`!Format` == "Boolean", "logical", r_format)) 
 
+## split tables
 split_def_tables <- split(sbtab_definitions, as_factor(sbtab_definitions$`!IsPartOf`))
-#names(split_def_tables) <- levels(as_factor(sbtab_definitions$`!IsPartOf`))
+
+## define tablenames to vector and dataframe
 table_names <- names(split_def_tables)
 table_names_df <- tibble(names(split_def_tables))
 names(table_names_df) <- "name"

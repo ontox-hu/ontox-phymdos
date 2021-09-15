@@ -56,12 +56,18 @@ server <- function(input, output, session) {
   # render setup
   output$mysetup <- renderUI({
     tagList(
-      selectInput("add_subitem", "Add subitem",
-                  choices = table_names),
-      actionButton("add", "add!"),
-      selectInput("rm_subitem", "Remove subitem",
-                  choices = local$subitems$name),
-      actionButton("rm", "remove!")
+        textInput("documentname", "Please name your document"),
+        selectInput("sbtab_version", "Which SBtab Version do you need (1.0 default)?", 
+                    c("0.8", "0.9", "1.0"), selected = "1.0"),
+        selectInput("add_subitem", "Add subitem",
+                    choices = table_names),
+        actionButton("add", "add!"),
+        selectInput("rm_subitem", "Remove subitem",
+                    choices = local$subitems$name),
+        actionButton("rm", "remove!"),
+        br(),
+        br(),
+        downloadButton("download", "Download tsv")
     )
   })
   
@@ -111,7 +117,7 @@ server <- function(input, output, session) {
                             data.frame(id = id, name = subitem))
     updateTabItems(session, "tabs", selected = "setup")
     
-    # dynamic content in the dynamic subitem
+    # dynamic content in the selected table
     output[[ paste0("sub_", id) ]] <- renderUI ({
       list(
         fluidRow(
@@ -120,7 +126,7 @@ server <- function(input, output, session) {
       )
     })
     
-    # update dynamic content in the created subitem
+    # update dynamic content in the created table
      output[[table_names[which(table_names_df$name == subitem)]]] <- outputTable(table_names[which(table_names_df$name == subitem)])
      output[[paste0("Description", table_names[which(table_names_df$name == subitem)])]] <- outputTableDescription(table_names[which(table_names_df$name == subitem)])
   })
@@ -128,7 +134,7 @@ server <- function(input, output, session) {
   # remove a tab
   observeEvent(input$rm, {
     req(input$rm_subitem)
-    req(length(local$empty_tabs) < 10)
+    req(length(local$empty_tabs) < 12)
     # id of tab to fill
     subitem_ind <- which(local$subitems$name == input$rm_subitem)
     subitem <- local$subitems[subitem_ind,]
@@ -141,6 +147,29 @@ server <- function(input, output, session) {
     local$subitems <- local$subitems[-subitem_ind,]
     updateTabItems(session, "tabs", selected = "setup")
   })
+  
+  # format the tab content to be compatible with .xml conversion 
+  observeEvent(input$documentname, {
+    cat(paste0('!!!SBtab Document="', input$documentname, '"'), file = "physmap.tsv", sep = "\n")
+    #Convert to R object
+    x <- hot_to_r(
+      for(is.element(table_names[which(table_names_df$name == subitem)], table_names_df$name))
+      {paste0("input$",table_names_df$name[which(table_names_df$name == subitem)])}
+      )
+    # Convert column names to SBtab format
+    colnames(x) <- paste0("!", colnames(x))
+    # Write in table header
+    cat(paste0('!!SBtab TableID="t_',subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$documentname, '"',' TableType="',subitem, '"',' TableName="',subitem, '"'), file = "physmap.tsv", sep = "\n", append = T)
+    # Write in table
+    cat(write.table(x, row.names=FALSE, na = "", quote=F, sep="\t"), file = "physmap.tsv", sep = "\n", append = T)
+  })
+  
+  # download tab content to .tsv
+  output$download <- downloadHandler(
+    filename = "physmap.tsv",
+    content = function(file) {
+      file.copy("physmap.tsv", file) 
+    })
 }
 
 shinyApp(ui, server)
