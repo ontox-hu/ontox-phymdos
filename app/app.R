@@ -106,7 +106,7 @@ server <- function(input, output, session) {
   observeEvent(input$set, {
     req(input$set_documentname)
     # Set documentname
-    documentname_set <- paste0('!!!SBtab Document="', input$documentname, '"') %>% as.character()
+    documentname_set <- paste0('!!!SBtab Document="', input$set_documentname, '"') %>% as.character()
     write_lines(documentname_set, file = "physmap.tsv")
   })
   
@@ -129,48 +129,51 @@ server <- function(input, output, session) {
     output[[ paste0("sub_", id) ]] <- renderUI ({
       list(
         tabItem(
-          tabName = subitem,
+          tabName = paste0(subitem, "_hot"),
           fluidRow(
-            rHandsontableOutput(subitem, height = 400, width = "100%")
+            rHandsontableOutput(paste0(subitem, "_hot"), 
+                                height = 400, 
+                                width = "100%")
           ),
           fluidRow(
             column(
               10,
-              DT::dataTableOutput(
-                paste0(
-                  "Description", 
-                  subitem), 
-                width = "100%"), 
+              DT::dataTableOutput(paste0("Description", subitem), 
+                                  width = "100%"), 
               offset = 0)
+            )
           )
         )
-      )
-    })
+      })
     
     # make table a reactive dataframe
     df <- sbtab_tables_list[[subitem]]
     values <- reactiveValues(data = df)
     
     # save hot values to reactive dataframe
-    observeEvent(input[[subitem]], {
-      values$data <- hot_to_r(input[[subitem]])
-    
-    # update dynamic content in the created table
-    output[[subitem]] <- renderRHandsontable({
-      rhandsontable(values$data, rowHeaders = NULL) 
+    observeEvent(input[[paste0(subitem, "_hot")]], {
+      values$data <- hot_to_r(input[[paste0(subitem, "_hot")]])
+      
+      # update dynamic content in the created table
+      output[[paste0(subitem, "_hot")]] <- renderRHandsontable({
+        rhandsontable(values$data, rowHeaders = NULL) 
       })
-    output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
-    
-    # Convert column names to SBtab format
-    tableValues <- values$data
-    set_cols(tableValues)
-    # Write in table header
-    tableheader <- 
-      paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
-  })
-    
-    write_lines(tableheader, file = "physmap.tsv", append = T)
-    write_tsv(tableValues, file = "physmap.tsv", col_names = T, append = T)
+      
+      # output description table
+      output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
+      
+      # Convert column names to SBtab format
+      # tableValues <- values$data
+      # set_cols(tableValues)
+      
+      # Write in table header
+      # tableheader <- 
+      #   paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
+      
+      # Write table header and columns to file
+      # write_lines(tableheader, file = "physmap.tsv", append = T)
+      # write_tsv(tableValues, file = "physmap.tsv", col_names = T, append = T)
+      })
     })
   
   # remove a tab
@@ -194,17 +197,22 @@ server <- function(input, output, session) {
   # # format the tab content to be compatible with .xml conversion
   # observeEvent(input$values$data, {
   #   subitem <- input$add_subitem
-  #   cat(paste0('!!!SBtab Document="', input$documentname, '"'), file = "physmap.tsv", sep = "\n")
+  #   # cat(paste0('!!!SBtab Document="', input$documentname, '"'), file = "physmap.tsv", sep = "\n")
   #   tableValues <- values$data
   #   # Convert column names to SBtab format
-  #   colnames(values$data) <- paste0("!", colnames(values$data))
+  #   set_cols(tableValues)
+  #   # colnames(values$data) <- paste0("!", colnames(values$data))
   #   # Write in table header
-  #   cat(paste0('!!SBtab TableID="t_',input$add_subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$documentname, '"',' TableType="',input$add_subitem, '"',' TableName="',input$add_subitem, '"'), file = "physmap.tsv", sep = "\n", append = T)
+  #   tableheader <- 
+  #     paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
+  #   # cat(paste0('!!SBtab TableID="t_',input$add_subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$documentname, '"',' TableType="',input$add_subitem, '"',' TableName="',input$add_subitem, '"'), file = "physmap.tsv", sep = "\n", append = T)
   #   # Write in table
-  #   write.table(tableValues, row.names=FALSE, na = "", quote=F, sep="\t", file = "test.tsv", append = T)
-  #   
-  #   cat(values$data, file = "physmap.tsv", sep = "\n", append = T)
-  #   cat(paste0(input$add_subitem, input$Reaction, "Hello2"), file = "physmap.tsv", sep = "\n", append = T)
+  #   write_lines(tableheader, file = "physmap.tsv", append = T)
+  #   write_tsv(tableValues, file = "physmap.tsv", col_names = T, append = T)
+  #   # write.table(tableValues, row.names=FALSE, na = "", quote=F, sep="\t", file = "test.tsv", append = T)
+  # 
+  #   # cat(values$data, file = "physmap.tsv", sep = "\n", append = T)
+  #   # cat(paste0(input$add_subitem, input$Reaction, "Hello2"), file = "physmap.tsv", sep = "\n", append = T)
   # })
     
   
