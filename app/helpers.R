@@ -25,13 +25,12 @@ sbtab_app_table_to_SbTab <- function(){
   
 }
 
+# Function to add ! to colnames
 set_cols <- function(x){
   names <- paste0("!", colnames(x))
-  item <- names %>% t() %>% as_tibble()
-  names(item) <- item[1,] %>% as.character()
-  item <- item[-1,]
+  x <- rlang::set_names(x, names)
+  names(x) <- names(x) %>% as.character()
 }
-
 
 # values <- list() 
 # 

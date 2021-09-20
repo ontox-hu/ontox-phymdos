@@ -39,19 +39,18 @@ table_empty[2,1] <- tableheader
 table_empty <- rbind(table_empty, item)
 summary(table_empty)
 
+names(sbtab_tables_list)
 
 # Set documentname and table header per table
 documentname <- paste0('!!!SBtab Document="', "test", '"') %>% as.character()
 tableheader <- paste0('!!SBtab TableID="t_', "Compound", '"', ' SBtabVersion="', "inputsbtab_version$", '"',' Document="', "test", '"',' TableType="', "Compound", '"',' TableName="', "Compound", '"')
 
-# Function to 
+# Function to add ! to colnames
 set_cols <- function(x){
   names <- paste0("!", colnames(x))
-  item <- names %>% t() %>% as_tibble(.name_repair = "minimal")
-  names(item) <- item[1,] %>% as.character()
-  item <- item[-1,]
-  item <- item[1,]
-  }
+  x <- rlang::set_names(x, names)
+  names(x) <- names(x) %>% as.character()
+}
 
 # Write .tsv document
 write_lines(documentname, file = "test.tsv")

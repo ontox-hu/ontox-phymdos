@@ -1,4 +1,2 @@
-!!!SBtab Document="test"
-!!SBtab TableID="t_Compound" SBtabVersion="inputsbtab_version$" Document="test" TableType="Compound" TableName="Compound"
 !Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Name	!Type	!Symbol	!ID	!SBML:species:id	!SBML:speciestype:id	!InitialValue	!Unit	!Location	!State	!CompoundSumFormula	!StructureFormula	!Charge	!Mass	!IsConstant	!EnzymeRole	!RegulatorRole	!SBOTerm	!Identifiers
-NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA
+																							

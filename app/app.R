@@ -46,11 +46,6 @@ ui <- dashboardPage(
 
 # server
 server <- function(input, output, session) {
-  observeEvent(input$documentname, {
-  # format a file containing tab content compatible with .xml conversion 
-  document <- write_lines(paste0('!!!SBtab Document="', input$documentname, '"'), file = "physmap.tsv", sep = "\n")
-  })
-  
   # This is to get the desired menuItem selected initially. 
   # selected=T seems not to work with a dynamic sidebarMenu.
   observeEvent(session, {
@@ -60,15 +55,16 @@ server <- function(input, output, session) {
   # render setup
   output$mysetup <- renderUI({
     tagList(
-        textInput("documentname", "Please name your document", placeholder = "Map name"),
+        textInput("set_documentname", "Please name your document", placeholder = "Map name"),
+        actionButton("set", "Set"),
         selectInput("sbtab_version", "Which SBtab Version do you need (1.0 default)?", 
                     c("0.8", "0.9", "1.0"), selected = "1.0"),
         selectInput("add_subitem", "Add subitem",
                     choices = table_names),
-        actionButton("add", "add!"),
+        actionButton("add", "Add"),
         selectInput("rm_subitem", "Remove subitem",
                     choices = local$subitems$name),
-        actionButton("rm", "remove!"),
+        actionButton("rm", "Remove"),
         br(),
         br(),
         downloadButton("download", "Download tsv")
@@ -104,6 +100,14 @@ server <- function(input, output, session) {
                  paste0(unlist(local$current_tabs), collapse = " ")))
     print(paste0("empty tabs = ", 
                  paste0(unlist(local$empty_tabs), collapse = " ")))
+  })
+  
+  # set document header
+  observeEvent(input$set, {
+    req(input$set_documentname)
+    # Set documentname
+    documentname_set <- paste0('!!!SBtab Document="', input$documentname, '"') %>% as.character()
+    write_lines(documentname_set, file = "physmap.tsv")
   })
   
   # add a tab
@@ -150,23 +154,24 @@ server <- function(input, output, session) {
     # save hot values to reactive dataframe
     observeEvent(input[[subitem]], {
       values$data <- hot_to_r(input[[subitem]])
-      
-      # Convert column names to SBtab format
-      tableValues <- values$data
-      colnames(tableValues) <- paste0("!", colnames(tableValues))
-      # Write in table header
-      tableitem <- write_lines(paste(paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"'), 
-                                   write.table(tableValues, row.names=FALSE, na = "", quote=F, sep="\t", file = "physmap.tsv"), sep = "\n"), file = "physmap.tsv")
-      # Write in table
-    #  subitem <- write.table(tableValues, row.names=FALSE, na = "", quote=F, sep="\t", file = "physmap.tsv", append = T)
-      fullDocument <- write_lines(paste(document, tableitem))
-      })
     
     # update dynamic content in the created table
-    output[[subitem]] <- renderRHandsontable({rhandsontable(values$data, rowHeaders = NULL) })
+    output[[subitem]] <- renderRHandsontable({
+      rhandsontable(values$data, rowHeaders = NULL) 
+      })
     output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
     
+    # Convert column names to SBtab format
+    tableValues <- values$data
+    set_cols(tableValues)
+    # Write in table header
+    tableheader <- 
+      paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
   })
+    
+    write_lines(tableheader, file = "physmap.tsv", append = T)
+    write_tsv(tableValues, file = "physmap.tsv", col_names = T, append = T)
+    })
   
   # remove a tab
   observeEvent(input$rm, {
