@@ -5,6 +5,7 @@ library(shiny)
 library(data.table)
 library(rhandsontable)
 library(shinyjs)
+library(berryFunctions)
 
 source(
   "sbtab_tables.R"
@@ -24,7 +25,12 @@ sbtab_app_table_to_SbTab <- function(){
   
 }
 
-
+set_cols <- function(x){
+  names <- paste0("!", colnames(x))
+  item <- names %>% t() %>% as_tibble()
+  names(item) <- item[1,] %>% as.character()
+  item <- item[-1,]
+}
 
 
 # values <- list() 
@@ -57,26 +63,26 @@ displayMenuItemUI <- function(id){
   
 }
 
-displayTabContent <- function(tableTitle){
-  tabItem(
-    tabName = tableTitle,
-    fluidRow(
-      span(textOutput(paste0(tableTitle,"Meta")), style = "color:red"),
-      br(),
-      rHandsontableOutput(tableTitle, height = 400, width = "100%")
-    ),
-    fluidRow(
-      column(
-        10,
-        DT::dataTableOutput(
-          paste0(
-            "Description", 
-            tableTitle), 
-          width = "100%"), 
-        offset = 0)
-    )
-  )
-}
+# displayTabContent <- function(tableTitle){
+#   tabItem(
+#     tabName = tableTitle,
+#     fluidRow(
+#       # span(textOutput(paste0(tableTitle,"Meta")), style = "color:red"),
+#       # br(),
+#       rHandsontableOutput(tableTitle, height = 400, width = "100%")
+#     ),
+#     fluidRow(
+#       column(
+#         10,
+#         DT::dataTableOutput(
+#           paste0(
+#             "Description", 
+#             tableTitle), 
+#           width = "100%"), 
+#         offset = 0)
+#     )
+#   )
+# }
 
 # displayTabContentUI <- function(id){
 #   NS(id)
@@ -95,11 +101,13 @@ displayTabContent <- function(tableTitle){
 #   )
 # }
 
-outputTable <- function(tableTitle){
-  renderRHandsontable({rhandsontable(sbtab_tables_list[[tableTitle]])
-    
-  })
-}
+# outputTable <- function(tableTitle){
+#   df <- sbtab_tables_list[[tableTitle]]
+#   values <- reactiveValues(data = df)
+#   renderRHandsontable({rhandsontable(df)
+#     
+#   })
+# }
 
 outputTableDescription <- function(tableTitle){
   DT::renderDataTable({
@@ -111,6 +119,9 @@ outputTableDescription <- function(tableTitle){
   })
 }
 
+# hotRInput <- function(){
+# for(is.element(table_names[which(table_names_df$name == subitem)], table_names_df$name))
+# {paste0("input$",table_names_df$name[which(table_names_df$name == subitem)])}}
 
 # ## save changes to table made
 # observe({

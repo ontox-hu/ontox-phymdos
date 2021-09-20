@@ -46,6 +46,10 @@ ui <- dashboardPage(
 
 # server
 server <- function(input, output, session) {
+  observeEvent(input$documentname, {
+  # format a file containing tab content compatible with .xml conversion 
+  document <- write_lines(paste0('!!!SBtab Document="', input$documentname, '"'), file = "physmap.tsv", sep = "\n")
+  })
   
   # This is to get the desired menuItem selected initially. 
   # selected=T seems not to work with a dynamic sidebarMenu.
@@ -56,7 +60,7 @@ server <- function(input, output, session) {
   # render setup
   output$mysetup <- renderUI({
     tagList(
-        textInput("documentname", "Please name your document"),
+        textInput("documentname", "Please name your document", placeholder = "Map name"),
         selectInput("sbtab_version", "Which SBtab Version do you need (1.0 default)?", 
                     c("0.8", "0.9", "1.0"), selected = "1.0"),
         selectInput("add_subitem", "Add subitem",
@@ -117,18 +121,51 @@ server <- function(input, output, session) {
                             data.frame(id = id, name = subitem))
     updateTabItems(session, "tabs", selected = "setup")
     
-    # dynamic content in the selected table
+    # render dynamic table and description corresponding to tab name
     output[[ paste0("sub_", id) ]] <- renderUI ({
       list(
-        fluidRow(
-          displayTabContent(table_names[which(table_names_df$name == subitem)])
+        tabItem(
+          tabName = subitem,
+          fluidRow(
+            rHandsontableOutput(subitem, height = 400, width = "100%")
+          ),
+          fluidRow(
+            column(
+              10,
+              DT::dataTableOutput(
+                paste0(
+                  "Description", 
+                  subitem), 
+                width = "100%"), 
+              offset = 0)
+          )
         )
       )
     })
     
+    # make table a reactive dataframe
+    df <- sbtab_tables_list[[subitem]]
+    values <- reactiveValues(data = df)
+    
+    # save hot values to reactive dataframe
+    observeEvent(input[[subitem]], {
+      values$data <- hot_to_r(input[[subitem]])
+      
+      # Convert column names to SBtab format
+      tableValues <- values$data
+      colnames(tableValues) <- paste0("!", colnames(tableValues))
+      # Write in table header
+      tableitem <- write_lines(paste(paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"'), 
+                                   write.table(tableValues, row.names=FALSE, na = "", quote=F, sep="\t", file = "physmap.tsv"), sep = "\n"), file = "physmap.tsv")
+      # Write in table
+    #  subitem <- write.table(tableValues, row.names=FALSE, na = "", quote=F, sep="\t", file = "physmap.tsv", append = T)
+      fullDocument <- write_lines(paste(document, tableitem))
+      })
+    
     # update dynamic content in the created table
-     output[[table_names[which(table_names_df$name == subitem)]]] <- outputTable(table_names[which(table_names_df$name == subitem)])
-     output[[paste0("Description", table_names[which(table_names_df$name == subitem)])]] <- outputTableDescription(table_names[which(table_names_df$name == subitem)])
+    output[[subitem]] <- renderRHandsontable({rhandsontable(values$data, rowHeaders = NULL) })
+    output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
+    
   })
   
   # remove a tab
@@ -148,27 +185,31 @@ server <- function(input, output, session) {
     updateTabItems(session, "tabs", selected = "setup")
   })
   
-  # format the tab content to be compatible with .xml conversion 
-  observeEvent(input$documentname, {
-    cat(paste0('!!!SBtab Document="', input$documentname, '"'), file = "physmap.tsv", sep = "\n")
-    #Convert to R object
-    x <- hot_to_r(
-      for(is.element(table_names[which(table_names_df$name == subitem)], table_names_df$name))
-      {paste0("input$",table_names_df$name[which(table_names_df$name == subitem)])}
-      )
-    # Convert column names to SBtab format
-    colnames(x) <- paste0("!", colnames(x))
-    # Write in table header
-    cat(paste0('!!SBtab TableID="t_',subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$documentname, '"',' TableType="',subitem, '"',' TableName="',subitem, '"'), file = "physmap.tsv", sep = "\n", append = T)
-    # Write in table
-    cat(write.table(x, row.names=FALSE, na = "", quote=F, sep="\t"), file = "physmap.tsv", sep = "\n", append = T)
-  })
+  
+  # # format the tab content to be compatible with .xml conversion
+  # observeEvent(input$values$data, {
+  #   subitem <- input$add_subitem
+  #   cat(paste0('!!!SBtab Document="', input$documentname, '"'), file = "physmap.tsv", sep = "\n")
+  #   tableValues <- values$data
+  #   # Convert column names to SBtab format
+  #   colnames(values$data) <- paste0("!", colnames(values$data))
+  #   # Write in table header
+  #   cat(paste0('!!SBtab TableID="t_',input$add_subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$documentname, '"',' TableType="',input$add_subitem, '"',' TableName="',input$add_subitem, '"'), file = "physmap.tsv", sep = "\n", append = T)
+  #   # Write in table
+  #   write.table(tableValues, row.names=FALSE, na = "", quote=F, sep="\t", file = "test.tsv", append = T)
+  #   
+  #   cat(values$data, file = "physmap.tsv", sep = "\n", append = T)
+  #   cat(paste0(input$add_subitem, input$Reaction, "Hello2"), file = "physmap.tsv", sep = "\n", append = T)
+  # })
+    
+  
   
   # download tab content to .tsv
   output$download <- downloadHandler(
     filename = "physmap.tsv",
     content = function(file) {
-      file.copy("physmap.tsv", file) 
+      write_lines(paste(document, tableitem))
+      #file.copy("physmap.tsv", file)
     })
 }
 

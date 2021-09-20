@@ -1,0 +1,61 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(berryFunctions)
+```
+
+```{r}
+x <- "Compound"
+x 
+table_names["Reaction"]
+table_namess <- tibble(names(split_def_tables))
+names(table_names_df) <- "name"
+as.character(table_names_df)
+table_names[which(table_names_df$name == x)]
+which(table_names_df$name == "Compound")
+summary(table_names_df)
+summary(x)
+
+test <- sbtab_tables_list$Compound
+colnames(test) <- paste0("!", colnames(test))
+test <- test %>% as_tibble()
+write.table(test, row.names=FALSE, na = "", quote=F, sep="\t", file = "test.tsv", append = T)
+x <- sbtab_tables_list$Compound
+
+test <- set_cols(sbtab_tables_list$Compound)
+
+table_empty <- 1:42 %>% as.character() %>% t() %>% as_tibble(.name_repair = "minimal")
+table_empty <- table_empty[-1,] 
+table_empty <- table_empty[1,] %>% insertRows(1)
+table_empty[1,1] <- documentname
+table_empty[2,1] <- tableheader
+table_empty <- rbind(table_empty, item)
+summary(table_empty)
+
+
+# Set documentname and table header per table
+documentname <- paste0('!!!SBtab Document="', "test", '"') %>% as.character()
+tableheader <- paste0('!!SBtab TableID="t_', "Compound", '"', ' SBtabVersion="', "inputsbtab_version$", '"',' Document="', "test", '"',' TableType="', "Compound", '"',' TableName="', "Compound", '"')
+
+# Function to 
+set_cols <- function(x){
+  names <- paste0("!", colnames(x))
+  item <- names %>% t() %>% as_tibble(.name_repair = "minimal")
+  names(item) <- item[1,] %>% as.character()
+  item <- item[-1,]
+  item <- item[1,]
+  }
+
+# Write .tsv document
+write_lines(documentname, file = "test.tsv")
+write_lines(tableheader, file = "test.tsv", append = T)
+write_tsv(item, file = "test.tsv", col_names = T, append = T)
+```
+
