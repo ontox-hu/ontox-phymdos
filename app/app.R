@@ -67,6 +67,7 @@ server <- function(input, output, session) {
         actionButton("rm", "Remove"),
         br(),
         br(),
+        actionButton("save_hot", "Save table"),
         downloadButton("download", "Download tsv")
     )
   })
@@ -105,7 +106,6 @@ server <- function(input, output, session) {
   # set document header
   observeEvent(input$set, {
     req(input$set_documentname)
-    # Set documentname
     documentname_set <- paste0('!!!SBtab Document="', input$set_documentname, '"') %>% as.character()
     write_lines(documentname_set, file = "physmap.tsv")
   })
@@ -128,23 +128,26 @@ server <- function(input, output, session) {
     # render dynamic table and description corresponding to tab name
     output[[ paste0("sub_", id) ]] <- renderUI ({
       list(
+        bsCollapsePanel("Select columns to include",
+          checkboxGroupInput(paste0(subitem, "_cols"),
+                             "Choose from:",
+                             choices = names(sbtab_tables_list[[subitem]]),
+                             inline = T)
+        ),
         tabItem(
-          tabName = paste0(subitem, "_hot"),
+          tabName = subitem,
           fluidRow(
             rHandsontableOutput(paste0(subitem, "_hot"), 
                                 height = 400, 
                                 width = "100%")
           ),
-          fluidRow(
-            column(
-              10,
+          bsCollapsePanel("Description of table elements",
               DT::dataTableOutput(paste0("Description", subitem), 
-                                  width = "100%"), 
-              offset = 0)
-            )
+                                  width = "100%")
           )
         )
-      })
+      )
+    })
     
     # make table a reactive dataframe
     df <- sbtab_tables_list[[subitem]]
@@ -153,26 +156,43 @@ server <- function(input, output, session) {
     # save hot values to reactive dataframe
     observeEvent(input[[paste0(subitem, "_hot")]], {
       values$data <- hot_to_r(input[[paste0(subitem, "_hot")]])
-      
-      # update dynamic content in the created table
-      output[[paste0(subitem, "_hot")]] <- renderRHandsontable({
-        rhandsontable(values$data, rowHeaders = NULL) 
+    })
+    
+    # Make column width vector for dynamic columns
+    if(names(sbtab_tables_list[[subitem]]) == names(paste0(subitem, "_cols"))) {
+      columns <- paste("100%", sep = ",")
+    } else {
+      columns <- paste(0.1, sep = ",")
+    }
+    
+    
+    # update dynamic content in the created table
+    output[[paste0(subitem, "_hot")]] <- renderRHandsontable({
+      rhandsontable(values$data, rowHeaders = NULL) %>%
+        hot_cols(colWidths = 0.1) %>%
+        hot_col(col = "Comment", colwidths = "100%") #%>%
+        hot_col(c(which(names(sbtab_tables_list[[subitem]]) == names(paste0(subitem, "_cols"))), colWidths = "100%"))
       })
+    
+    # Create column name vector
+    columns <- names(values$data)
       
-      # output description table
-      output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
+    # output description table
+    output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
       
-      # Convert column names to SBtab format
-      # tableValues <- values$data
-      # set_cols(tableValues)
+    # Write in table header
+    tableheader <- 
+      paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
       
-      # Write in table header
-      # tableheader <- 
-      #   paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
+    # Convert column names to SBtab format
+    #tableValues <- values$data
+    set_cols(values$data)
       
-      # Write table header and columns to file
-      # write_lines(tableheader, file = "physmap.tsv", append = T)
-      # write_tsv(tableValues, file = "physmap.tsv", col_names = T, append = T)
+    # Write table header and columns to file
+    observeEvent(input$save_hot, {
+      req(input[[paste0(subitem, "_hot")]])
+      write_lines(tableheader, file = "physmap.tsv", append = T)
+      write_tsv(values$data, file = "physmap.tsv", col_names = T, append = T, na = "")
       })
     })
   
@@ -221,8 +241,7 @@ server <- function(input, output, session) {
   output$download <- downloadHandler(
     filename = "physmap.tsv",
     content = function(file) {
-      write_lines(paste(document, tableitem))
-      #file.copy("physmap.tsv", file)
+      file.copy("physmap.tsv", file)
     })
 }
 

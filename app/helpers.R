@@ -5,7 +5,7 @@ library(shiny)
 library(data.table)
 library(rhandsontable)
 library(shinyjs)
-library(berryFunctions)
+library(shinyBS)
 
 source(
   "sbtab_tables.R"
@@ -29,7 +29,7 @@ sbtab_app_table_to_SbTab <- function(){
 set_cols <- function(x){
   names <- paste0("!", colnames(x))
   x <- rlang::set_names(x, names)
-  names(x) <- names(x) %>% as.character()
+  #names(x) <- names(x) %>% as.character()
 }
 
 # values <- list() 
@@ -38,7 +38,7 @@ set_cols <- function(x){
 #   values[[tabTitle]] <<- x 
 # 
 # DF <- reaction_def
-DF <- list()
+# DF <- list()
 
 ## Functions to help display
 
