@@ -132,6 +132,7 @@ server <- function(input, output, session) {
           checkboxGroupInput(paste0(subitem, "_cols"),
                              "Choose from:",
                              choices = names(sbtab_tables_list[[subitem]]),
+                             selected = c("ReferenceDOI", "ID"),
                              inline = T)
         ),
         tabItem(
@@ -158,20 +159,11 @@ server <- function(input, output, session) {
       values$data <- hot_to_r(input[[paste0(subitem, "_hot")]])
     })
     
-    # Make column width vector for dynamic columns
-    if(names(sbtab_tables_list[[subitem]]) == names(paste0(subitem, "_cols"))) {
-      columns <- paste("100%", sep = ",")
-    } else {
-      columns <- paste(0.1, sep = ",")
-    }
-    
-    
     # update dynamic content in the created table
     output[[paste0(subitem, "_hot")]] <- renderRHandsontable({
       rhandsontable(values$data, rowHeaders = NULL) %>%
         hot_cols(colWidths = 0.1) %>%
-        hot_col(col = "Comment", colwidths = "100%") #%>%
-        hot_col(c(which(names(sbtab_tables_list[[subitem]]) == names(paste0(subitem, "_cols"))), colWidths = "100%"))
+        hot_col(col = input[[paste0(subitem, "_cols")]], colWidths = "100%")
       })
     
     # Create column name vector
