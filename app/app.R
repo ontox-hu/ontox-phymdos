@@ -35,7 +35,8 @@ update_submenu <- function(local) {
 
 # ui
 ui <- dashboardPage(
-  dashboardHeader(),
+  dashboardHeader(title = "ONTOX - Physiological Maps Data Entry Portal",
+                                  titleWidth = 500),
   dashboardSidebar(
     sidebarMenuOutput("mysidebar")
   ),
