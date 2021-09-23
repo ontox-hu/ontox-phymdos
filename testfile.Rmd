@@ -24,6 +24,10 @@ columns <- columns %>% c(paste("100%"))
 columns <- columns %>% c(paste("0.1"))
 paste(columns)
 
+head("app/physmap.tsv")
+docheader <- read_lines("app/physmap.tsv")
+docheader[1]
+
 test <- sbtab_tables_list$Compound
 colnames(test) <- paste0("!", colnames(test))
 test <- test %>% as_tibble()

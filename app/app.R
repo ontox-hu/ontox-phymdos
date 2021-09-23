@@ -1,4 +1,4 @@
-# credit: adapted from https://mgei.github.io/post/dynamic-shinydashboard/
+# credit: dynamic table selection adapted from https://mgei.github.io/post/dynamic-shinydashboard/
 source(
   "helpers.R"
 )
@@ -13,6 +13,12 @@ tab_list_ui <- function() {
       tabItem(
         tabName = "setup",
         uiOutput("mysetup")
+      )
+    ),
+    list(
+      tabItem(
+        tabName = "select_tables",
+        uiOutput("mytables")
       )
     ),
     lapply(1:12, function(id) {
@@ -55,21 +61,36 @@ server <- function(input, output, session) {
   
   # render setup
   output$mysetup <- renderUI({
-    tagList(
+    bsCollapse(id = "homescreen", open = "Set documentname",
+      bsCollapsePanel("Set documentname",
         textInput("set_documentname", "Please name your document", placeholder = "Map name"),
-        actionButton("set", "Set"),
+        actionButton("set", "Set")
+      ),
+      bsCollapsePanel("Configure map",
         selectInput("sbtab_version", "Which SBtab Version do you need (1.0 default)?", 
                     c("0.8", "0.9", "1.0"), selected = "1.0"),
-        selectInput("add_subitem", "Add subitem",
-                    choices = table_names),
-        actionButton("add", "Add"),
-        selectInput("rm_subitem", "Remove subitem",
-                    choices = local$subitems$name),
-        actionButton("rm", "Remove"),
-        br(),
-        br(),
+        br(), br(),
         actionButton("save_hot", "Save table"),
+        br(), br(),
         downloadButton("download", "Download tsv")
+      )
+    )
+  })
+  
+  # Open "configure map" pannel when document name is set
+  observeEvent(input$set, {
+    updateCollapse(session, "homescreen", open = "Configure map")
+  })
+  
+  # render select_tables
+  output$mytables <- renderUI({
+    tagList(
+      selectInput("add_subitem", "Add subitem",
+                  choices = table_names),
+      actionButton("add", "Add"),
+      selectInput("rm_subitem", "Remove subitem",
+                  choices = local$subitems$name),
+      actionButton("rm", "Remove")
     )
   })
   
@@ -85,12 +106,16 @@ server <- function(input, output, session) {
     sidebarMenu(
       id = "tabs",
       menuItem(
-        "Setup", tabName = "setup", 
-        icon = icon("gear"), selected = T
+        "Setup", tabName = "setup",
+        icon = icon("gear"), selected = TRUE
+      ),
+      menuItem(
+        "Select tables", tabName = "select_tables", 
+        icon = icon("columns")
       ),
       menuItem(
         "Subs", id = "subs", tabName = "subs", 
-        icon = icon("dashboard"), startExpanded = T,
+        icon = icon("dashboard"), startExpanded = TRUE,
         update_submenu(local)
       )
     )
@@ -105,9 +130,11 @@ server <- function(input, output, session) {
   })
   
   # set document header
-  observeEvent(input$set, {
+  observeEvent({input$set
+    input$save_hot}, {
     req(input$set_documentname)
-    documentname_set <- paste0('!!!SBtab Document="', input$set_documentname, '"') %>% as.character()
+    documentname_set <- 
+      paste0('!!!SBtab Document="', input$set_documentname, '"') %>% as.character()
     write_lines(documentname_set, file = "physmap.tsv")
   })
   
@@ -124,7 +151,7 @@ server <- function(input, output, session) {
     subitem <- input$add_subitem
     local$subitems <- rbind(local$subitems, 
                             data.frame(id = id, name = subitem))
-    updateTabItems(session, "tabs", selected = "setup")
+    updateTabItems(session, "tabs", selected = "select_tables")
     
     # render dynamic table and description corresponding to tab name
     output[[ paste0("sub_", id) ]] <- renderUI ({
@@ -134,15 +161,18 @@ server <- function(input, output, session) {
                              "Choose from:",
                              choices = names(sbtab_tables_list[[subitem]]),
                              selected = c("ReferenceDOI", "ID"),
-                             inline = T)
+                             inline = TRUE)
         ),
         tabItem(
           tabName = subitem,
           fluidRow(
-            rHandsontableOutput(paste0(subitem, "_hot"), 
-                                height = 400, 
-                                width = "100%")
-          ),
+            column( 10,
+              rHandsontableOutput(paste0(subitem, "_hot"), 
+                                  height = 400, 
+                                  width = "100%"),
+              offset = 0
+            )
+            ),
           bsCollapsePanel("Description of table elements",
               DT::dataTableOutput(paste0("Description", subitem), 
                                   width = "100%")
@@ -166,26 +196,20 @@ server <- function(input, output, session) {
         hot_cols(colWidths = 0.1) %>%
         hot_col(col = input[[paste0(subitem, "_cols")]], colWidths = "100%")
       })
-    
-    # Create column name vector
-    columns <- names(values$data)
       
     # output description table
     output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
-      
+    
     # Write in table header
     tableheader <- 
       paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
       
-    # Convert column names to SBtab format
-    #tableValues <- values$data
-    set_cols(values$data)
-      
     # Write table header and columns to file
     observeEvent(input$save_hot, {
-      req(input[[paste0(subitem, "_hot")]])
-      write_lines(tableheader, file = "physmap.tsv", append = T)
-      write_tsv(values$data, file = "physmap.tsv", col_names = T, append = T, na = "")
+      #values$data <- set_cols(values$data)
+      write_lines(tableheader, file = "physmap.tsv", append = TRUE)
+      write_tsv(set_cols(values$data), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
+      write_lines(" ", file = "physmap.tsv", append = TRUE)
       })
     })
   
@@ -203,32 +227,8 @@ server <- function(input, output, session) {
     shinyjs::reset(paste0("sub_", subitem$id))
     # tab name
     local$subitems <- local$subitems[-subitem_ind,]
-    updateTabItems(session, "tabs", selected = "setup")
+    updateTabItems(session, "tabs", selected = "select_tables")
   })
-  
-  
-  # # format the tab content to be compatible with .xml conversion
-  # observeEvent(input$values$data, {
-  #   subitem <- input$add_subitem
-  #   # cat(paste0('!!!SBtab Document="', input$documentname, '"'), file = "physmap.tsv", sep = "\n")
-  #   tableValues <- values$data
-  #   # Convert column names to SBtab format
-  #   set_cols(tableValues)
-  #   # colnames(values$data) <- paste0("!", colnames(values$data))
-  #   # Write in table header
-  #   tableheader <- 
-  #     paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
-  #   # cat(paste0('!!SBtab TableID="t_',input$add_subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$documentname, '"',' TableType="',input$add_subitem, '"',' TableName="',input$add_subitem, '"'), file = "physmap.tsv", sep = "\n", append = T)
-  #   # Write in table
-  #   write_lines(tableheader, file = "physmap.tsv", append = T)
-  #   write_tsv(tableValues, file = "physmap.tsv", col_names = T, append = T)
-  #   # write.table(tableValues, row.names=FALSE, na = "", quote=F, sep="\t", file = "test.tsv", append = T)
-  # 
-  #   # cat(values$data, file = "physmap.tsv", sep = "\n", append = T)
-  #   # cat(paste0(input$add_subitem, input$Reaction, "Hello2"), file = "physmap.tsv", sep = "\n", append = T)
-  # })
-    
-  
   
   # download tab content to .tsv
   output$download <- downloadHandler(
