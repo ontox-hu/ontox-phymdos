@@ -12,47 +12,6 @@ library(berryFunctions)
 ```
 
 ```{r}
-c(which(names(sbtab_tables_list[["Compound"]]) == names(sbtab_tables_list[["Compound"]][1:3])))
-names(sbtab_tables_list[["Compound"]])
-
-    if(names(sbtab_tables_list[["Compound"]]) == names(sbtab_tables_list[["Compound"]][1:4])) {
-      columns <- columns %>% c(paste("100%"))
-    } else {
-      columns <- columns %>% c(paste("0.1"))
-    }
-columns <- columns %>% c(paste("100%"))
-columns <- columns %>% c(paste("0.1"))
-paste(columns)
-
-head("app/physmap.tsv")
-docheader <- read_lines("app/physmap.tsv")
-docheader[1]
-
-test <- sbtab_tables_list$Compound
-colnames(test) <- paste0("!", colnames(test))
-test <- test %>% as_tibble()
-write.table(test, row.names=FALSE, na = "", quote=F, sep="\t", file = "test.tsv", append = T)
-x <- sbtab_tables_list$Compound
-
-x <- set_cols(x)
-test <- set_cols(sbtab_tables_list$Compound)
-
-names(sbtab_tables_list$Compartment)
-
-# Set documentname and table header per table
-documentname <- paste0('!!!SBtab Document="', "test", '"') %>% as.character()
-tableheader <- paste0('!!SBtab TableID="t_', "Compound", '"', ' SBtabVersion="', "inputsbtab_version$", '"',' Document="', "test", '"',' TableType="', "Compound", '"',' TableName="', "Compound", '"')
-
-# Function to add ! to colnames
-set_cols <- function(x){
-  names <- paste0("!", colnames(x))
-  x <- rlang::set_names(x, names)
-  names(x) <- names(x) %>% as.character()
-}
-
-# Write .tsv document
-write_lines(documentname, file = "test.tsv")
-write_lines(tableheader, file = "test.tsv", append = T)
-write_tsv(x, file = "test.tsv", col_names = T, append = T, na = "")
+test <- table_names[table_names!=deparse(substitute(Compound))]
 ```
 

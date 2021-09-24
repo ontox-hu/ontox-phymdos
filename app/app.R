@@ -67,12 +67,15 @@ server <- function(input, output, session) {
         actionButton("set", "Set")
       ),
       bsCollapsePanel("Configure map",
-        selectInput("sbtab_version", "Which SBtab Version do you need (1.0 default)?", 
+        selectInput("sbtab_version", "Please enter which SBtab Version you need (1.0 default)", 
                     c("0.8", "0.9", "1.0"), selected = "1.0"),
-        br(), br(),
+        br(),
+        htmlOutput("text_hot"),
         actionButton("save_hot", "Save table"),
-        br(), br(),
-        downloadButton("download", "Download tsv")
+        br(), br(), br(),
+        htmlOutput("text_download"),
+        downloadButton("download_tsv", "Download tsv"),
+        downloadButton("download_xml", "Download xml")
       )
     )
   })
@@ -82,13 +85,23 @@ server <- function(input, output, session) {
     updateCollapse(session, "homescreen", open = "Configure map")
   })
   
+  # Render text for setup page
+  output$text_hot <- renderText({
+    paste("<b>Press 'Save table' to save your file before downloading it</b>")
+  })
+  
+  output$text_download <- renderText({
+    paste("<b>Download your file to .tsv or .xml format</b>")
+  })
+  
   # render select_tables
   output$mytables <- renderUI({
     tagList(
-      selectInput("add_subitem", "Add subitem",
-                  choices = table_names),
+      selectInput("add_subitem", "Select table to add",
+                  choices = local$choices),
       actionButton("add", "Add"),
-      selectInput("rm_subitem", "Remove subitem",
+      br(), br(),
+      selectInput("rm_subitem", "Select table to remove",
                   choices = local$subitems$name),
       actionButton("rm", "Remove")
     )
@@ -98,7 +111,8 @@ server <- function(input, output, session) {
   local <- reactiveValues(
     empty_tabs = as.list(1:12),
     current_tabs = list(),
-    subitems = data.frame(id = integer(), name = character())
+    subitems = data.frame(id = integer(), name = character()),
+    choices = table_names
   )
   
   # dynamic sidebar menu #
@@ -111,11 +125,11 @@ server <- function(input, output, session) {
       ),
       menuItem(
         "Select tables", tabName = "select_tables", 
-        icon = icon("columns")
+        icon = icon("table")
       ),
       menuItem(
-        "Subs", id = "subs", tabName = "subs", 
-        icon = icon("dashboard"), startExpanded = TRUE,
+        "Tables", id = "subs", tabName = "subs", 
+        icon = icon("database"), startExpanded = TRUE,
         update_submenu(local)
       )
     )
@@ -151,6 +165,8 @@ server <- function(input, output, session) {
     subitem <- input$add_subitem
     local$subitems <- rbind(local$subitems, 
                             data.frame(id = id, name = subitem))
+    # remove name of table from choices 
+    local$choices <- local$choices[local$choices!=subitem]
     updateTabItems(session, "tabs", selected = "select_tables")
     
     # render dynamic table and description corresponding to tab name
@@ -217,6 +233,8 @@ server <- function(input, output, session) {
   observeEvent(input$rm, {
     req(input$rm_subitem)
     req(length(local$empty_tabs) < 12)
+    # add name of table from choices
+    local$choices <- local$choices %>% c(paste(input$rm_subitem))
     # id of tab to fill
     subitem_ind <- which(local$subitems$name == input$rm_subitem)
     subitem <- local$subitems[subitem_ind,]
@@ -231,7 +249,7 @@ server <- function(input, output, session) {
   })
   
   # download tab content to .tsv
-  output$download <- downloadHandler(
+  output$download_tsv <- downloadHandler(
     filename = "physmap.tsv",
     content = function(file) {
       file.copy("physmap.tsv", file)
