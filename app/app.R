@@ -64,12 +64,11 @@ server <- function(input, output, session) {
     bsCollapse(id = "homescreen", open = "Set documentname",
       bsCollapsePanel("Set documentname",
         textInput("set_documentname", "Please name your document", placeholder = "Map name"),
-        actionButton("set", "Set")
-      ),
-      bsCollapsePanel("Configure map",
         selectInput("sbtab_version", "Please enter which SBtab Version you need (1.0 default)", 
                     c("0.8", "0.9", "1.0"), selected = "1.0"),
-        br(),
+        actionButton("set", "Save input")
+      ),
+      bsCollapsePanel("Save and download",
         htmlOutput("text_hot"),
         actionButton("save_hot", "Save table"),
         br(), br(), br(),
@@ -80,14 +79,20 @@ server <- function(input, output, session) {
     )
   })
   
-  # Open "configure map" pannel when document name is set
+  # Open "configure map" panel when document name is set
   observeEvent(input$set, {
-    updateCollapse(session, "homescreen", open = "Configure map")
+    updateCollapse(session, "homescreen", open = "Save and download")
+    updateTabItems(session, "tabs", selected = "select_tables")
   })
   
+  # Head to save and download tab
+  observeEvent(input$goto_download, {
+  updateTabItems(session, "tabs", selected = "setup")
+  })
+    
   # Render text for setup page
   output$text_hot <- renderText({
-    paste("<b>Press 'Save table' to save your file before downloading it</b>")
+    paste("<b>Press <i>Save table</i> to save your file before downloading it</b>")
   })
   
   output$text_download <- renderText({
@@ -187,12 +192,14 @@ server <- function(input, output, session) {
                                   height = 400, 
                                   width = "100%"),
               offset = 0
-            )
             ),
-          bsCollapsePanel("Description of table elements",
-              DT::dataTableOutput(paste0("Description", subitem), 
-                                  width = "100%")
           )
+        ),
+        actionButton("goto_download", "Click here to go to the download screen" ),
+        br(), br(),
+        bsCollapsePanel("Description of table elements",
+            DT::dataTableOutput(paste0("Description", subitem), 
+                                width = "100%")
         )
       )
     })
