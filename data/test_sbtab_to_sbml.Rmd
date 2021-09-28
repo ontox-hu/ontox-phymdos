@@ -13,7 +13,7 @@ use_condaenv("ontox-app", required = TRUE)
 ```
 
 ```{r}
-file_test <- here::here('app','ontox_data_entry_dashboard','test.tsv')
+file_test <- here::here('data','liver_bile_example','liver_bile_template.tsv')
 onetable_test <- here::here('app','ontox_data_entry_dashboard','sbtab_table_specifications','reaction_example.tsv')
 file_out <- here::here('app','ontox_data_entry_dashboard','test_data','hynne_model.xml')
 
@@ -73,7 +73,7 @@ print(warnings)
 
 # Convert SBtab file to SBML
 Cd = sbtab2sbml.SBtabDocument(Sd)
-(sbml, warnings) = Cd.convert_to_sbml('31')
+(sbml, warnings) = Cd.convert_to_sbml('24')
 
 # Save SBML xml file (overwrites existing file with the same name)
 myfile = open("test_fromapp.xml", "w")
