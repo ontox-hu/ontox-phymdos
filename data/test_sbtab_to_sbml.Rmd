@@ -111,7 +111,7 @@ print(warnings)
 
 # Convert SBtab file to SBML
 Cd = sbtab2sbml.SBtabDocument(Sd)
-(sbml, warnings) = Cd.convert_to_sbml('31')
+(sbml, warnings) = Cd.convert_to_sbml('24')
 
 # Save SBML xml file (overwrites existing file with the same name)
 myfile = open("test_hynne.xml", "w")
