@@ -14,8 +14,9 @@ use_condaenv("ontox-app", required = TRUE)
 
 ```{r}
 file_test <- here::here('data','liver_bile_example','liver_bile_template.tsv')
-onetable_test <- here::here('app','ontox_data_entry_dashboard','sbtab_table_specifications','reaction_example.tsv')
-file_out <- here::here('app','ontox_data_entry_dashboard','test_data','hynne_model.xml')
+#definitions <- here::here('definitions.tsv')
+#onetable_test <- here::here'app','ontox_data_entry_dashboard','sbtab_table_specifications','reaction_example.tsv')
+#file_out <- here::here('app','ontox_data_entry_dashboard','test_data','hynne_model.xml')
 
 # Counts max number of columns
 no_col <- max(count.fields(file_test, sep = "\t"))
@@ -45,13 +46,12 @@ from pathlib import Path
 # from validatorSBtab import ValidateTable
 # from sbtab2sbml import SBtabDocument
 
-
 # Read in TSV file containing SBtab info and definitions file
 sbtab_file   = open(r.file_test,'r')
 file_content = sbtab_file.read()
 sbtab_file.close()
 
-# def_file = open("/home/marie.corradi/ontoxr/app/ontox_data_entry_dashboard/definitions.tsv", "r")
+# def_file = open('/Users/danie/OneDrive/Documenten/R/Files/ontox-pmdep/definitions.tsv', "r")
 # def_file_content = def_file.read()
 # def_file.close()
 
@@ -61,10 +61,10 @@ Sd.set_filename('test.tsv')
 Sd.set_name('test')
 Sd.add_sbtab_string(file_content,filename='test.tsv')
 
-def_tabl = SBtab.SBtabDocument()
-def_tabl.set_filename('definitions.tsv')
-def_tabl.set_filename('definitions')
-Sd.add_sbtab_string(def_file_content,filename='definitions.tsv')
+# def_tabl = SBtab.SBtabDocument()
+# def_tabl.set_filename('definitions.tsv')
+# def_tabl.set_filename('definitions')
+# Sd.add_sbtab_string(def_file_content,filename='definitions.tsv')
 
 # Validate the SBtab file and save warnings
 V_obj = validatorSBtab.ValidateDocument(Sd) #, def_tabl
@@ -85,7 +85,7 @@ myfile.close()
 
 # For one table only
 
-```{python}
+#```{python}
 import sbtab
 import libsbml
 from sbtab import SBtab
