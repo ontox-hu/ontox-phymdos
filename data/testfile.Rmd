@@ -1,0 +1,17 @@
+---
+title: "Untitled"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(berryFunctions)
+```
+
+```{r}
+test <- table_names[table_names!=deparse(substitute(Compound))]
+```
+

@@ -1,0 +1,13 @@
+name: ontox-pmdep
+title: ontox-pmdep
+username:
+account: ontox-pmdep
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4706196
+bundleId: 5118616
+url: https://ontox-pmdep.shinyapps.io/ontox-pmdep/
+when: 1633701050.19024
+lastSyncTime: 1633701050.19024
+asMultiple: FALSE
+asStatic: FALSE
