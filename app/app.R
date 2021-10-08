@@ -2,6 +2,9 @@
 source(
   "helpers.R"
 )
+source(
+  "open_python.R"
+)
 
 options(stringsAsFactors = FALSE)
 
@@ -148,15 +151,6 @@ server <- function(input, output, session) {
                  paste0(unlist(local$empty_tabs), collapse = " ")))
   })
   
-  # set document header
-  observeEvent({input$set
-    input$save_hot}, {
-    req(input$set_documentname)
-    documentname_set <- 
-      paste0('!!!SBtab Document="', input$set_documentname, '"') %>% as.character()
-    write_lines(documentname_set, file = "physmap.tsv")
-  })
-  
   # add a tab
   observeEvent(input$add, {
     req(input$add_subitem)
@@ -229,11 +223,20 @@ server <- function(input, output, session) {
       
     # Write table header and columns to file
     observeEvent(input$save_hot, {
-      #values$data <- set_cols(values$data)
       write_lines(tableheader, file = "physmap.tsv", append = TRUE)
       write_tsv(set_cols(values$data), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
       write_lines(" ", file = "physmap.tsv", append = TRUE)
+      source_python('sbtab_to_sbml.py')
       })
+    })
+  
+  # set document header
+  observeEvent({input$set
+    input$save_hot}, {
+      req(input$set_documentname)
+      documentname_set <- 
+        paste0('!!!SBtab Document="', input$set_documentname, '"') %>% as.character()
+      write_lines(documentname_set, file = "physmap.tsv")
     })
   
   # remove a tab
@@ -255,12 +258,25 @@ server <- function(input, output, session) {
     updateTabItems(session, "tabs", selected = "select_tables")
   })
   
-  # download tab content to .tsv
+  # download tab content to .tsv and .xml
   output$download_tsv <- downloadHandler(
     filename = "physmap.tsv",
     content = function(file) {
       file.copy("physmap.tsv", file)
     })
+  
+  output$download_xml <- downloadHandler(
+    filename = "physmap.xml",
+    content = function(file) {
+      file.copy("physmap.xml", file)
+    })
 }
 
-shinyApp(ui, server)
+shinyApp(ui, 
+         server, 
+         onStart = function() {
+           onStop(function() {
+             close.connection('physmap.tsv')
+             })
+           }
+         )

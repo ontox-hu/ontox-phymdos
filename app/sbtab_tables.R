@@ -3,7 +3,7 @@
 library(tidyverse)
 ## tables: 
 sbtab_definitions <- readr::read_tsv("definitions.tsv", 
-                                     skip = 1, col_names = TRUE
+                                     skip = 1, col_names = TRUE, show_col_types = FALSE
 )
 
 ## recode `Type` column
@@ -13,7 +13,7 @@ sbtab_definitions <- sbtab_definitions %>%
   mutate(r_format = ifelse(`!Format` == "Boolean", "logical", r_format)) 
 
 ## split tables
-split_def_tables <- split(sbtab_definitions, as_factor(sbtab_definitions$`!IsPartOf`))
+split_def_tables <- split(sbtab_definitions, as_factor(sbtab_definitions$`!Parent`))
 
 ## define tablenames to vector and dataframe
 table_names <- names(split_def_tables)
@@ -73,40 +73,42 @@ make_sbtab_table_on_definition <- function(df_ori){
   
 }
 
-map(
+suppressWarnings(map(
   .x = split_def_tables,
   make_sbtab_table_on_definition
-) -> sbtab_tables_list
+)) -> sbtab_tables_list
 
 
-## create examples for each table
-reaction <- read_csv(
-  file.path("sbtab_table_specifications", "reaction_example.tsv"),
-  comment = c("!!")
-)
-
-## combine
-reaction_def <- dplyr::full_join(sbtab_tables_list$Reaction, reaction) %>%
-  dplyr::relocate(
-    ID,
-    ReactionFormula,
-    `Identifiers:kegg.reaction`,
-    `Gene:Symbol`,
-    ReferencePubMed,
-    ReferenceDOI
-  )
-
-compound <- read_csv(
-  file.path("sbtab_table_specifications", "compound_example.tsv"),
-  comment = c("!!")
-)
-
-## combine
-compound_def <- dplyr::full_join(sbtab_tables_list$Compound, compound) %>%
-  dplyr::relocate(
-    ID,
-    Name,
-    `Identifiers:kegg.compound`,
-    ReferencePubMed,
-    ReferenceDOI
-  )
+# ## create examples for each table
+# reaction <- read_csv(
+#   file.path("sbtab_table_specifications", "reaction_example.tsv"),
+#   comment = c("!!"),
+#   show_col_types = FALSE
+# )
+# 
+# ## combine
+# reaction_def <- dplyr::full_join(sbtab_tables_list$Reaction, reaction) %>%
+#   dplyr::relocate(
+#     ID,
+#     ReactionFormula,
+#     `Identifiers:kegg.reaction`,
+#     `Gene:Symbol`,
+#     ReferencePubMed,
+#     ReferenceDOI
+#   )
+# 
+# compound <- read_csv(
+#   file.path("sbtab_table_specifications", "compound_example.tsv"),
+#   comment = c("!!"),
+#   show_col_types = FALSE
+# )
+# 
+# ## combine
+# compound_def <- dplyr::full_join(sbtab_tables_list$Compound, compound) %>%
+#   dplyr::relocate(
+#     ID,
+#     Name,
+#     `Identifiers:kegg.compound`,
+#     ReferencePubMed,
+#     ReferenceDOI
+#   )

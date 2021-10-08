@@ -11,7 +11,6 @@ source(
   "sbtab_tables.R"
 )
 
-
 #' @title Export app sbtab table to SbTab S4 object
 #' @param df A dataframe
 #' @param SbTabMeta Object of formal class SbTabMeta

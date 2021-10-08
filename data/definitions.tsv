@@ -1,5 +1,5 @@
 !!SBtab SBtabVersion='0.9.1' TableType='Definition' TableName='Allowed_types'
-!ComponentName	!ComponentType	!IsPartOf	!Format	!Description
+!ComponentName	!ComponentType	!Parent	!Format	!Description
 Comment	Column	Reaction	string	Comment
 ReferenceName	Column	Reaction	string	Reference title, authors, etc. (as free text)
 ReferencePubMed	Column	Reaction	string	Reference PubMed ID
