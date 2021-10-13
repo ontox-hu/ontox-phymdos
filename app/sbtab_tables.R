@@ -78,7 +78,6 @@ suppressWarnings(map(
   make_sbtab_table_on_definition
 )) -> sbtab_tables_list
 
-
 # ## create examples for each table
 # reaction <- read_csv(
 #   file.path("sbtab_table_specifications", "reaction_example.tsv"),

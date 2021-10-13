@@ -62,16 +62,45 @@ server <- function(input, output, session) {
     updateTabItems(session, "tabs", selected = "setup")
   })
   
-  # render setup
+  ## render setup screen
   output$mysetup <- renderUI({
-    bsCollapse(id = "homescreen", open = "Set documentname",
-      bsCollapsePanel("Set documentname",
+    tabItems(
+      # create home- choicescreen       
+      tabItem(tabName = "home",
+        htmlOutput("welcome"),
+        actionButton("new_sbtab", "Create new SBtab"),
+        actionButton("upload_sbtab", "Upload an SBtab object"),
+        actionButton("upload_sbml", "Upload an SBML object")
+      ),
+      
+      # upload screen for SBtab file
+      tabItem(tabName = "sbtab_tab",
+        fileInput("sbtabfile_in", "Upload SBtab file",
+                  multiple = FALSE,
+                  accept = c("text/tsv",
+                             "text/tab-separated-values,text/plain",
+                             ".tsv"))
+      ),
+      
+      # upload screen for SBML file
+      tabItem(tabName = "sbml_tab",
+        fileInput("sbmlfile_in", "Upload SBML file",
+                  multiple = FALSE,
+                  accept = c("text/xml",
+                             "text/plain",
+                             ".xml")),
+      ),
+      
+      # setup screen for document name and sbtab version
+      tabItem(tabName = "Document setup",
         textInput("set_documentname", "Please name your document", placeholder = "Map name"),
         selectInput("sbtab_version", "Please enter which SBtab Version you need (1.0 default)", 
                     c("0.8", "0.9", "1.0"), selected = "1.0"),
         actionButton("set", "Save input")
       ),
-      bsCollapsePanel("Save and download",
+      
+      # download screen
+      tabItem(tabName = "Save and download",
         htmlOutput("text_hot"),
         actionButton("save_hot", "Save table"),
         br(), br(), br(),
@@ -81,6 +110,9 @@ server <- function(input, output, session) {
       )
     )
   })
+  
+  # Render homescreen text
+  output$welcome <- renderText({paste("<b>What would you like to do?</b>")})
   
   # Open "configure map" panel when document name is set
   observeEvent(input$set, {
@@ -129,7 +161,8 @@ server <- function(input, output, session) {
       id = "tabs",
       menuItem(
         "Setup", tabName = "setup",
-        icon = icon("gear"), selected = TRUE
+        icon = icon("gear"), selected = TRUE, 
+        startExpanded = FALSE
       ),
       menuItem(
         "Select tables", tabName = "select_tables", 
@@ -226,7 +259,7 @@ server <- function(input, output, session) {
       write_lines(tableheader, file = "physmap.tsv", append = TRUE)
       write_tsv(set_cols(values$data), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
       write_lines(" ", file = "physmap.tsv", append = TRUE)
-      source_python('sbtab_to_sbml.py')
+      source_python("sbtab_to_sbml.py")
       })
     })
   
@@ -272,11 +305,4 @@ server <- function(input, output, session) {
     })
 }
 
-shinyApp(ui, 
-         server, 
-         onStart = function() {
-           onStop(function() {
-             close.connection('physmap.tsv')
-             })
-           }
-         )
+shinyApp(ui, server)

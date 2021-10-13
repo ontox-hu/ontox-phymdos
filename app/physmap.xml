@@ -14,7 +14,6 @@
       </species>
     </listOfSpecies>
     <listOfReactions>
-      <reaction name="123" reversible="true" fast="false"/>
       <reaction reversible="true" fast="false"/>
     </listOfReactions>
   </model>
