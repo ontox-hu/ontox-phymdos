@@ -24,7 +24,7 @@ tab_list_ui <- function() {
         uiOutput("mytables")
       )
     ),
-    lapply(1:12, function(id) {
+    lapply(table_names, function(id) {
       tabItem(
         tabName = paste0("tab_", id), 
         uiOutput(paste0("sub_", id))
@@ -64,43 +64,38 @@ server <- function(input, output, session) {
   
   ## render setup screen
   output$mysetup <- renderUI({
-    tabItems(
+    bsCollapse(id = "homescreen", open = "Homescreen",
       # create home- choicescreen       
-      tabItem(tabName = "home",
+      bsCollapsePanel("Homescreen",
         htmlOutput("welcome"),
         actionButton("new_sbtab", "Create new SBtab"),
         actionButton("upload_sbtab", "Upload an SBtab object"),
         actionButton("upload_sbml", "Upload an SBML object")
       ),
-      
       # upload screen for SBtab file
-      tabItem(tabName = "sbtab_tab",
+      bsCollapsePanel("Upload SBtab",
         fileInput("sbtabfile_in", "Upload SBtab file",
                   multiple = FALSE,
                   accept = c("text/tsv",
                              "text/tab-separated-values,text/plain",
-                             ".tsv"))
+                             ".tsv")),
+        actionButton("set_sbtab", "Click here to continue (required)")
       ),
-      
-      # upload screen for SBML file
-      tabItem(tabName = "sbml_tab",
+      bsCollapsePanel("Upload SBML",
         fileInput("sbmlfile_in", "Upload SBML file",
                   multiple = FALSE,
                   accept = c("text/xml",
                              "text/plain",
                              ".xml")),
+        actionButton("set_sbml", "Click here to continue (required)")
       ),
-      
-      # setup screen for document name and sbtab version
-      tabItem(tabName = "Document setup",
+      bsCollapsePanel("First setup",
         textInput("set_documentname", "Please name your document", placeholder = "Map name"),
         selectInput("sbtab_version", "Please enter which SBtab Version you need (1.0 default)", 
                     c("0.8", "0.9", "1.0"), selected = "1.0"),
         actionButton("set", "Save input")
       ),
-      
-      # download screen
-      tabItem(tabName = "Save and download",
+      bsCollapsePanel("Save and download",
         htmlOutput("text_hot"),
         actionButton("save_hot", "Save table"),
         br(), br(), br(),
@@ -113,6 +108,31 @@ server <- function(input, output, session) {
   
   # Render homescreen text
   output$welcome <- renderText({paste("<b>What would you like to do?</b>")})
+  
+  # Open "First setup" panel when "Create new SBtab" is selected
+  observeEvent(input$new_sbtab, {
+    updateCollapse(session, "homescreen", open = "First setup")
+  })
+  
+  # Open "Upload SBtab" panel when "Upload an SBtab object" is selected
+  observeEvent(input$upload_sbtab, {
+    updateCollapse(session, "homescreen", open = "Upload SBtab")
+  })
+  
+  # Open "Upload SBML" panel when "Upload an SBML object" is selected
+  observeEvent(input$upload_sbml, {
+    updateCollapse(session, "homescreen", open = "Upload SBML")
+  })
+  
+  # Open "First setup" panel after SBtab is uploaded
+  observeEvent(input$set_sbtab, {
+    updateCollapse(session, "homescreen", open = "First setup")
+  })
+  
+  # Open "First setup" panel after SBML is uploaded
+  observeEvent(input$set_sbml, {
+    updateCollapse(session, "homescreen", open = "First setup")
+  })
   
   # Open "configure map" panel when document name is set
   observeEvent(input$set, {
@@ -149,7 +169,7 @@ server <- function(input, output, session) {
   
   # store dynamic tab list and dynamic contents
   local <- reactiveValues(
-    empty_tabs = as.list(1:12),
+    empty_tabs = as.list(table_names),
     current_tabs = list(),
     subitems = data.frame(id = integer(), name = character()),
     choices = table_names
@@ -161,8 +181,7 @@ server <- function(input, output, session) {
       id = "tabs",
       menuItem(
         "Setup", tabName = "setup",
-        icon = icon("gear"), selected = TRUE, 
-        startExpanded = FALSE
+        icon = icon("gear"), selected = TRUE
       ),
       menuItem(
         "Select tables", tabName = "select_tables", 
@@ -189,7 +208,7 @@ server <- function(input, output, session) {
     req(input$add_subitem)
     req(length(local$empty_tabs) > 0)
     # id of next tab to fill
-    id <- min(unlist(local$empty_tabs))
+    id <- table_names[which(input$add_subitem == table_names)]
     # update empty/current tab lists
     local$empty_tabs <- local$empty_tabs[-which(local$empty_tabs == id)]
     local$current_tabs <- append(local$current_tabs, id)
@@ -202,36 +221,36 @@ server <- function(input, output, session) {
     updateTabItems(session, "tabs", selected = "select_tables")
     
     # render dynamic table and description corresponding to tab name
-    output[[ paste0("sub_", id) ]] <- renderUI ({
+    output[[ paste0("sub_", subitem)]] <- renderUI ({
       list(
         bsCollapsePanel("Select columns to include",
-          checkboxGroupInput(paste0(subitem, "_cols"),
-                             "Choose from:",
-                             choices = names(sbtab_tables_list[[subitem]]),
-                             selected = c("ReferenceDOI", "ID"),
-                             inline = TRUE)
+                        checkboxGroupInput(paste0(subitem, "_cols"),
+                                           "Choose from:",
+                                           choices = names(sbtab_tables_list[[subitem]]),
+                                           selected = c("ReferenceDOI", "ID", "ReactionID"),
+                                           inline = TRUE)
         ),
         tabItem(
           tabName = subitem,
           fluidRow(
             column( 10,
-              rHandsontableOutput(paste0(subitem, "_hot"), 
-                                  height = 400, 
-                                  width = "100%"),
-              offset = 0
+                    rHandsontableOutput(paste0(subitem, "_hot"), 
+                                        height = 400, 
+                                        width = "100%"),
+                    offset = 0
             ),
           )
         ),
         actionButton("goto_download", "Click here to go to the download screen" ),
         br(), br(),
         bsCollapsePanel("Description of table elements",
-            DT::dataTableOutput(paste0("Description", subitem), 
-                                width = "100%")
+                        DT::dataTableOutput(paste0("Description", subitem), 
+                                            width = "100%")
         )
       )
     })
     
-    # make table a reactive dataframe
+    # make reactive dataframes out of table choices
     df <- sbtab_tables_list[[subitem]]
     values <- reactiveValues(data = df)
     
@@ -245,23 +264,29 @@ server <- function(input, output, session) {
       rhandsontable(values$data, rowHeaders = NULL) %>%
         hot_cols(colWidths = 0.1) %>%
         hot_col(col = input[[paste0(subitem, "_cols")]], colWidths = "100%")
-      })
+    })
       
     # output description table
     output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
     
-    # Write in table header
+    # write in table header
     tableheader <- 
       paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
       
-    # Write table header and columns to file
+    # write table header and columns to file
     observeEvent(input$save_hot, {
       write_lines(tableheader, file = "physmap.tsv", append = TRUE)
       write_tsv(set_cols(values$data), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
       write_lines(" ", file = "physmap.tsv", append = TRUE)
       source_python("sbtab_to_sbml.py")
-      })
     })
+    
+    # 
+    observeEvent({input$sbtabfile_in 
+      input$set_sbtab}, {
+        sbtabdata <- read_sbtab(input$sbtabfile_in)
+    })
+  })
   
   # set document header
   observeEvent({input$set

@@ -12,6 +12,13 @@ library(berryFunctions)
 ```
 
 ```{r}
-test <- table_names[table_names!=deparse(substitute(Compound))]
+values <- list(data = list())
+for(item in table_names){
+ df <- sbtab_tables_list[[item]]
+    values$data[[item]] <- df
+}
+
+output <- list("data")
+
 ```
 
