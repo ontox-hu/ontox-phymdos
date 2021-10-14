@@ -1,4 +1,4 @@
-!!!SBtab Document="To test the app and discover how it works (default)"
+!!!SBtab Document="liver_bile_template"
 !!SBtab TableID="t_1" SBtabVersion="1.0" Document="Liver Bile Synthesis Test Example" TableType="Reaction" TableName="Reaction"
 !Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Modifier	!Name	!Type	!Symbol	!ID	!SBML:reaction:id	!ReactionFormula	!Location	!Enzyme	!Model	!Pathway	!SubreactionOf	!IsComplete	!IsReversible	!IsInEquilibrium	!IsExchangeReaction	!Flux	!IsNonEnzymatic	!KineticLaw	!Gene	!Operon	!Enzyme:SBML:species:id	!Enzyme:SBML:parameter:id	!BuildReaction	!BuildEnzyme	!BuildEnzymeProduction	!SBOTerm	!Identifiers
 			https://doi.org/10.1016/j.livres.2017.05.001			CYP7A1	Enzyme		R_CYP7A1		C_cholesterol <=> C_E7aHOcholesterol	Liver	E_CYP7A1					FALSE														

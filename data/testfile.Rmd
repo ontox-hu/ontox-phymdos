@@ -12,6 +12,9 @@ library(berryFunctions)
 ```
 
 ```{r}
-test <- table_names[table_names!=deparse(substitute(Compound))]
+for(n in 1:12){
+  print(table_names[n])
+}
+table_names[1]
 ```
 
