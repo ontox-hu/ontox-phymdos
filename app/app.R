@@ -6,6 +6,7 @@ source(
   "open_python.R"
 )
 
+
 options(stringsAsFactors = FALSE)
 
 # static tab list
@@ -124,11 +125,6 @@ server <- function(input, output, session) {
     updateCollapse(session, "homescreen", open = "Upload SBML")
   })
   
-  # Open "First setup" panel after SBtab is uploaded
-  observeEvent(input$set_sbtab, {
-    updateCollapse(session, "homescreen", open = "First setup")
-  })
-  
   # Open "First setup" panel after SBML is uploaded
   observeEvent(input$set_sbml, {
     updateCollapse(session, "homescreen", open = "First setup")
@@ -172,8 +168,26 @@ server <- function(input, output, session) {
     empty_tabs = as.list(table_names),
     current_tabs = list(),
     subitems = data.frame(id = integer(), name = character()),
-    choices = table_names
+    choices = table_names,
+    # make reactive dataframes out of table choices
+    data = sbtab_tables_list,
+    file = NULL
   )
+  
+  # read input sbtab to dashboard
+  observeEvent(input$sbtabfile_in, {
+    local$file <- input$sbtabfile_in
+    sbtabfile <-  suppressWarnings(read_sbtab(local$file$datapath))
+    print(paste("File", paste0("'",input$sbtabfile_in$name, "'"), "contains tabs:"))
+    print(names(sbtabfile))
+    local$data[names(sbtabfile)] <- sbtabfile
+  })
+  
+  # open "First setup" panel after SBtab is uploaded
+  observeEvent(input$set_sbtab, {
+    closeAllConnections()
+    updateCollapse(session, "homescreen", open = "First setup")
+  })
   
   # dynamic sidebar menu #
   output$mysidebar <- renderMenu({
@@ -250,18 +264,14 @@ server <- function(input, output, session) {
       )
     })
     
-    # make reactive dataframes out of table choices
-    df <- sbtab_tables_list[[subitem]]
-    values <- reactiveValues(data = df)
-    
     # save hot values to reactive dataframe
     observeEvent(input[[paste0(subitem, "_hot")]], {
-      values$data <- hot_to_r(input[[paste0(subitem, "_hot")]])
+      local$data[[subitem]] <- hot_to_r(input[[paste0(subitem, "_hot")]])
     })
     
     # update dynamic content in the created table
     output[[paste0(subitem, "_hot")]] <- renderRHandsontable({
-      rhandsontable(values$data, rowHeaders = NULL) %>%
+      rhandsontable(local$data[[subitem]], rowHeaders = NULL) %>%
         hot_cols(colWidths = 0.1) %>%
         hot_col(col = input[[paste0(subitem, "_cols")]], colWidths = "100%")
     })
@@ -276,7 +286,7 @@ server <- function(input, output, session) {
     # write table header and columns to file
     observeEvent(input$save_hot, {
       write_lines(tableheader, file = "physmap.tsv", append = TRUE)
-      write_tsv(set_cols(values$data), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
+      write_tsv(set_cols(local$data[[subitem]]), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
       write_lines(" ", file = "physmap.tsv", append = TRUE)
       source_python("sbtab_to_sbml.py")
     })

@@ -26,9 +26,9 @@ set_cols <- function(x){
 }
 
 ## read tables from sbtab file and convert to a list
-read_sbtab <- function(file){
+read_sbtab <- function(file, na = ""){
   # read in file and create empty list and name vector
-  sbtab <- read_lines(file)
+  sbtab <- read_lines(file, lazy = FALSE)
   sbtab <- append(sbtab, "") # every table needs an empty line below it
   tables <- list()
   name <- vector()
@@ -53,6 +53,7 @@ read_sbtab <- function(file){
       # remove "!" from column names
       names(tables[[c]]) <- names(sbtab_tables_list[[names(tables[c])]])
       c = c+1
+      closeAllConnections()
     } 
   }
   return(tables)

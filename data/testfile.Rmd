@@ -17,8 +17,43 @@ for(item in table_names){
  df <- sbtab_tables_list[[item]]
     values$data[[item]] <- df
 }
+test <- list(
+df = sbtab_tables_list)
+sbtabfile <- read_sbtab("liver_bile_example/liver_bile_template.tsv")
 
-output <- list("data")
-
+read_sbtab <- function(file){
+  # read in file and create empty list and name vector
+  sbtab <- read_lines("liver_bile_example/liver_bile_template.tsv", lazy = FALSE)
+  sbtab <- append(sbtab, "") # every table needs an empty line below it
+  tables <- list()
+  name <- vector()
+  c = 1 # counter for list item
+  for(i in sbtab){
+    # detect column name line
+    if(str_detect(i, "^\\!(?!\\!)")){
+      # set table name and create table with column names
+      name <- append(name, table_names[which(table_names == str_extract(sbtab[which(i == sbtab)-1], table_names))])
+      tables <- append(tables, list(str_split(i, "\t")))
+      names(tables) <- name
+      tables[[c]] <- as_tibble(tables[[c]], .name_repair = "minimal") %>% t() %>% as_tibble(.name_repair = "minimal")
+      names(tables[[c]]) <- tables[[c]][1,] %>% as.character()
+      # get table content and write to table
+      tab_content <- sbtab[(which(i==sbtab)+1):(which(""==sbtab)[c]-1)]
+      for(line in tab_content){
+        vector <- tables[[c]][1,] %>% unlist()
+        vector[1:length(vector)] <- unlist(strsplit(line, "\t"))
+        vector <- vector %>% t() %>% as_tibble()
+        tables[[c]][which(line == tab_content),] <- vector
+      }
+      # remove "!" from column names
+      names(tables[[c]]) <- names(sbtab_tables_list[[names(tables[c])]])
+      c = c+1
+    } 
+  }
+  #close.connection(file)
+  return(tables)
+}
+i = sbtab[3]
+line = sbtab[4]
 ```
 
