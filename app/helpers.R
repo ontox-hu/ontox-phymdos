@@ -59,6 +59,18 @@ read_sbtab <- function(file, na = ""){
   return(tables)
 }
 
+## Check if a table is filled and open filled tables in the sidebar
+open_tabs <- function(table){
+  if(length(is.na(table)) == length(table)){
+    TRUE
+    }else if(length(which(table == "")) == length(table)){
+      TRUE
+      }else{    
+        FALSE
+        }
+}
+
+## Output the table description with the tables
 outputTableDescription <- function(tableTitle){
   DT::renderDataTable({
     split_def_tables[[tableTitle]]%>%
@@ -67,4 +79,34 @@ outputTableDescription <- function(tableTitle){
                     Description = `!Description`,
                     Format = `!Format`)
   })
+}
+
+## Create individual table pages 
+add_tableUI <- function(subitem){
+  list(
+    bsCollapsePanel("Select columns to include",
+                    checkboxGroupInput(paste0(subitem, "_cols"),
+                                       "Choose from:",
+                                       choices = names(sbtab_tables_list[[subitem]]),
+                                       selected = c("ReferenceDOI", "ID", "ReactionID"),
+                                       inline = TRUE)
+    ),
+    tabItem(
+      tabName = subitem,
+      fluidRow(
+        column( 10,
+                rHandsontableOutput(paste0(subitem, "_hot"), 
+                                    height = 400, 
+                                    width = "100%"),
+                offset = 0
+        ),
+      )
+    ),
+    actionButton("goto_download", "Click here to go to the download screen" ),
+    br(), br(),
+    bsCollapsePanel("Description of table elements",
+                    DT::dataTableOutput(paste0("Description", subitem), 
+                                        width = "100%")
+    )
+  )
 }
