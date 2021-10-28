@@ -5,9 +5,16 @@ account: ontox-pmdep
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 4706196
+<<<<<<< HEAD
 bundleId: 5186573
 url: https://ontox-pmdep.shinyapps.io/ontox-pmdep/
 when: 1635427979.89036
 lastSyncTime: 1635427979.89036
+=======
+bundleId: 5185800
+url: https://ontox-pmdep.shinyapps.io/ontox-pmdep/
+when: 1635410577.10296
+lastSyncTime: 1635410577.10296
+>>>>>>> d864e552544003a4eb1bce050ef8a3e3bcb4baf8
 asMultiple: FALSE
 asStatic: FALSE
