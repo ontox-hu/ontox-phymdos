@@ -13,23 +13,13 @@ library(tidyverse)
 ```{r}
 # open tabs included in sbtab in the dashboard
 sbtabfile <-  suppressWarnings(read_sbtab("liver_bile_example/liver_bile_template.tsv"))
-table <- "Protein"
+table <- "Compartment"
 empty_tabs <- as.list(table_names)
 current_tabs <- list()
+nrs <- c(1, 3, 3, 5)
 
-for(table in names(sbtabfile)){
-  headers <- append(headers,
-                    paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="', "input$sbtab_version", '"',' Document="', "input$set_documentname", '"',' TableType="', table, '"',' TableName="', table, '"')
-        )
-}
-headernames <- vector()
-for(header in 1:length(headers)){
-  headernames <- append(headernames, table_names[which(table_names == str_extract(headers[header], table_names))])
-}
-names(headers) <- headernames
-names(sbtabfile)[2]
-for(table in names(sbtabfile)){
-empty_tabs <- empty_tabs[empty_tabs!=table]
-}
+names(sbtabfile[[table]][which(sbtabfile[[table]][1,] != "")])
+names(sbtab_tables_list[[table]][nrs])
+
 ```
 
