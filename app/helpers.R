@@ -11,14 +11,6 @@ source(
   "sbtab_tables.R"
 )
 
-#' @title Export app sbtab table to SbTab S4 object
-#' @param df A dataframe
-#' @param SbTabMeta Object of formal class SbTabMeta
-#' @param SbtabColNames Object of formal class SbTabColNames
-#' @return SbTab class S4 object
-#' @author Marc A.T. Teunis  
-#' @export
-
 ## add ! to colnames
 set_cols <- function(x){
   names <- paste0("!", colnames(x))
@@ -81,14 +73,51 @@ outputTableDescription <- function(tableTitle){
   })
 }
 
-## Create individual table pages 
+## Create individual table pages for adding table by hand
 add_tableUI <- function(subitem){
   list(
     bsCollapsePanel("Select columns to include",
                     checkboxGroupInput(paste0(subitem, "_cols"),
                                        "Choose from:",
                                        choices = names(sbtab_tables_list[[subitem]]),
-                                       selected = c("ReferenceDOI", "ID", "ReactionID"),
+                                       selected = c("ReferenceDOI", 
+                                                    "ID", 
+                                                    "ReactionID"
+                                                    ),
+                                       inline = TRUE)
+    ),
+    tabItem(
+      tabName = subitem,
+      fluidRow(
+        column( 10,
+                rHandsontableOutput(paste0(subitem, "_hot"), 
+                                    height = 400, 
+                                    width = "100%"),
+                offset = 0
+        ),
+      )
+    ),
+    actionButton("goto_download", "Click here to go to the download screen" ),
+    br(), br(),
+    bsCollapsePanel("Description of table elements",
+                    DT::dataTableOutput(paste0("Description", subitem), 
+                                        width = "100%")
+    )
+  )
+}
+
+## Create individual table pages for adding table by upload
+upload_tableUI <- function(subitem, sbtabfile = list()){
+  list(
+    bsCollapsePanel("Select columns to include",
+                    checkboxGroupInput(paste0(subitem, "_cols"),
+                                       "Choose from:",
+                                       choices = names(sbtab_tables_list[[subitem]]),
+                                       selected = c("ReferenceDOI", 
+                                                    "ID", 
+                                                    "ReactionID", 
+                                                    names(sbtabfile[[subitem]][which(sbtabfile[[subitem]][1,] != "")])
+                                       ),
                                        inline = TRUE)
     ),
     tabItem(

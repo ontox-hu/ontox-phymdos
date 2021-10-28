@@ -5,9 +5,9 @@ account: daniel.roodzant
 server: datascience.hu.nl
 hostUrl: https://datascience.hu.nl/rsconnect/__api__
 appId: 124
-bundleId: 616
-url: https://datascience.hu.nl:443/rsconnect/content/d693c67f-b80e-4b0b-8aed-3a3a19acc47e/
-when: 1634024734.2463
-lastSyncTime: 1634024734.2463
+bundleId: 634
+url: https://datascience.hu.nl:443/rsconnect/pmdep/
+when: 1635427945.81968
+lastSyncTime: 1635427945.81968
 asMultiple: FALSE
 asStatic: FALSE

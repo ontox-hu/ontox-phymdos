@@ -94,7 +94,7 @@ server <- function(input, output, session) {
         actionButton("set_sbml", "Click here to continue (required)")
       ),
       bsCollapsePanel("First setup",
-        textInput("set_documentname", "Please name your document", placeholder = "Map name"),
+        textInput("set_documentname", "Please name your document", placeholder = "Documentname"),
         selectInput("sbtab_version", "Please enter which SBtab Version you need (1.0 default)", 
                     c("0.8", "0.9", "1.0"), selected = "1.0"),
         actionButton("set", "Save input")
@@ -200,9 +200,9 @@ server <- function(input, output, session) {
 
         # render dynamic table and description corresponding to tab name
         output[[paste0("sub_", table)]] <- renderUI({
-          add_tableUI(table)
+          upload_tableUI(table, sbtabfile)
         })
-
+        
         # save hot values to reactive dataframe
         observeEvent(input[[paste0(table, "_hot")]], {
           local$data[[table]] <- hot_to_r(input[[paste0(table, "_hot")]])
@@ -224,6 +224,14 @@ server <- function(input, output, session) {
         # output description table
         output[[paste0("Description", table)]] <- outputTableDescription(table)
       }
+      
+      # If table was opened previously, open filled columns
+      updateCheckboxGroupInput(session, paste0(table, "_cols"), 
+                               selected = c("ReferenceDOI", 
+                                            "ID",
+                                            "ReactionID", 
+                                            names(sbtabfile[[table]][which(sbtabfile[[table]][1,] != "")]))
+      )
     })
     names(local$headers) <- local$current_tabs
   })
@@ -287,36 +295,9 @@ server <- function(input, output, session) {
 
     # render dynamic table and description corresponding to tab name
     output[[ paste0("sub_", subitem)]] <- renderUI ({
-      add_tableUI(subitem)
+      upload_tableUI(subitem)
     })
-    #   list(
-    #     bsCollapsePanel("Select columns to include",
-    #                     checkboxGroupInput(paste0(subitem, "_cols"),
-    #                                        "Choose from:",
-    #                                        choices = names(sbtab_tables_list[[subitem]]),
-    #                                        selected = c("ReferenceDOI", "ID", "ReactionID"),
-    #                                        inline = TRUE)
-    #     ),
-    #     tabItem(
-    #       tabName = subitem,
-    #       fluidRow(
-    #         column( 10,
-    #                 rHandsontableOutput(paste0(subitem, "_hot"), 
-    #                                     height = 400, 
-    #                                     width = "100%"),
-    #                 offset = 0
-    #         ),
-    #       )
-    #     ),
-    #     actionButton("goto_download", "Click here to go to the download screen" ),
-    #     br(), br(),
-    #     bsCollapsePanel("Description of table elements",
-    #                     DT::dataTableOutput(paste0("Description", subitem), 
-    #                                         width = "100%")
-    #     )
-    #   )
-    # })
-
+    
     # save hot values to reactive dataframe
     observeEvent(input[[paste0(subitem, "_hot")]], {
       local$data[[subitem]] <- hot_to_r(input[[paste0(subitem, "_hot")]])
@@ -341,9 +322,15 @@ server <- function(input, output, session) {
   
   # write tsv and xml documents reactively
   observeEvent(local$data, {
-    req(input$set_documentname)
     documentname_set <-
-      paste0('!!!SBtab Document="', input$set_documentname, '"') %>% as.character()
+      paste0('!!!SBtab Document="', 
+             if(is_empty(input$set_documentname)){
+               "Documentname"
+               }else{
+                 input$set_documentname
+                 }, 
+             '"') %>% 
+      as.character()
     write_lines(documentname_set, file = "physmap.tsv")
     for(table in local$current_tabs){
       write_lines(local$headers[[table]], file = "physmap.tsv", append = TRUE)
