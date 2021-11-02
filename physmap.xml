@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
-  <model id="liver_bile_template" name="liver_bile_template">
+  <model id="physmap" name="physmap">
     <listOfCompartments>
       <compartment id="Liver" name="Liver" size="1" constant="true"/>
       <compartment id="Ileum" name="Ileum" size="1" constant="true"/>

@@ -24,7 +24,7 @@ tab_list_ui <- function() {
         uiOutput("mytables")
       )
     ),
-    lapply(1:12, function(id) {
+    lapply(table_names, function(id) {
       tabItem(
         tabName = paste0("tab_", id), 
         uiOutput(paste0("sub_", id))
@@ -44,13 +44,16 @@ update_submenu <- function(local) {
 
 # ui
 ui <- dashboardPage(
-  dashboardHeader(title = "ONTOX - Physiological Maps Data Entry Portal",
-                                  titleWidth = 500),
+  dashboardHeader(title = tags$p(tags$a(href='https://ontox-project.eu/',
+                                 tags$img(src='ontox_logo.png',height='40',width='60')),
+                                 " - Physiological Maps Data Entry Portal"), 
+                  titleWidth = 500),
   dashboardSidebar(
     sidebarMenuOutput("mysidebar")
   ),
   dashboardBody(
-    tab_list_ui()
+    tab_list_ui(),
+    useShinyjs()
   )
 )
 
@@ -62,19 +65,40 @@ server <- function(input, output, session) {
     updateTabItems(session, "tabs", selected = "setup")
   })
   
-  # render setup
+  ## render setup screen
   output$mysetup <- renderUI({
-    bsCollapse(id = "homescreen", open = "Set documentname",
-      bsCollapsePanel("Set documentname",
-        textInput("set_documentname", "Please name your document", placeholder = "Map name"),
+    bsCollapse(id = "homescreen", open = "Homescreen",
+      # create home- choicescreen       
+      bsCollapsePanel("Homescreen",
+        htmlOutput("welcome"),
+        actionButton("new_sbtab", "Create new SBtab"),
+        actionButton("upload_sbtab", "Upload an SBtab object"),
+        actionButton("upload_sbml", "Upload an SBML object")
+      ),
+      # upload screen for SBtab file
+      bsCollapsePanel("Upload SBtab",
+        fileInput("sbtabfile_in", "Upload SBtab file",
+                  multiple = FALSE,
+                  accept = c("text/tsv",
+                             "text/tab-separated-values,text/plain",
+                             ".tsv")),
+        actionButton("set_sbtab", "Click here to continue (required)")
+      ),
+      bsCollapsePanel("Upload SBML",
+        fileInput("sbmlfile_in", "Upload SBML file",
+                  multiple = FALSE,
+                  accept = c("text/xml",
+                             "text/plain",
+                             ".xml")),
+        actionButton("set_sbml", "Click here to continue (required)")
+      ),
+      bsCollapsePanel("First setup",
+        textInput("set_documentname", "Please name your document", placeholder = "Documentname"),
         selectInput("sbtab_version", "Please enter which SBtab Version you need (1.0 default)", 
                     c("0.8", "0.9", "1.0"), selected = "1.0"),
         actionButton("set", "Save input")
       ),
       bsCollapsePanel("Save and download",
-        htmlOutput("text_hot"),
-        actionButton("save_hot", "Save table"),
-        br(), br(), br(),
         htmlOutput("text_download"),
         downloadButton("download_tsv", "Download tsv"),
         downloadButton("download_xml", "Download xml")
@@ -82,20 +106,28 @@ server <- function(input, output, session) {
     )
   })
   
+  # Render homescreen text
+  output$welcome <- renderText({paste("<b>What would you like to do?</b>")})
+  
+  # Open "First setup" panel when "Create new SBtab" is selected
+  observeEvent(input$new_sbtab, {
+    updateCollapse(session, "homescreen", open = "First setup")
+  })
+  
+  # Open "Upload SBtab" panel when "Upload an SBtab object" is selected
+  observeEvent(input$upload_sbtab, {
+    updateCollapse(session, "homescreen", open = "Upload SBtab")
+  })
+  
+  # Open "Upload SBML" panel when "Upload an SBML object" is selected
+  observeEvent(input$upload_sbml, {
+    updateCollapse(session, "homescreen", open = "Upload SBML")
+  })
+  
   # Open "configure map" panel when document name is set
   observeEvent(input$set, {
     updateCollapse(session, "homescreen", open = "Save and download")
     updateTabItems(session, "tabs", selected = "select_tables")
-  })
-  
-  # Head to save and download tab
-  observeEvent(input$goto_download, {
-  updateTabItems(session, "tabs", selected = "setup")
-  })
-    
-  # Render text for setup page
-  output$text_hot <- renderText({
-    paste("<b>Press <i>Save table</i> to save your file before downloading it</b>")
   })
   
   output$text_download <- renderText({
@@ -117,11 +149,113 @@ server <- function(input, output, session) {
   
   # store dynamic tab list and dynamic contents
   local <- reactiveValues(
-    empty_tabs = as.list(1:12),
+    empty_tabs = as.list(table_names),
     current_tabs = list(),
     subitems = data.frame(id = integer(), name = character()),
-    choices = table_names
+    choices = table_names,
+    # create empty list for table headers (for exporting)
+    headers = list(),
+    # make reactive dataframes out of table choices
+    data = sbtab_tables_list,
+    # create empty list for data upload
+    sbtabfile = list()
   )
+  
+  # read input sbtab to dashboard
+  observeEvent(input$sbtabfile_in, {
+    local$sbtabfile <- suppressWarnings(read_sbtab(input$sbtabfile_in$datapath))
+    # print names of tables in the file to console
+    print(paste("File", paste0("'",input$sbtabfile_in$name, "'"), "contains tabs:"))
+    print(names(local$sbtabfile))
+    local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
+      # make sure all columns start with uppercase letter
+      colnames(local$sbtabfile[[name]]) <- 
+        gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
+             colnames(local$sbtabfile[[name]]),
+             perl = TRUE)
+      local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+    })
+  })
+  
+  # read input sbml to dashboard
+  observeEvent(input$sbmlfile_in, {
+    sbml_to_sbtab(input$sbmlfile_in$datapath)
+    local$sbtabfile <- suppressWarnings(read_sbtab(sbtab_string))
+    # print names of tables in the file to console
+    print(paste("File", paste0("'",input$sbmlfile_in$name, "'"), "contains tabs:"))
+    print(names(local$sbtabfile))
+    local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
+      # make sure all columns start with uppercase letter
+      colnames(local$sbtabfile[[name]]) <- 
+        gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
+             colnames(local$sbtabfile[[name]]),
+             perl = TRUE)
+      local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+    })
+  })  
+  
+  # open table tabs from uploaded files
+  observeEvent(input$set_sbtab|input$set_sbml, {
+    req(input$set_sbtab|input$set_sbml)
+    # open tabs included in sbtab in the dashboard
+    lapply(names(local$sbtabfile), function(table){
+      # update empty/current tab lists if the table is not open yet
+      if(!(table %in% local$current_tabs)){
+        local$empty_tabs <- local$empty_tabs[local$empty_tabs!=table]
+        local$current_tabs <- append(local$current_tabs, table)
+
+        # tab name
+        local$subitems <- rbind(local$subitems,
+                                data.frame(id = table, name = table))
+
+        # write table header for file
+        local$headers <- append(local$headers,
+                                paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', table, '"',' TableName="', table, '"')
+        )
+
+        # remove name of table from choices
+        local$choices <- local$choices[local$choices!=table]
+
+        # render dynamic table and description corresponding to tab name
+        output[[paste0("sub_", table)]] <- renderUI({
+          upload_tableUI(table, local$sbtabfile)
+        })
+
+        # save hot values to reactive dataframe
+        observeEvent(input[[paste0(table, "_hot")]], {
+          local$data[[table]] <- hot_to_r(input[[paste0(table, "_hot")]])
+        })
+
+        # update dynamic content in the created table
+        output[[paste0(table, "_hot")]] <- renderRHandsontable({
+          rhandsontable(local$data[[table]], rowHeaders = NULL) %>%
+            hot_cols(colWidths = 0.1) %>%
+            hot_col(col = input[[paste0(table, "_cols")]], colWidths = "100%")
+        })
+
+        # Head to save and download tab
+        observeEvent(input[[paste0("goto_download_", table)]], {
+          updateTabItems(session, "tabs", selected = "setup")
+          updateCollapse(session, "homescreen", open = "Save and download")
+        })
+
+        # output description table
+        output[[paste0("Description", table)]] <- outputTableDescription(table)
+      }
+
+      # If table was opened previously, open filled columns
+      updateCheckboxGroupInput(session, paste0(table, "_cols"),
+                               selected = c("ReferenceDOI",
+                                            "ID",
+                                            "ReactionID",
+                                            names(local$sbtabfile[[table]][which(local$sbtabfile[[table]][1,] != "")]))
+      )
+    })
+    names(local$headers) <- local$current_tabs
+
+    # open "First setup" panel after SBtab or SBML is uploaded and the continue button is pressed
+    updateCollapse(session, "homescreen", open = "First setup")
+  })
   
   # dynamic sidebar menu #
   output$mysidebar <- renderMenu({
@@ -156,87 +290,78 @@ server <- function(input, output, session) {
     req(input$add_subitem)
     req(length(local$empty_tabs) > 0)
     # id of next tab to fill
-    id <- min(unlist(local$empty_tabs))
+    id <- table_names[which(input$add_subitem == table_names)]
     # update empty/current tab lists
     local$empty_tabs <- local$empty_tabs[-which(local$empty_tabs == id)]
     local$current_tabs <- append(local$current_tabs, id)
     # tab name
     subitem <- input$add_subitem
-    local$subitems <- rbind(local$subitems, 
+    local$subitems <- rbind(local$subitems,
                             data.frame(id = id, name = subitem))
-    # remove name of table from choices 
+
+    # write table header for file
+    local$headers <- append(local$headers,
+                            paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
+                            )
+    names(local$headers) <- local$current_tabs
+
+    # remove name of table from choices
     local$choices <- local$choices[local$choices!=subitem]
     updateTabItems(session, "tabs", selected = "select_tables")
-    
+
     # render dynamic table and description corresponding to tab name
-    output[[ paste0("sub_", id) ]] <- renderUI ({
-      list(
-        bsCollapsePanel("Select columns to include",
-          checkboxGroupInput(paste0(subitem, "_cols"),
-                             "Choose from:",
-                             choices = names(sbtab_tables_list[[subitem]]),
-                             selected = c("ReferenceDOI", "ID"),
-                             inline = TRUE)
-        ),
-        tabItem(
-          tabName = subitem,
-          fluidRow(
-            column( 10,
-              rHandsontableOutput(paste0(subitem, "_hot"), 
-                                  height = 400, 
-                                  width = "100%"),
-              offset = 0
-            ),
-          )
-        ),
-        actionButton("goto_download", "Click here to go to the download screen" ),
-        br(), br(),
-        bsCollapsePanel("Description of table elements",
-            DT::dataTableOutput(paste0("Description", subitem), 
-                                width = "100%")
-        )
-      )
+    output[[ paste0("sub_", subitem)]] <- renderUI ({
+      upload_tableUI(subitem)
     })
-    
-    # make table a reactive dataframe
-    df <- sbtab_tables_list[[subitem]]
-    values <- reactiveValues(data = df)
     
     # save hot values to reactive dataframe
     observeEvent(input[[paste0(subitem, "_hot")]], {
-      values$data <- hot_to_r(input[[paste0(subitem, "_hot")]])
+      local$data[[subitem]] <- hot_to_r(input[[paste0(subitem, "_hot")]])
     })
-    
+
     # update dynamic content in the created table
     output[[paste0(subitem, "_hot")]] <- renderRHandsontable({
-      rhandsontable(values$data, rowHeaders = NULL) %>%
+      rhandsontable(local$data[[subitem]], rowHeaders = NULL) %>%
         hot_cols(colWidths = 0.1) %>%
         hot_col(col = input[[paste0(subitem, "_cols")]], colWidths = "100%")
-      })
-      
+    })
+    
+    # Head to save and download tab
+    observeEvent(input[[paste0("goto_download_", subitem)]], {
+      updateTabItems(session, "tabs", selected = "setup")
+      updateCollapse(session, "homescreen", open = "Save and download")
+    })
+
     # output description table
     output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
-    
-    # Write in table header
-    tableheader <- 
-      paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
-      
-    # Write table header and columns to file
-    observeEvent(input$save_hot, {
-      write_lines(tableheader, file = "physmap.tsv", append = TRUE)
-      write_tsv(set_cols(values$data), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
-      write_lines(" ", file = "physmap.tsv", append = TRUE)
-      source_python('sbtab_to_sbml.py')
-      })
-    })
+  })
   
-  # set document header
-  observeEvent({input$set
-    input$save_hot}, {
-      req(input$set_documentname)
-      documentname_set <- 
-        paste0('!!!SBtab Document="', input$set_documentname, '"') %>% as.character()
-      write_lines(documentname_set, file = "physmap.tsv")
+  # write tsv and xml documents reactively
+  observeEvent(local$data, {
+    documentname_set <-
+      paste0('!!!SBtab Document="', 
+             if(is_empty(input$set_documentname)){
+               "Documentname"
+               }else{
+                 input$set_documentname
+                 }, 
+             '"') %>% 
+      as.character()
+    write_lines(documentname_set, file = "physmap.tsv")
+    for(table in local$current_tabs){
+      write_lines(local$headers[[table]], file = "physmap.tsv", append = TRUE)
+      write_tsv(set_cols(local$data[[table]]), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
+      write_lines(" ", file = "physmap.tsv", append = TRUE)
+    }
+    tryCatch({
+      sbtab_to_sbml("physmap.tsv")
+      },
+      warning = function(warn){
+        print(warn)
+      },
+      error = function(err){
+        print(err)
+      })
     })
   
   # remove a tab
@@ -268,7 +393,7 @@ server <- function(input, output, session) {
   output$download_xml <- downloadHandler(
     filename = "physmap.xml",
     content = function(file) {
-      file.copy("physmap.xml", file)
+      write_file(sbml, file)
     })
 }
 
