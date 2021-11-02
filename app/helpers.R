@@ -43,7 +43,7 @@ read_sbtab <- function(file, na = ""){
         tables[[c]][which(l == tab_content),] <- vector
       }
       # remove "!" from column names
-      names(tables[[c]]) <- names(sbtab_tables_list[[names(tables[c])]])
+      names(tables[[c]]) <- str_remove_all(names(tables[[c]]), "!")
       c = c+1
       closeAllConnections()
     } 

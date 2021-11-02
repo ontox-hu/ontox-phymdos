@@ -11,15 +11,19 @@ library(tidyverse)
 ```
 
 ```{r}
-# open tabs included in sbtab in the dashboard
-sbtabfile <-  suppressWarnings(read_sbtab("liver_bile_example/liver_bile_template.tsv"))
-table <- "Compartment"
-empty_tabs <- as.list(table_names)
-current_tabs <- list()
-nrs <- c(1, 3, 3, 5)
-
-names(sbtabfile[[table]][which(sbtabfile[[table]][1,] != "")])
-names(sbtab_tables_list[[table]][nrs])
-
+test <- read_sbtab(sbml_file)
+colnames(test[[2]])
+gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",    # Uppercase with Base R
+     colnames(test[[2]]),
+     perl = TRUE)
+str_to_upper(colnames(test[[2]]))
+colnames(test[["Compound"]])[7] <- "HasOnlySubstanceUnits"
+sbtab <- sbtab_tables_list
+x <- names(test)[1]
+sbtab[names(test)] <- lapply(names(test), function(name){
+sbtab[[name]] <- add_row(sbtab[[name]], test[[name]], .after = 0)
+})
+sbtab[["Compound"]] <- add_row(sbtab[["Compound"]], test[["Compound"]], .after = 0)
+test[["Reaction"]][]
 ```
 

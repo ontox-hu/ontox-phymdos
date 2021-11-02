@@ -1,0 +1,31 @@
+!!!SBtab Document=""
+!!SBtab TableID="t_Compartment" SBtabVersion="1.0" Document="" TableType="Compartment" TableName="Compartment"
+!Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Name	!MiriamAnnotation	!Type	!Symbol	!PositionX	!PositionY	!ID	!SBML:compartment:id	!OuterCompartment	!OuterCompartment:SBML:compartment:id	!IsConstant	!Size	!Unit	!SBOTerm	!Identifiers
+					Liver						Liver					1.0		Liver	
+					Ileum						Ileum					1.0		Ileum	
+					Colon						Colon					1.0		Colon	
+																			
+ 
+!!SBtab TableID="t_Compound" SBtabVersion="1.0" Document="" TableType="Compound" TableName="Compound"
+!Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Name	!MiriamAnnotation	!Type	!Symbol	!PositionX	!PositionY	!ID	!SBML:species:id	!Compound	!SBML:speciestype:id	!InitialValue	!InitialConcentration	!HasOnlySubstanceUnits	!BoundaryCondition	!Unit	!Location	!State	!CompoundSumFormula	!StructureFormula	!Charge	!Mass	!IsConstant	!EnzymeRole	!RegulatorRole	!SBOTerm	!Identifiers	!SBML:fbc:ChemicalFormula	!SBML:fbc:Charge
+					cholesterol						C_cholesterol					0.0	False			Liver						False						
+					7a-HO-cholesterol						C_E7aHOcholesterol					0.0	False			Liver						False						
+					7a-HO-4-cholesten-3-one						C_E7aHO4cholesten3one					0.0	False			Liver						False						
+					7a, 12a-(OH)2-4-cholesten-3-one						C_E7a12aOH24cholesten3one					0.0	False			Liver						False						
+					3a, 7a, 12a-(HO)3-5B-cholestenoic_acid						C_E3a7a12aHO35Bcholestenoicacid					0.0	False			Liver						False						
+					3a,7a,12a-(HO)3-cholanoic_acid (cholic_acis) (TCA)						C_E3a7a12aHO3cholanoicacid					0.0	False			Liver						False						
+					CA						C_CA					0.0	False			Ileum						False						
+					DCA						C_DCA					0.0	False			Colon						False						
+																																
+ 
+!!SBtab TableID="t_Reaction" SBtabVersion="1.0" Document="" TableType="Reaction" TableName="Reaction"
+!Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Modifier	!Name	!MiriamAnnotation	!Type	!Symbol	!PositionX	!PositionY	!ID	!SBML:reaction:id	!Reaction	!ReactionFormula	!Location	!Enzyme	!Regulator	!Model	!Pathway	!SubreactionOf	!IsComplete	!IsReversible	!IsInEquilibrium	!IsExchangeReaction	!Flux	!IsNonEnzymatic	!KineticLaw	!KineticLaw:Name	!KineticLaw:Formula	!Gene	!Gene:Symbol	!Operon	!Enzyme:SBML:species:id	!Enzyme:SBML:parameter:id	!BuildReaction	!BuildEnzyme	!BuildEnzymeProduction	!SBOTerm	!Identifiers	!SBML:fbc:GeneAssociation	!SBML:fbc:LowerBound	!SBML:fbc:UpperBound
+						CYP7A1						R_CYP7A1			C_cholesterol <=> C_E7aHOcholesterol								False																				
+						3?-HSO						R_E3BHSO			C_E7aHOcholesterol <=> C_E7aHO4cholesten3one								False																				
+						CYP8B1						R_CYP8B1			C_E7aHO4cholesten3one <=> C_E7a12aOH24cholesten3one								False																				
+						CYP27A1						R_CYP27A1			C_E7a12aOH24cholesten3one <=> C_E3a7a12aHO35Bcholestenoicacid								False																				
+						NA						R_NA			C_E3a7a12aHO35Bcholestenoicacid <=> C_E3a7a12aHO3cholanoicacid								False																				
+						BSH						R_BSH			C_E3a7a12aHO3cholanoicacid <=> C_CA								False																				
+						7a-de-HO-ase						R_E7adeHOase			C_CA <=> C_DCA								False																				
+																																											
+ 

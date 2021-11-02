@@ -6,7 +6,7 @@ from sbtab import sbtab2sbml
 from pathlib import Path
 
 # Read in TSV file containing SBtab info and definitions file
-sbtab_file   = open(r.file_test,'r')
+sbtab_file   = open(r.sbtab_file,'r')
 file_content = sbtab_file.read()
 sbtab_file.close()
 

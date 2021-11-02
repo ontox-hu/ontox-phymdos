@@ -7,4 +7,4 @@ virtualenv_install(envname = "ontox-app", "sbtab")
 use_virtualenv("ontox-app", required = TRUE)
 
 # Load in file to convert
-file_test <- "app/physmap.tsv"
+sbtab_file <- "app/physmap.tsv"

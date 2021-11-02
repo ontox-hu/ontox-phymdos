@@ -2,7 +2,7 @@
 
 library(tidyverse)
 ## tables: 
-sbtab_definitions <- readr::read_tsv("definitions.tsv", 
+sbtab_definitions <- readr::read_tsv("https://raw.githubusercontent.com/tlubitz/SBtab/master/definition_table/definitions.tsv", 
                                      skip = 1, col_names = TRUE, show_col_types = FALSE
 )
 
@@ -14,6 +14,7 @@ sbtab_definitions <- sbtab_definitions %>%
 
 ## split tables
 split_def_tables <- split(sbtab_definitions, as_factor(sbtab_definitions$`!Parent`))
+split_def_tables <- split_def_tables[names(split_def_tables) != "SBtab"]
 
 ## define tablenames to vector and dataframe
 table_names <- names(split_def_tables)
@@ -26,7 +27,7 @@ df_ori = split_def_tables[[1]]
 ## function creates a table from the definitions object
 make_sbtab_table_on_definition <- function(df_ori){
   
-  table_columns <- df_ori$`!ComponentName` 
+  table_columns <- df_ori$`!Name` 
   table_spine <- table_columns %>% t() %>% as_tibble()
   names(table_spine) <- table_spine[1,] %>% as.character() 
   

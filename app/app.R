@@ -5,6 +5,9 @@ source(
 source(
   "open_python.R"
 )
+source_python(
+  "sbml_to_sbtab.py"
+  )
 
 
 options(stringsAsFactors = FALSE)
@@ -128,11 +131,6 @@ server <- function(input, output, session) {
     updateCollapse(session, "homescreen", open = "Upload SBML")
   })
   
-  # Open "First setup" panel after SBML is uploaded
-  observeEvent(input$set_sbml, {
-    updateCollapse(session, "homescreen", open = "First setup")
-  })
-  
   # Open "configure map" panel when document name is set
   observeEvent(input$set, {
     updateCollapse(session, "homescreen", open = "Save and download")
@@ -167,20 +165,52 @@ server <- function(input, output, session) {
     current_tabs = list(),
     subitems = data.frame(id = integer(), name = character()),
     choices = table_names,
+    # create empty list for table headers (for exporting)
     headers = list(),
     # make reactive dataframes out of table choices
-    data = sbtab_tables_list
+    data = sbtab_tables_list,
+    # create empty list for data upload
+    sbtabfile = list()
   )
   
   # read input sbtab to dashboard
   observeEvent(input$sbtabfile_in, {
-    sbtabfile <-  suppressWarnings(read_sbtab(input$sbtabfile_in$datapath))
+    local$sbtabfile <- suppressWarnings(read_sbtab(input$sbtabfile_in$datapath))
+    # print names of tables in the file to console
     print(paste("File", paste0("'",input$sbtabfile_in$name, "'"), "contains tabs:"))
-    print(names(sbtabfile))
-    local$data[names(sbtabfile)] <- sbtabfile
-    
+    print(names(local$sbtabfile))
+    local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
+      # make sure all columns start with uppercase letter
+      colnames(local$sbtabfile[[name]]) <- 
+        gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
+             colnames(local$sbtabfile[[name]]),
+             perl = TRUE)
+      local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+    })
+  })
+  
+  # read input sbml to dashboard
+  observeEvent(input$sbmlfile_in, {
+    open_sbml(input$sbmlfile_in$datapath)
+    local$sbtabfile <- suppressWarnings(read_sbtab(sbml_file))
+    # print names of tables in the file to console
+    print(paste("File", paste0("'",input$sbmlfile_in$name, "'"), "contains tabs:"))
+    print(names(local$sbtabfile))
+    local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
+      # make sure all columns start with uppercase letter
+      colnames(local$sbtabfile[[name]]) <- 
+        gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
+             colnames(local$sbtabfile[[name]]),
+             perl = TRUE)
+      local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+    })
+  })  
+  
+  # open table tabs from uploaded files
+  observeEvent(input$set_sbtab|input$set_sbml, {
+    req(input$set_sbtab|input$set_sbml)
     # open tabs included in sbtab in the dashboard
-    lapply(names(sbtabfile), function(table){
+    lapply(names(local$sbtabfile), function(table){
       # update empty/current tab lists if the table is not open yet
       if(!(table %in% local$current_tabs)){
         local$empty_tabs <- local$empty_tabs[local$empty_tabs!=table]
@@ -200,9 +230,9 @@ server <- function(input, output, session) {
 
         # render dynamic table and description corresponding to tab name
         output[[paste0("sub_", table)]] <- renderUI({
-          upload_tableUI(table, sbtabfile)
+          upload_tableUI(table, local$sbtabfile)
         })
-        
+
         # save hot values to reactive dataframe
         observeEvent(input[[paste0(table, "_hot")]], {
           local$data[[table]] <- hot_to_r(input[[paste0(table, "_hot")]])
@@ -224,20 +254,18 @@ server <- function(input, output, session) {
         # output description table
         output[[paste0("Description", table)]] <- outputTableDescription(table)
       }
-      
+
       # If table was opened previously, open filled columns
-      updateCheckboxGroupInput(session, paste0(table, "_cols"), 
-                               selected = c("ReferenceDOI", 
+      updateCheckboxGroupInput(session, paste0(table, "_cols"),
+                               selected = c("ReferenceDOI",
                                             "ID",
-                                            "ReactionID", 
-                                            names(sbtabfile[[table]][which(sbtabfile[[table]][1,] != "")]))
+                                            "ReactionID",
+                                            names(local$sbtabfile[[table]][which(local$sbtabfile[[table]][1,] != "")]))
       )
     })
     names(local$headers) <- local$current_tabs
-  })
-  
-  # open "First setup" panel after SBtab is uploaded
-  observeEvent(input$set_sbtab, {
+
+    # open "First setup" panel after SBtab or SBML is uploaded and the continue button is pressed
     updateCollapse(session, "homescreen", open = "First setup")
   })
   
