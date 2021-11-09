@@ -1,6 +1,15 @@
 ## define rhandsontables for SBTab app
 
 library(tidyverse)
+library(callr)
+library(shinydashboard)
+library(shiny)
+library(data.table)
+library(rhandsontable)
+library(shinyjs)
+library(shinyBS)
+library(shinyWidgets)
+
 ## tables: 
 sbtab_definitions <- readr::read_tsv("https://raw.githubusercontent.com/tlubitz/SBtab/master/definition_table/definitions.tsv", 
                                      skip = 1, col_names = TRUE, show_col_types = FALSE
