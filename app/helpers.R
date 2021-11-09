@@ -6,10 +6,38 @@ library(data.table)
 library(rhandsontable)
 library(shinyjs)
 library(shinyBS)
+library(shinyWidgets)
 
 source(
   "sbtab_tables.R"
 )
+
+## create static tab list
+tab_list_ui <- function() {
+  # concatenate static tabs
+  items <- c(
+    list(
+      tabItem(
+        tabName = "setup",
+        uiOutput("mysetup")
+      )
+    ),
+    list(
+      tabItem(
+        tabName = "select_tables",
+        uiOutput("mytables")
+      )
+    ),
+    lapply(table_names, function(id) {
+      tabItem(
+        tabName = paste0("tab_", id), 
+        uiOutput(paste0("sub_", id))
+      )
+    })
+  )
+  # render
+  do.call(tabItems, items)
+}
 
 ## add ! to colnames
 set_cols <- function(x){
@@ -66,8 +94,8 @@ open_tabs <- function(table){
 outputTableDescription <- function(tableTitle){
   DT::renderDataTable({
     split_def_tables[[tableTitle]]%>%
-      dplyr::select(`!ComponentName`,`!Description`,`!Format`)%>%
-      dplyr::rename(ComponentName = `!ComponentName`,
+      dplyr::select(`!Name`,`!Description`,`!Format`)%>%
+      dplyr::rename(Name = `!Name`,
                     Description = `!Description`,
                     Format = `!Format`)
   })

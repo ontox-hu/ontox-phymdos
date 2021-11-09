@@ -8,33 +8,6 @@ source(
 
 options(stringsAsFactors = FALSE)
 
-# static tab list
-tab_list_ui <- function() {
-  # concatenate static tabs
-  items <- c(
-    list(
-      tabItem(
-        tabName = "setup",
-        uiOutput("mysetup")
-      )
-    ),
-    list(
-      tabItem(
-        tabName = "select_tables",
-        uiOutput("mytables")
-      )
-    ),
-    lapply(table_names, function(id) {
-      tabItem(
-        tabName = paste0("tab_", id), 
-        uiOutput(paste0("sub_", id))
-      )
-    })
-  )
-  # render
-  do.call(tabItems, items)
-}
-
 # dynamic sub menu
 update_submenu <- function(local) {
   lapply(split(local$subitems, seq(nrow(local$subitems))), function(x) {
@@ -47,7 +20,16 @@ ui <- dashboardPage(
   dashboardHeader(title = tags$p(tags$a(href='https://ontox-project.eu/',
                                  tags$img(src='ontox_logo.png',height='40',width='60')),
                                  " - Physiological Maps Data Entry Portal"), 
-                  titleWidth = 500),
+                  titleWidth = 500,
+                  tags$li(a(onclick = "onclick =window.open('https://github.com/xxx/xxx')",
+                            href = NULL,
+                            icon("github"),
+                            title = "GitHub",
+                            style = "cursor: pointer;"
+                            ),
+                          class = "dropdown"
+                          )
+                  ),
   dashboardSidebar(
     sidebarMenuOutput("mysidebar")
   ),
@@ -59,11 +41,54 @@ ui <- dashboardPage(
 
 # server
 server <- function(input, output, session) {
+  # dynamic sidebar menu 
+  output$mysidebar <- renderMenu({
+    sidebarMenu(
+      id = "tabs",
+      menuItem(
+        "Setup", tabName = "setup",
+        icon = icon("gear"), selected = TRUE
+      ),
+      menuItem(
+        "Select tables", tabName = "select_tables", 
+        icon = icon("table")
+      ),
+      menuItem(
+        "Tables", id = "subs", tabName = "subs", 
+        icon = icon("database"), startExpanded = TRUE,
+        update_submenu(local)
+      )
+    )
+  })
+  
+  # debugging
+  observe({
+    print(paste0("current tabs = ", 
+                 paste0(unlist(local$current_tabs), collapse = " ")))
+    print(paste0("empty tabs = ", 
+                 paste0(unlist(local$empty_tabs), collapse = " ")))
+  })
+  
   # This is to get the desired menuItem selected initially. 
   # selected=T seems not to work with a dynamic sidebarMenu.
   observeEvent(session, {
     updateTabItems(session, "tabs", selected = "setup")
   })
+  
+  # store dynamic tab list and dynamic contents to use in app
+  local <- reactiveValues(
+    empty_tabs = as.list(table_names),
+    current_tabs = list(),
+    subitems = data.frame(id = integer(), name = character()),
+    choices = table_names,
+    # create empty list for table headers (for exporting)
+    headers = list(),
+    # make reactive dataframes out of table choices
+    data = sbtab_tables_list,
+    # create empty list for data upload
+    sbtabfile = list()
+  )
+  
   
   ## render setup screen
   output$mysetup <- renderUI({
@@ -101,7 +126,8 @@ server <- function(input, output, session) {
       bsCollapsePanel("Save and download",
         htmlOutput("text_download"),
         downloadButton("download_tsv", "Download tsv"),
-        downloadButton("download_xml", "Download xml")
+        downloadButton("download_xml", "Download xml"),
+        actionButton("open_minerva", "Open MINERVA", icon(progressBar(id = "open_m", value = 0, total = 5)))
       )
     )
   })
@@ -123,43 +149,6 @@ server <- function(input, output, session) {
   observeEvent(input$upload_sbml, {
     updateCollapse(session, "homescreen", open = "Upload SBML")
   })
-  
-  # Open "configure map" panel when document name is set
-  observeEvent(input$set, {
-    updateCollapse(session, "homescreen", open = "Save and download")
-    updateTabItems(session, "tabs", selected = "select_tables")
-  })
-  
-  output$text_download <- renderText({
-    paste("<b>Download your file to .tsv or .xml format</b>")
-  })
-  
-  # render select_tables
-  output$mytables <- renderUI({
-    tagList(
-      selectInput("add_subitem", "Select table to add",
-                  choices = local$choices),
-      actionButton("add", "Add"),
-      br(), br(),
-      selectInput("rm_subitem", "Select table to remove",
-                  choices = local$subitems$name),
-      actionButton("rm", "Remove")
-    )
-  })
-  
-  # store dynamic tab list and dynamic contents
-  local <- reactiveValues(
-    empty_tabs = as.list(table_names),
-    current_tabs = list(),
-    subitems = data.frame(id = integer(), name = character()),
-    choices = table_names,
-    # create empty list for table headers (for exporting)
-    headers = list(),
-    # make reactive dataframes out of table choices
-    data = sbtab_tables_list,
-    # create empty list for data upload
-    sbtabfile = list()
-  )
   
   # read input sbtab to dashboard
   observeEvent(input$sbtabfile_in, {
@@ -203,46 +192,46 @@ server <- function(input, output, session) {
       if(!(table %in% local$current_tabs)){
         local$empty_tabs <- local$empty_tabs[local$empty_tabs!=table]
         local$current_tabs <- append(local$current_tabs, table)
-
+        
         # tab name
         local$subitems <- rbind(local$subitems,
                                 data.frame(id = table, name = table))
-
+        
         # write table header for file
         local$headers <- append(local$headers,
                                 paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', table, '"',' TableName="', table, '"')
         )
-
+        
         # remove name of table from choices
         local$choices <- local$choices[local$choices!=table]
-
+        
         # render dynamic table and description corresponding to tab name
         output[[paste0("sub_", table)]] <- renderUI({
           upload_tableUI(table, local$sbtabfile)
         })
-
+        
         # save hot values to reactive dataframe
         observeEvent(input[[paste0(table, "_hot")]], {
           local$data[[table]] <- hot_to_r(input[[paste0(table, "_hot")]])
         })
-
+        
         # update dynamic content in the created table
         output[[paste0(table, "_hot")]] <- renderRHandsontable({
           rhandsontable(local$data[[table]], rowHeaders = NULL) %>%
             hot_cols(colWidths = 0.1) %>%
             hot_col(col = input[[paste0(table, "_cols")]], colWidths = "100%")
         })
-
+        
         # Head to save and download tab
         observeEvent(input[[paste0("goto_download_", table)]], {
           updateTabItems(session, "tabs", selected = "setup")
           updateCollapse(session, "homescreen", open = "Save and download")
         })
-
+        
         # output description table
         output[[paste0("Description", table)]] <- outputTableDescription(table)
       }
-
+      
       # If table was opened previously, open filled columns
       updateCheckboxGroupInput(session, paste0(table, "_cols"),
                                selected = c("ReferenceDOI",
@@ -252,39 +241,30 @@ server <- function(input, output, session) {
       )
     })
     names(local$headers) <- local$current_tabs
-
+    
     # open "First setup" panel after SBtab or SBML is uploaded and the continue button is pressed
     updateCollapse(session, "homescreen", open = "First setup")
   })
   
-  # dynamic sidebar menu #
-  output$mysidebar <- renderMenu({
-    sidebarMenu(
-      id = "tabs",
-      menuItem(
-        "Setup", tabName = "setup",
-        icon = icon("gear"), selected = TRUE
-      ),
-      menuItem(
-        "Select tables", tabName = "select_tables", 
-        icon = icon("table")
-      ),
-      menuItem(
-        "Tables", id = "subs", tabName = "subs", 
-        icon = icon("database"), startExpanded = TRUE,
-        update_submenu(local)
-      )
+  # Open "configure map" panel when document name is set
+  observeEvent(input$set, {
+    updateCollapse(session, "homescreen", open = "Save and download")
+    updateTabItems(session, "tabs", selected = "select_tables")
+  })
+  
+  # render select_tables
+  output$mytables <- renderUI({
+    tagList(
+      selectInput("add_subitem", "Select table to add",
+                  choices = local$choices),
+      actionButton("add", "Add"),
+      br(), br(),
+      selectInput("rm_subitem", "Select table to remove",
+                  choices = local$subitems$name),
+      actionButton("rm", "Remove")
     )
   })
-  
-  # debugging
-  observe({
-    print(paste0("current tabs = ", 
-                 paste0(unlist(local$current_tabs), collapse = " ")))
-    print(paste0("empty tabs = ", 
-                 paste0(unlist(local$empty_tabs), collapse = " ")))
-  })
-  
+
   # add a tab
   observeEvent(input$add, {
     req(input$add_subitem)
@@ -336,7 +316,7 @@ server <- function(input, output, session) {
     output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
   })
   
-  # write tsv and xml documents reactively
+  # write tsv and xml documents actively
   observeEvent(local$data, {
     documentname_set <-
       paste0('!!!SBtab Document="', 
@@ -353,14 +333,16 @@ server <- function(input, output, session) {
       write_tsv(set_cols(local$data[[table]]), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
       write_lines(" ", file = "physmap.tsv", append = TRUE)
     }
+    # make it so that sbtab conversion errors don't crash the app 
+    # (incomplete sbtab document will cause the .py script to return error)
     tryCatch({
       sbtab_to_sbml("physmap.tsv")
       },
       warning = function(warn){
-        print(warn)
+        print("py.warn")
       },
       error = function(err){
-        print(err)
+        print("py.err")
       })
     })
   
@@ -383,6 +365,11 @@ server <- function(input, output, session) {
     updateTabItems(session, "tabs", selected = "select_tables")
   })
   
+  # render text in download tab
+  output$text_download <- renderText({
+    paste("<b>Download your file to .tsv or .xml format</b>")
+  })
+  
   # download tab content to .tsv and .xml
   output$download_tsv <- downloadHandler(
     filename = "physmap.tsv",
@@ -395,6 +382,22 @@ server <- function(input, output, session) {
     content = function(file) {
       write_file(sbml, file)
     })
+  
+  # open minerva on click
+  observeEvent(input$open_minerva, {
+    showNotification("Please wait a few seconds for the page to load")
+    source_python("minerva_upload.py")
+    delay(2000, browseURL(paste0("http://localhost:8080/minerva/index.xhtml?id=", project_id)))
+  })
+  
 }
 
-shinyApp(ui, server)
+shinyApp(ui, server,
+onStart = function() {
+  rcmd_bg("docker-compose", "up", wd = "./docker",  supervise = TRUE)
+  
+  onStop(function() {
+    rcmd_bg("docker", c("stop", "docker_minerva_1"))
+    rcmd_bg("docker", c("stop", "docker_db_1"))
+  })
+})

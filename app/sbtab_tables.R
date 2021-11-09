@@ -1,6 +1,7 @@
 ## define rhandsontables for SBTab app
 
 library(tidyverse)
+library(callr)
 ## tables: 
 sbtab_definitions <- readr::read_tsv("https://raw.githubusercontent.com/tlubitz/SBtab/master/definition_table/definitions.tsv", 
                                      skip = 1, col_names = TRUE, show_col_types = FALSE
