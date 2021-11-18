@@ -47,4 +47,29 @@ The webversion of the application can be found [here](https://datascience.hu.nl/
   <br>
   
   ![add](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/add_upload.png)
+  
+  <li>
+    Once all the correct tables are sellected users can start filling the new tables or adding to the uploaded tables however they see fit. 
+  </li>
+  <br> 
+  
+  ![table](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/table_upload.png)
+  
+  For empty tables the first step is to start adding colums to the table. This can also be done on existing tables to add information.
+  <br>
+  
+  ![choose](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/column_choose.png)
+    
+  To find out what columns users can view the description of table elements found at the bottom of the page.
+  <br>
+  
+  ![description](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/table_description.png)
+  
+  <li> 
+    When users are done filling out the tables they can click the button to go to the download screen or they can click back to Setup on the menu on the left. Here they can export the file to SBtab format as well as SBML. 
+  </li>
+  <br>
+  
+  ![download](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/download.png)
+  
 </ol>
