@@ -1,18 +1,21 @@
 ONTOX-PMDEP - the ONTOX Physiological Map Data Entry Portal
 ============================================================
 
+ <font size="+1">
 This application was created to serve as a bridge between the SBTAB and SBML formats. Its core functionality is to allow the user to easily create SBML style physiological maps from litarature by filling out easy to use datatables and converting them to the desired format by the click of a button. <br>
 The webversion of the application can be found [here](https://datascience.hu.nl/rsconnect/pmdep/).
----
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
 The MINERVA functionality is not yet operable on the webversion of the app.
----
+<hr style="height:2px;border-width:0;color:gray;background-color:gray">
 <ol>
   <li>
   Upon opening the app users will first be guided to the homescreen where they are presented with 3 choices. 
   </li>
   <br>
   
-  ![home](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/home.png/)
+  <img src="home.png" width="100%" height="100%" />
+  
+  <br> <br>
   <ol type=a>
     <li> 
       Create new SBtab: <br>
@@ -33,44 +36,51 @@ The MINERVA functionality is not yet operable on the webversion of the app.
   </li>
   <br>
   
-  ![upload](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/upload.png/)
-  
+  <img src="upload.png" width="100%" height="100%" />
+
+  <br> <br>
   <li>
   Once the upload is complete and the continue button is clicked the app will open the tables corresponding to the upload file, and users will be redirected to the first setup where they can enter a name for the document and choose a SBtab version (change only if needed, the newest version is standard).
   </li>
   <br>
   
-  ![setup](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/first_setup_upload.png/)
-  
+  <img src="first_setup_upload.png" width="100%" height="100%" />
+
+  <br> <br>
   <li>
     Clicking 'save input' will redirect users to the 'select tables' tab which can also be accessed from the menu on the left side of the screen. Here users can add or remove tables from the menu. Please note that removing a table from the menu deletes any data that is inside the table.
   </li>
   <br>
   
-  ![add](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/add_upload.png)
-  
+  <img src="add_upload.png" width="100%" height="100%" />
+
+  <br> <br>
   <li>
     Once all the correct tables are sellected users can start filling the new tables or adding to the uploaded tables however they see fit. 
   </li>
   <br> 
   
-  ![table](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/table_upload.png)
-  
+  <img src="table_upload.png" width="100%" height="100%" />
+
+  <br> <br>
   For empty tables the first step is to start adding colums to the table. This can also be done on existing tables to add information.
-  <br>
+  <br> <br>
   
-  ![choose](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/column_choose.png)
-    
+  <img src="column_choose.png" width="100%" height="100%" />
+
+  <br> <br>
   To find out what columns users can view the description of table elements found at the bottom of the page.
-  <br>
+  <br> <br>
   
-  ![description](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/table_description.png)
-  
+  <img src="table_description.png" width="100%" height="100%" />
+
+  <br> <br>
   <li> 
     When users are done filling out the tables they can click the button to go to the download screen or they can click back to Setup on the menu on the left. Here they can export the file to SBtab format as well as SBML. 
   </li>
   <br>
   
-  ![download](https://github.com/ontox-hu/ontox-pmdep/blob/dev_daniel/documentation/download.png)
-  
+  <img src="download.png" width="100%" height="100%" />
+
 </ol>
+</font>

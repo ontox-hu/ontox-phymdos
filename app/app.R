@@ -57,6 +57,10 @@ server <- function(input, output, session) {
         "Tables", id = "subs", tabName = "subs", 
         icon = icon("database"), startExpanded = TRUE,
         update_submenu(local)
+      ),
+      menuItem(
+        "Help", tabName = "help",
+        icon = icon("question")
       )
     )
   })
@@ -291,7 +295,7 @@ server <- function(input, output, session) {
 
     # render dynamic table and description corresponding to tab name
     output[[ paste0("sub_", subitem)]] <- renderUI ({
-      upload_tableUI(subitem)
+      add_tableUI(subitem)
     })
     
     # save hot values to reactive dataframe
@@ -349,8 +353,7 @@ server <- function(input, output, session) {
   # remove a tab
   observeEvent(input$rm, {
     req(input$rm_subitem)
-    req(length(local$empty_tabs) < 12)
-    # add name of table from choices
+    # add name of table back to choices
     local$choices <- local$choices %>% c(paste(input$rm_subitem))
     # id of tab to fill
     subitem_ind <- which(local$subitems$name == input$rm_subitem)
@@ -358,8 +361,15 @@ server <- function(input, output, session) {
     # update empty/current tab lists
     local$empty_tabs <- append(local$empty_tabs, subitem$id)
     local$current_tabs <- local$current_tabs[-which(local$current_tabs == subitem$id)]
-    # reset deleted tab
-    shinyjs::reset(paste0("sub_", subitem$id))
+    # # reset deleted tab and tab content
+    # shinyjs::reset(paste0("sub_", subitem$id))
+    # local$data[which(names(local$data) == subitem$id)] <- sbtab_tables_list[which(names(sbtab_tables_list) == subitem$id)]
+    # print(local$data[which(names(local$data) == subitem$id)])
+    # updateCheckboxGroupInput(session, paste0(input$rm_subitem, "_cols"),
+    #                          selected = c("ReferenceDOI",
+    #                                       "ID",
+    #                                       "ReactionID")
+    #                          )
     # tab name
     local$subitems <- local$subitems[-subitem_ind,]
     updateTabItems(session, "tabs", selected = "select_tables")
@@ -387,7 +397,11 @@ server <- function(input, output, session) {
   observeEvent(input$open_minerva, {
     showNotification("Please wait a few seconds for the page to load")
     source_python("minerva_upload.py")
-    #delay(2000, js$browseURL(paste0("http://localhost:8080/minerva/index.xhtml?id=", project_id)))
+  })
+  
+  ## render help screen
+  output$myhelp <- renderUI({
+    includeMarkdown("README_copy.md")
   })
   
 }

@@ -2,10 +2,10 @@
 
 library(tidyverse)
 library(callr)
-library(shinydashboard)
-library(shiny)
 library(data.table)
 library(rhandsontable)
+library(shinydashboard)
+library(shiny)
 library(shinyjs)
 library(shinyBS)
 library(shinyWidgets)
