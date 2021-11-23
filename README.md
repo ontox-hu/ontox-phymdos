@@ -3,9 +3,9 @@ ONTOX-PMDEP - the ONTOX Physiological Map Data Entry Portal
 
 This application was created to serve as a bridge between the SBTAB and SBML formats. Its core functionality is to allow the user to easily create SBML style physiological maps from litarature by filling out easy to use datatables and converting them to the desired format by the click of a button. <br>
 The webversion of the application can be found [here](https://datascience.hu.nl/rsconnect/pmdep/).
----
+
 The MINERVA functionality is not yet operable on the webversion of the app.
----
+
 <ol>
   <li>
   Upon opening the app users will first be guided to the homescreen where they are presented with 3 choices. 
