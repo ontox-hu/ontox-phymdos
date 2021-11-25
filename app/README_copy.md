@@ -2,14 +2,15 @@ ONTOX-PMDEP - the ONTOX Physiological Map Data Entry Portal
 ============================================================
 
  <font size="+1">
-This application was created to serve as a bridge between the SBTAB and SBML formats. Its core functionality is to allow the user to easily create SBML style physiological maps from litarature by filling out easy to use datatables and converting them to the desired format by the click of a button. <br>
-The webversion of the application can be found [here](https://datascience.hu.nl/rsconnect/pmdep/).
+This application was created to serve as a bridge between [sysrev.com](https://sysrev.com/) and [Celldesigner](http://www.celldesigner.org/). Its core functionality is to allow the user to easily create SBML style physiological maps from litarature by filling out easy to use datatables and converting them to the desired format by the click of a button. 
+The format used to create these datatables is SBtab, which is essentially a .tsv file containing several tables that together define a system. These tables can be filled out at sysrev.com and in this app and can then be converted to SBML files that are used by Celldesigner to build physiological maps. This workflow has been illustrated below. <br>
+<img src="app_workflow.png" width="80%" height="100%" />
 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-The MINERVA functionality is not yet operable on the webversion of the app.
+The MINERVA functionality is not yet operable on the web-version of the app.
 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
 <ol>
   <li>
-  Upon opening the app users will first be guided to the homescreen where they are presented with 3 choices. 
+  Upon opening the app, users will first be guided to the homescreen where they are presented with 3 choices. 
   </li>
   <br>
   
@@ -32,7 +33,7 @@ The MINERVA functionality is not yet operable on the webversion of the app.
    </ol>
   <br>
   <li>
-    Upon clicking one of the uploading options users will be presented an uploading screen in which they can upload eiter a .tsv file for SBtab or a .xml file for SBML. 
+    Upon clicking one of the uploading options, users will be presented an uploading screen in which they can upload either a .tsv file for SBtab or a .xml file for SBML. 
   </li>
   <br>
   
@@ -56,7 +57,7 @@ The MINERVA functionality is not yet operable on the webversion of the app.
 
   <br> <br>
   <li>
-    Once all the correct tables are sellected users can start filling the new tables or adding to the uploaded tables however they see fit. 
+    Once all the correct tables are selected users can start filling the new tables or adding to the uploaded tables however they see fit. 
   </li>
   <br> 
   
@@ -69,7 +70,7 @@ The MINERVA functionality is not yet operable on the webversion of the app.
   <img src="column_choose.png" width="100%" height="100%" />
 
   <br> <br>
-  To find out what columns users can view the description of table elements found at the bottom of the page.
+  To find out what columns, users can view the description of table elements found at the bottom of the page.
   <br> <br>
   
   <img src="table_description.png" width="100%" height="100%" />
