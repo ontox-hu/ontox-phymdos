@@ -106,7 +106,7 @@ server <- function(input, output, session) {
       ),
       # upload screen for SBtab file
       bsCollapsePanel("Upload SBtab",
-        fileInput("sbtabfile_in", "Upload SBtab file",
+        fileInput("sbtabfile_in", "Upload SBtab file (.tsv)",
                   multiple = FALSE,
                   accept = c("text/tsv",
                              "text/tab-separated-values,text/plain",
@@ -114,7 +114,7 @@ server <- function(input, output, session) {
         actionButton("set_sbtab", "Click here to continue (required)")
       ),
       bsCollapsePanel("Upload SBML",
-        fileInput("sbmlfile_in", "Upload SBML file",
+        fileInput("sbmlfile_in", "Upload SBML file (.xml)",
                   multiple = FALSE,
                   accept = c("text/xml",
                              "text/plain",
@@ -129,8 +129,8 @@ server <- function(input, output, session) {
       ),
       bsCollapsePanel("Save and download",
         htmlOutput("text_download"),
-        downloadButton("download_tsv", "Download tsv"),
-        downloadButton("download_xml", "Download xml"),
+        downloadButton("download_tsv", "Download SBtab (.tsv)"),
+        downloadButton("download_xml", "Download SBML (.xml)"),
         actionButton("open_minerva", "Open MINERVA", icon(progressBar(id = "open_m", value = 0, total = 5)))
       )
     )
