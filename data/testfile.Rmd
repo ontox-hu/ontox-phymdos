@@ -11,11 +11,18 @@ library(tidyverse)
 ```
 
 ```{r}
-test <- read_sbtab("liver_bile_example/liver_bile_template.tsv")
-sbtab <- sbtab_tables_list
-x <- names(test)[1]
-df <- test["Reaction"]
-sbtab[which(names(sbtab["Reaction"]) == names(test["Reaction"]))]
-sbtab[["Reaction"]] <- sbtab[["Reaction"]][FALSE,]
+filename <- "testfile"
+
+sbml_file <- c('<?xml version="1.0" encoding="UTF-8"?>',
+               '<sbml xmlns="http://www.sbml.org/sbml/level2/version4" xmlns:celldesigner="http://www.sbml.org/2001/ns/celldesigner" level="2" version="4">', 
+               paste0('<model metaid="', filename, '" id="', filename, '">'), 
+               '<annotation>',
+               '<celldesigner:extension>',
+               '<celldesigner:modelVersion>4.0</celldesigner:modelVersion>',
+               '<celldesigner:modelDisplay sizeX="3000" sizeY="3000"/>',
+               
+)
+
+write_lines(sbml_file, file = "test.xml")
 ```
 

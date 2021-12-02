@@ -26,7 +26,7 @@ def sbtab_to_sbml(file):
   Cd = sbtab2sbml.SBtabDocument(Sd)
   (sbml, warnings) = Cd.convert_to_sbml('24')
   
-  #r.sbml_string = sbml
+  r.sbml_string = sbml
   
   # # Save SBML xml file (overwrites existing file with the same name)
   # myfile = open("physmap.xml", "w")
