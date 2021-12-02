@@ -1,7 +1,7 @@
 ONTOX-PMDEP - the ONTOX Physiological Map Data Entry Portal
 ============================================================
 
- <font size="+1">
+<font size="+1">
 This application was created to serve as a bridge between [sysrev.com](https://sysrev.com/) and [Celldesigner](http://www.celldesigner.org/). Its core functionality is to allow the user to easily create SBML style physiological maps from litarature by filling out easy to use datatables and converting them to the desired format by the click of a button. 
 The format used to create these datatables is SBtab, which is essentially a .tsv file containing several tables that together define a system. These tables can be filled out at sysrev.com and in this app and can then be converted to SBML files that are used by Celldesigner to build physiological maps. This workflow has been illustrated below. <br>
 <img src="app_workflow.png" width="80%" height="100%" />
