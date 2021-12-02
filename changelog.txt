@@ -1,0 +1,2 @@
+1.01:
+  This version contains a minimal version of the definitions file out of which the tables are created. Only 3 tables remain: Reaction, Compound and Compartment.
