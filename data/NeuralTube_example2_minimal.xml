@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" xmlns:celldesigner="http://www.sbml.org/2001/ns/celldesigner" level="2" version="4">
+<model metaid="Ex" id="Ex">
+<annotation>
+<celldesigner:extension>
+<celldesigner:modelVersion>4.0</celldesigner:modelVersion>
+<celldesigner:modelDisplay sizeX="600" sizeY="400"/>
+<celldesigner:listOfCompartmentAliases>
+<celldesigner:compartmentAlias id="ca1" compartment="c1">
+<celldesigner:class>SQUARE</celldesigner:class>
+<celldesigner:bounds x="20.0" y="2.0" w="509.0" h="349.0"/>
+</celldesigner:compartmentAlias>
+</celldesigner:listOfCompartmentAliases>
+<celldesigner:listOfComplexSpeciesAliases/>
+<celldesigner:listOfSpeciesAliases>
+<celldesigner:speciesAlias id="sa1" species="s1" compartmentAlias="ca1">
+<celldesigner:bounds x="193.0" y="108.5" w="70.0" h="25.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa2" species="s2" compartmentAlias="ca1">
+<celldesigner:bounds x="174.0" y="182.5" w="70.0" h="25.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa3" species="s3" compartmentAlias="ca1">
+<celldesigner:bounds x="194.0" y="272.5" w="70.0" h="25.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa4" species="s4" compartmentAlias="ca1">
+<celldesigner:bounds x="73.0" y="256.0" w="80.0" h="40.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa6" species="s6" compartmentAlias="ca1">
+<celldesigner:bounds x="313.0" y="250.0" w="80.0" h="40.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa7" species="s14" compartmentAlias="ca1">
+<celldesigner:bounds x="332.0" y="168.5" w="70.0" h="25.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa8" species="s8" compartmentAlias="ca1">
+<celldesigner:bounds x="48.0" y="169.5" w="70.0" h="25.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa10" species="s10">
+<celldesigner:bounds x="194.0" y="367.5" w="70.0" h="25.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa12" species="s12" compartmentAlias="ca1">
+<celldesigner:bounds x="304.0" y="312.0" w="80.0" h="40.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa13" species="s7" compartmentAlias="ca1">
+<celldesigner:bounds x="59.5" y="21.75" w="70.0" h="25.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa14" species="s13" compartmentAlias="ca1">
+<celldesigner:bounds x="54.5" y="111.25" w="80.0" h="40.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa15" species="s15" compartmentAlias="ca1">
+<celldesigner:bounds x="192.0" y="23.5" w="70.0" h="25.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa16" species="s16" compartmentAlias="ca1">
+<celldesigner:bounds x="364.0" y="119.5" w="70.0" h="25.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+<celldesigner:speciesAlias id="sa17" species="s17" compartmentAlias="ca1">
+<celldesigner:bounds x="329.0" y="22.0" w="80.0" h="40.0"/>
+<celldesigner:view state="usual"/>
+</celldesigner:speciesAlias>
+</celldesigner:listOfSpeciesAliases>
+<celldesigner:listOfGroups/>
+<celldesigner:listOfProteins>
+<celldesigner:protein id="pr1" name="RDH10" type="GENERIC"/>
+<celldesigner:protein id="pr2" name="DHRS3" type="GENERIC"/>
+<celldesigner:protein id="pr4" name="STRA6" type="GENERIC"/>
+<celldesigner:protein id="pr5" name="RALDH2" type="GENERIC"/>
+<celldesigner:protein id="pr6" name="CYP26A1" type="GENERIC"/>
+</celldesigner:listOfProteins>
+<celldesigner:listOfGenes>
+<celldesigner:gene id="gn4" name="RDH10_g" type="GENE"/>
+<celldesigner:gene id="gn5" name="RALDH2_g" type="GENE"/>
+<celldesigner:gene id="gn6" name="DHRS3_g" type="GENE"/>
+<celldesigner:gene id="gn7" name="CYP26A1_g" type="GENE"/>
+</celldesigner:listOfGenes>
+<celldesigner:listOfRNAs/>
+<celldesigner:listOfAntisenseRNAs/>
+<celldesigner:listOfLayers/>
+<celldesigner:listOfBlockDiagrams/>
+</celldesigner:extension>
+</annotation>
+<listOfCompartments>
+<compartment metaid="default" id="default" size="1" units="volume"/>
+<compartment metaid="c1" id="c1" name="Mesoderm" size="1" units="volume" outside="default">
+</compartment>
+</listOfCompartments>
+<listOfSpecies>
+<species metaid="s1" id="s1" name="ATRA" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:speciesIdentity>
+<celldesigner:class>SIMPLE_MOLECULE</celldesigner:class>
+<celldesigner:name>ATRA</celldesigner:name>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s3" id="s3" name="Vit.A" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>SIMPLE_MOLECULE</celldesigner:class>
+<celldesigner:name>Vit.A</celldesigner:name>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s4" id="s4" name="RDH10" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>PROTEIN</celldesigner:class>
+<celldesigner:proteinReference>pr1</celldesigner:proteinReference>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s6" id="s6" name="DHRS3" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>PROTEIN</celldesigner:class>
+<celldesigner:proteinReference>pr2</celldesigner:proteinReference>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s8" id="s8" name="RDH10_g" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>GENE</celldesigner:class>
+<celldesigner:geneReference>gn4</celldesigner:geneReference>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s10" id="s10" name="Vit.A_e" compartment="default">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>SIMPLE_MOLECULE</celldesigner:class>
+<celldesigner:name>Vit.A_e</celldesigner:name>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s12" id="s12" name="STRA6" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>transmembrane</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>PROTEIN</celldesigner:class>
+<celldesigner:proteinReference>pr4</celldesigner:proteinReference>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s7" id="s7" name="RALDH2_g" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>GENE</celldesigner:class>
+<celldesigner:geneReference>gn5</celldesigner:geneReference>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s13" id="s13" name="RALDH2" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>PROTEIN</celldesigner:class>
+<celldesigner:proteinReference>pr5</celldesigner:proteinReference>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s14" id="s14" name="DHRS3_g" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>GENE</celldesigner:class>
+<celldesigner:geneReference>gn6</celldesigner:geneReference>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s15" id="s15" name="ATRA_i" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>SIMPLE_MOLECULE</celldesigner:class>
+<celldesigner:name>ATRA_i</celldesigner:name>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s16" id="s16" name="CYP26A1_g" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>GENE</celldesigner:class>
+<celldesigner:geneReference>gn7</celldesigner:geneReference>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s17" id="s17" name="CYP26A1" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>PROTEIN</celldesigner:class>
+<celldesigner:proteinReference>pr6</celldesigner:proteinReference>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+<species metaid="s2" id="s2" name="Retinaldehyde" compartment="c1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
+<celldesigner:speciesIdentity>
+<celldesigner:class>SIMPLE_MOLECULE</celldesigner:class>
+<celldesigner:name>Retinaldehyde</celldesigner:name>
+</celldesigner:speciesIdentity>
+</celldesigner:extension>
+</annotation>
+</species>
+</listOfSpecies>
+<listOfReactions>
+<reaction metaid="re1" id="re1" reversible="false">
+<annotation>
+<celldesigner:extension>
+<celldesigner:reactionType>STATE_TRANSITION</celldesigner:reactionType>
+<celldesigner:baseReactants>
+<celldesigner:baseReactant species="s2" alias="sa2"/>
+</celldesigner:baseReactants>
+<celldesigner:baseProducts>
+<celldesigner:baseProduct species="s1" alias="sa1"/>
+</celldesigner:baseProducts>
+<celldesigner:listOfModification>
+<celldesigner:modification type="CATALYSIS" modifiers="s13" aliases="sa14"/>
+</celldesigner:listOfModification>
+</celldesigner:extension>
+</annotation>
+<listOfReactants>
+<speciesReference metaid="CDMT00001" species="s2">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa2</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00002" species="s1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa1</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00023" species="s13">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa14</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</modifierSpeciesReference>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re2" id="re2" reversible="false">
+<annotation>
+<celldesigner:extension>
+<celldesigner:reactionType>STATE_TRANSITION</celldesigner:reactionType>
+<celldesigner:baseReactants>
+<celldesigner:baseReactant species="s3" alias="sa3"/>
+</celldesigner:baseReactants>
+<celldesigner:baseProducts>
+<celldesigner:baseProduct species="s2" alias="sa2"/>
+</celldesigner:baseProducts>
+<celldesigner:listOfModification>
+<celldesigner:modification type="CATALYSIS" modifiers="s4" aliases="sa4"/>
+</celldesigner:listOfModification>
+</celldesigner:extension>
+</annotation>
+<listOfReactants>
+<speciesReference metaid="CDMT00003" species="s3">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa3</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00004" species="s2">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa2</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00005" species="s4">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa4</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</modifierSpeciesReference>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re3" id="re3" reversible="false">
+<annotation>
+<celldesigner:extension>
+<celldesigner:reactionType>STATE_TRANSITION</celldesigner:reactionType>
+<celldesigner:baseReactants>
+<celldesigner:baseReactant species="s2" alias="sa2"/>
+</celldesigner:baseReactants>
+<celldesigner:baseProducts>
+<celldesigner:baseProduct species="s3" alias="sa3"/>
+</celldesigner:baseProducts>
+<celldesigner:listOfModification>
+<celldesigner:modification type="CATALYSIS" modifiers="s6" aliases="sa6"/>
+</celldesigner:listOfModification>
+</celldesigner:extension>
+</annotation>
+<listOfReactants>
+<speciesReference metaid="CDMT00006" species="s2">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa2</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00007" species="s3">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa3</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00013" species="s6">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa6</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</modifierSpeciesReference>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re5" id="re5" reversible="false">
+<annotation>
+<celldesigner:extension>
+<celldesigner:reactionType>TRANSLATION</celldesigner:reactionType>
+<celldesigner:baseReactants>
+<celldesigner:baseReactant species="s8" alias="sa8"/>
+</celldesigner:baseReactants>
+<celldesigner:baseProducts>
+<celldesigner:baseProduct species="s4" alias="sa4"/>
+</celldesigner:baseProducts>
+<celldesigner:listOfModification>
+<celldesigner:modification type="INHIBITION" modifiers="s1" aliases="sa1"/>
+</celldesigner:listOfModification>
+</celldesigner:extension>
+</annotation>
+<listOfReactants>
+<speciesReference metaid="CDMT00014" species="s8">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa8</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00015" species="s4">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa4</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00016" species="s1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa1</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</modifierSpeciesReference>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re6" id="re6" reversible="false">
+<annotation>
+<celldesigner:extension>
+<celldesigner:reactionType>TRANSLATION</celldesigner:reactionType>
+<celldesigner:baseReactants>
+<celldesigner:baseReactant species="s14" alias="sa7"/>
+</celldesigner:baseReactants>
+<celldesigner:baseProducts>
+<celldesigner:baseProduct species="s6" alias="sa6"/>
+</celldesigner:baseProducts>
+<celldesigner:listOfModification>
+<celldesigner:modification type="CATALYSIS" modifiers="s1" aliases="sa1"/>
+</celldesigner:listOfModification>
+</celldesigner:extension>
+</annotation>
+<listOfReactants>
+<speciesReference metaid="CDMT00017" species="s14">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa7</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00018" species="s6">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa6</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00008" species="s1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa1</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</modifierSpeciesReference>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re8" id="re8" reversible="false">
+<annotation>
+<celldesigner:extension>
+<celldesigner:reactionType>TRANSPORT</celldesigner:reactionType>
+<celldesigner:baseReactants>
+<celldesigner:baseReactant species="s10" alias="sa10"/>
+</celldesigner:baseReactants>
+<celldesigner:baseProducts>
+<celldesigner:baseProduct species="s3" alias="sa3"/>
+</celldesigner:baseProducts>
+<celldesigner:listOfModification>
+<celldesigner:modification type="CATALYSIS" modifiers="s12" aliases="sa12"/>
+</celldesigner:listOfModification>
+</celldesigner:extension>
+</annotation>
+<listOfReactants>
+<speciesReference metaid="CDMT00009" species="s10">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa10</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00010" species="s3">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa3</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00011" species="s12">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa12</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</modifierSpeciesReference>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re9" id="re9" reversible="false">
+<annotation>
+<celldesigner:extension>
+<celldesigner:reactionType>TRANSLATION</celldesigner:reactionType>
+<celldesigner:baseReactants>
+<celldesigner:baseReactant species="s7" alias="sa13"/>
+</celldesigner:baseReactants>
+<celldesigner:baseProducts>
+<celldesigner:baseProduct species="s13" alias="sa14"/>
+</celldesigner:baseProducts>
+<celldesigner:listOfModification>
+<celldesigner:modification type="INHIBITION" modifiers="s1" aliases="sa1"/>
+</celldesigner:listOfModification>
+</celldesigner:extension>
+</annotation>
+<listOfReactants>
+<speciesReference metaid="CDMT00024" species="s7">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa13</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00025" species="s13">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa14</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00026" species="s1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa1</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</modifierSpeciesReference>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re10" id="re10" reversible="false">
+<annotation>
+<celldesigner:extension>
+<celldesigner:reactionType>STATE_TRANSITION</celldesigner:reactionType>
+<celldesigner:baseReactants>
+<celldesigner:baseReactant species="s1" alias="sa1"/>
+</celldesigner:baseReactants>
+<celldesigner:baseProducts>
+<celldesigner:baseProduct species="s15" alias="sa15"/>
+</celldesigner:baseProducts>
+<celldesigner:listOfModification>
+<celldesigner:modification type="CATALYSIS" modifiers="s17" aliases="sa17"/>
+</celldesigner:listOfModification>
+</celldesigner:extension>
+</annotation>
+<listOfReactants>
+<speciesReference metaid="CDMT00027" species="s1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa1</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00028" species="s15">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa15</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00029" species="s17">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa17</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</modifierSpeciesReference>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re11" id="re11" reversible="false">
+<annotation>
+<celldesigner:extension>
+<celldesigner:reactionType>TRANSLATION</celldesigner:reactionType>
+<celldesigner:baseReactants>
+<celldesigner:baseReactant species="s16" alias="sa16"/>
+</celldesigner:baseReactants>
+<celldesigner:baseProducts>
+<celldesigner:baseProduct species="s17" alias="sa17"/>
+</celldesigner:baseProducts>
+<celldesigner:listOfModification>
+<celldesigner:modification type="CATALYSIS" modifiers="s1" aliases="sa1"/>
+</celldesigner:listOfModification>
+</celldesigner:extension>
+</annotation>
+<listOfReactants>
+<speciesReference metaid="CDMT00030" species="s16">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa16</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00031" species="s17">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa17</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</speciesReference>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00032" species="s1">
+<annotation>
+<celldesigner:extension>
+<celldesigner:alias>sa1</celldesigner:alias>
+</celldesigner:extension>
+</annotation>
+</modifierSpeciesReference>
+</listOfModifiers>
+</reaction>
+</listOfReactions>
+</model>
+</sbml>
