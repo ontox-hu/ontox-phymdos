@@ -7,7 +7,7 @@ def sbtab_to_sbml(file):
   from pathlib import Path
   
   # Read in TSV file containing SBtab info and definitions file
-  sbtab_file   = open(file,'r')
+  sbtab_file   = open("physmap.tsv",'r')
   file_content = sbtab_file.read()
   sbtab_file.close()
   
@@ -28,10 +28,10 @@ def sbtab_to_sbml(file):
   
   r.sbml_string = sbml
   
-  # # Save SBML xml file (overwrites existing file with the same name)
-  # myfile = open("physmap.xml", "w")
-  # myfile.write(sbml)
-  # myfile.close()
+  # Save SBML xml file (overwrites existing file with the same name)
+  myfile = open("physmap.xml", "w")
+  myfile.write(sbml)
+  myfile.close()
 
 def sbml_to_sbtab(file):
   import sbtab

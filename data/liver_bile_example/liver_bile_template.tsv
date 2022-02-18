@@ -8,7 +8,7 @@
 			https://doi.org/10.1016/j.livres.2017.05.001			NA	Enzyme		R_NA		C_E3a7a12aHO35Bcholestenoicacid <=> C_E3a7a12aHO3cholanoicacid	Liver	E_NA			R_CYP27A1		FALSE														
 			https://doi.org/10.1016/j.livres.2017.05.001			BSH	Enzyme		R_BSH		C_E3a7a12aHO3cholanoicacid <=> C_CA	Ileum	E_BSH			R_NA		FALSE														
 			https://doi.org/10.1016/j.livres.2017.05.001			7a-de-HO-ase	Enzyme		R_E7adeHOase		C_CA <=> C_DCA	Colon	E_E7adeHOase			R_BSH		FALSE														
-
+ 
 !!SBtab TableID="t_2" SBtabVersion="1.0" Document="Liver Bile Synthesis Test Example" TableType="Compound" TableName="Compound"
 !Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Name	!Type	!Symbol	!ID	!SBML:species:id	!SBML:speciestype:id	!InitialValue	!Unit	!Location	!State	!CompoundSumFormula	!StructureFormula	!Charge	!Mass	!IsConstant	!EnzymeRole	!RegulatorRole	!SBOTerm	!Identifiers
 			https://doi.org/10.1016/j.livres.2017.05.001		cholesterol			C_cholesterol					Liver				0		FALSE	converts			
@@ -19,7 +19,7 @@
 			https://doi.org/10.1016/j.livres.2017.05.001		3a,7a,12a-(HO)3-cholanoic_acid (cholic_acis) (TCA)			C_E3a7a12aHO3cholanoicacid					Liver				0		FALSE	deconjugates			
 			https://doi.org/10.1016/j.livres.2017.05.001		CA			C_CA					Ileum				0		FALSE	converts			
 			https://doi.org/10.1016/j.livres.2017.05.001		DCA			C_DCA					Colon				0		FALSE				
-
+ 
 !!SBtab TableID="t_3" SBtabVersion="1.0" Document="Liver Bile Synthesis Test Example" TableType="Enzyme" TableName="Enzyme"
 !Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Name	!Type	!Symbol	!ID	!CatalysedReaction	!KineticLaw	!Pathway	!Gene	!Identifiers
 			https://doi.org/10.1016/j.livres.2017.05.001		CYP7A1	Enzyme		E_CYP7A1	R_CYP7A1				
@@ -29,9 +29,10 @@
 			https://doi.org/10.1016/j.livres.2017.05.001		NA	Enzyme		E_NA	R_NA				
 			https://doi.org/10.1016/j.livres.2017.05.001		BSH	Enzyme		E_BSH	R_BSH				
 			https://doi.org/10.1016/j.livres.2017.05.001		7a-de-HO-ase	Enzyme		E_E7adeHOase	R_E7adeHOase				
-
+ 
 !!SBtab TableID="t_4" SBtabVersion="1.0" Document="Liver Bile Synthesis Test Example" TableType="Compartment" TableName="Compartment"
 !Comment	!ReferenceName	!ReferencePubMed	!ReferenceDOI	!Description	!Name	!Type	!Symbol	!ID	!SBML:compartment:id	!OuterCompartment	!OuterCompartment:SBML:compartment:id	!Size	!Unit	!SBOTerm	!Identifiers
 			https://doi.org/10.1016/j.livres.2017.05.001		Liver			Liver				1.0			
 			https://doi.org/10.1016/j.livres.2017.05.001		Ileum			Ileum				1.0			
 			https://doi.org/10.1016/j.livres.2017.05.001		Colon			Colon				1.0			
+ 

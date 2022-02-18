@@ -1,76 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
-  <model id="liver_bile_template" name="liver_bile_template">
+  <model id="physmap" name="physmap">
     <listOfCompartments>
-      <compartment id="Liver" name="Liver" size="1" constant="true"/>
-      <compartment id="Ileum" name="Ileum" size="1" constant="true"/>
-      <compartment id="Colon" name="Colon" size="1" constant="true"/>
+      <compartment id="default" name="default" size="1" constant="true"/>
+      <compartment id="c1" name="Mesoderm" size="1" constant="true"/>
     </listOfCompartments>
     <listOfSpecies>
-      <species id="C_cholesterol" name="cholesterol" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="C_E7aHOcholesterol" name="7a-HO-cholesterol" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="C_E7aHO4cholesten3one" name="7a-HO-4-cholesten-3-one" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="C_E7a12aOH24cholesten3one" name="7a, 12a-(OH)2-4-cholesten-3-one" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="C_E3a7a12aHO35Bcholestenoicacid" name="3a, 7a, 12a-(HO)3-5B-cholestenoic_acid" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="C_E3a7a12aHO3cholanoicacid" name="3a,7a,12a-(HO)3-cholanoic_acid (cholic_acis) (TCA)" compartment="Liver" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="C_CA" name="CA" compartment="Ileum" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="C_DCA" name="DCA" compartment="Colon" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="s1" name="ATRA" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="s2" name="Ret.ald." compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="s3" name="Vit.A" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="s4" name="RDH10" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="s6" name="DHRS3" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="s7" name="DHRS3_g" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="s8" name="RDH10_g" compartment="c1" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="s9" name="ATRA_e" compartment="default" initialConcentration="0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
     </listOfSpecies>
     <listOfReactions>
-      <reaction id="R_CYP7A1" name="CYP7A1" reversible="false" fast="false">
+      <reaction id="re1" name="re1" reversible="false" fast="false">
         <listOfReactants>
-          <speciesReference species="C_cholesterol" stoichiometry="1"/>
+          <speciesReference species="s2" stoichiometry="1"/>
         </listOfReactants>
         <listOfProducts>
-          <speciesReference species="C_E7aHOcholesterol" stoichiometry="1"/>
+          <speciesReference species="s1" stoichiometry="1"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R_E3BHSO" name="3?-HSO" reversible="false" fast="false">
+      <reaction id="re2" name="re2" reversible="false" fast="false">
         <listOfReactants>
-          <speciesReference species="C_E7aHOcholesterol" stoichiometry="1"/>
+          <speciesReference species="s3" stoichiometry="1"/>
         </listOfReactants>
         <listOfProducts>
-          <speciesReference species="C_E7aHO4cholesten3one" stoichiometry="1"/>
+          <speciesReference species="s2" stoichiometry="1"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R_CYP8B1" name="CYP8B1" reversible="false" fast="false">
+      <reaction id="re3" name="re3" reversible="false" fast="false">
         <listOfReactants>
-          <speciesReference species="C_E7aHO4cholesten3one" stoichiometry="1"/>
+          <speciesReference species="s2" stoichiometry="1"/>
         </listOfReactants>
         <listOfProducts>
-          <speciesReference species="C_E7a12aOH24cholesten3one" stoichiometry="1"/>
+          <speciesReference species="s3" stoichiometry="1"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R_CYP27A1" name="CYP27A1" reversible="false" fast="false">
+      <reaction id="re5" name="re5" reversible="false" fast="false">
         <listOfReactants>
-          <speciesReference species="C_E7a12aOH24cholesten3one" stoichiometry="1"/>
+          <speciesReference species="s8" stoichiometry="1"/>
         </listOfReactants>
         <listOfProducts>
-          <speciesReference species="C_E3a7a12aHO35Bcholestenoicacid" stoichiometry="1"/>
+          <speciesReference species="s4" stoichiometry="1"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R_NA" name="NA" reversible="false" fast="false">
+      <reaction id="re6" name="re6" reversible="false" fast="false">
         <listOfReactants>
-          <speciesReference species="C_E3a7a12aHO35Bcholestenoicacid" stoichiometry="1"/>
+          <speciesReference species="s7" stoichiometry="1"/>
         </listOfReactants>
         <listOfProducts>
-          <speciesReference species="C_E3a7a12aHO3cholanoicacid" stoichiometry="1"/>
+          <speciesReference species="s6" stoichiometry="1"/>
         </listOfProducts>
       </reaction>
-      <reaction id="R_BSH" name="BSH" reversible="false" fast="false">
+      <reaction id="re7" name="re7" reversible="false" fast="false">
         <listOfReactants>
-          <speciesReference species="C_E3a7a12aHO3cholanoicacid" stoichiometry="1"/>
+          <speciesReference species="s1" stoichiometry="1"/>
         </listOfReactants>
         <listOfProducts>
-          <speciesReference species="C_CA" stoichiometry="1"/>
-        </listOfProducts>
-      </reaction>
-      <reaction id="R_E7adeHOase" name="7a-de-HO-ase" reversible="false" fast="false">
-        <listOfReactants>
-          <speciesReference species="C_CA" stoichiometry="1"/>
-        </listOfReactants>
-        <listOfProducts>
-          <speciesReference species="C_DCA" stoichiometry="1"/>
+          <speciesReference species="s9" stoichiometry="1"/>
         </listOfProducts>
       </reaction>
     </listOfReactions>

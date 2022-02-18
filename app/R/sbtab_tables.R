@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(callr)
+library(markdown)
 library(data.table)
 library(rhandsontable)
 library(shinydashboard)
@@ -17,8 +18,8 @@ sbtab_definitions <- readr::read_tsv("definitions.tsv",
 
 ## recode `Type` column
 sbtab_definitions <- sbtab_definitions %>%
-  mutate(r_format = ifelse(`!Format` == "string", "character", `!Format`)) %>%
-  mutate(r_format = ifelse(`!Format` == "float", "double", r_format)) %>%
+  mutate(r_format = ifelse(`!Format` == "String", "character", `!Format`)) %>%
+  mutate(r_format = ifelse(`!Format` == "Float", "double", r_format)) %>%
   mutate(r_format = ifelse(`!Format` == "Boolean", "logical", r_format)) 
 
 ## split tables
