@@ -1,7 +1,14 @@
 ## helpers to app
 source(
-  "sbtab_tables.R"
+  "R/sbtab_tables.R"
 )
+
+## create dynamic sub menu
+update_submenu <- function(local) {
+  lapply(split(local$subitems, seq(nrow(local$subitems))), function(x) {
+    menuSubItem(x$name, tabName = paste0("tab_", x$id))
+  })
+}
 
 ## create static tab list
 tab_list_ui <- function() {
@@ -91,10 +98,10 @@ open_tabs <- function(table){
 outputTableDescription <- function(tableTitle){
   DT::renderDataTable({
     split_def_tables[[tableTitle]]%>%
-      dplyr::select(`!Name`,`!Description`,`!Format`)%>%
+      dplyr::select(`!Name`,`!Description`) %>%#,`!Example`)%>%
       dplyr::rename(Name = `!Name`,
-                    Description = `!Description`,
-                    Format = `!Format`)
+                    Description = `!Description`)#,
+                    #xample = `!Example`)
   })
 }
 

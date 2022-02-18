@@ -7,4 +7,4 @@ virtualenv_install(envname = "ontox-app", "sbtab")
 use_virtualenv("ontox-app", required = TRUE)
 
 # Load in converter functions
-source_python("sbtab_converters.py")
+source_python("py/sbtab_converters.py")
