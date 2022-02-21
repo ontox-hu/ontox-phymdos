@@ -1,0 +1,61 @@
+!!!SBtab Document="cholestasis_example"
+!!SBtab TableID="t_4" SBtabVersion="1.0" Document="cholestasis_example" TableType="Compartment" TableName="Compartment"
+!ID	!Name	!Type	!OuterCompartment	!Size	!Unit	!SBOTerm
+c1	Intra-cellular					
+c2	blood-serum					
+
+!!SBtab TableID="t_2" SBtabVersion="1.0" Document="cholestasis_example" TableType="Compound" TableName="Compound"
+!ID	!Name	!Type	!Symbol	!InitialValue	!Unit	!Location	!IsConstant	!SBOTerm
+s1	Clav					c1		
+s2	NRF2.L					c1		
+s3	NRF2.H					c1		
+s4	ROS					c1		
+s5	FXR.H					c1		
+s6	FXR.L					c1		
+s7	NTCP.A					c1		
+s8	NTCP.I					c1		
+s9	BSEP.A					c1		
+s10	BSEP.I					c1		
+s11	MDR2.I					c1		
+s12	MDR2.H					c1		
+s13	MDR2.:L					c1		
+s14	OSTa.A					c1		
+s15	OSTa.I					c1		
+s16	ABCG5.A					c1		
+s17	ABCG5.I					c1		
+s18	MRP2.i					c1		
+s19	MRP2.A					c1		
+s20	BSEP.H					c1		
+s21	BSEP.L					c1		
+s22	ABCG5.H					c1		
+s23	ABCG5.L					c1		
+s24	MRP2.L					c1		
+s25	MRP2.H					c1		
+s26	PL					c2		
+s27	BA					c2		
+s28	Chol					c2		
+s29	GS-Conj					c2		
+s30	Bil					c2		
+s31	GSGG					c2		
+
+!!SBtab TableID="t_1" SBtabVersion="1.0" Document="cholestasis_example" TableType="Reaction" TableName="Reaction"
+!ID	!Name	!Type	!IsReversible	!ReactionFormula	!Modifier	!Location	!KinteticLaw	!SBOTerm
+re1				s2 <=> s3	s1, s4			
+re2				s5 <=> s6	s1			
+re3				s7 <=> s8	s3			
+re4				s9 <=> s10	s3			
+re5				s8 <=> s11				
+re6				s12 <=> s13	s11			
+re7				s14 <=> s15	s6			
+re8				s16 <=> s17 	s6			
+re9				s9 <=> s10	s6			
+re10				s18 <=> s19	s3			
+re11				s20 <=> s21	s10			
+re12				s22 <=> s23	s17			
+re13				s24 <=> s25	s19			
+re14				s13 <=> 26				
+re15				s21 <=> s27				
+re16				s23 <=> s28				
+re17				s25 <=> s29				
+re18				s25 <=> s30				
+re19				s25 <=> s31				

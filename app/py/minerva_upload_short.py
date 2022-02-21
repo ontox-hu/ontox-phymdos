@@ -18,7 +18,7 @@ session = requests.Session()
 ### INPUT YOUR CREDENTIALS TO LOGIN to PD map instance
 login = "admin"
 password = "admin"
-api_url = "http://localhost:8080/minerva/api"
+api_url = "http://145.38.204.52:8080/minerva/api"
 map_file = "physmap.xml"
 
 # LOGIN to PD map instance with your credentials
@@ -56,7 +56,7 @@ upload_content_request = session.post(api_url+"/files/"+str(file_id)+":uploadCon
 project_id = "physmap_"+str(file_id)
 r.project_id = "physmap_"+str(file_id)
 project_name = "Physmap"
-create_map_request = session.post(api_url+"/projects/"+project_id, data = {"file-id":file_id, "name": project_name , "version": "example", "mapCanvasType":"OPEN_LAYERS", "parser":"lcsb.mapviewer.converter.model.sbml.SbmlParser"})
+create_map_request = session.post(api_url+"/projects/"+project_id, data = {"file-id":file_id, "name": project_name , "version": "example", "mapCanvasType":"OPEN_LAYERS", "annotate":"false", "parser":"lcsb.mapviewer.converter.model.sbml.SbmlParser"})
 
 time.sleep(1)
 
@@ -74,6 +74,8 @@ print("Comment details:", create_comment_request.text)
 # GIVE PERMISSION to users to open the map
 grant_user_permission = session.patch(api_url+"/projects/"+project_id+":grantPrivileges", data = '[{"login":"anonymous", "privilegeType":"READ_PROJECT"}]')
 
-# OPEN the map in the webbrowser
-time.sleep(2)
-webbrowser.open("http://localhost:8080/minerva/index.xhtml?id="+project_id)
+# Create r-object telling app that the map is ready
+r.minerva_short = project_id
+# # OPEN the map in the webbrowser
+# time.sleep(3)
+# webbrowser.open("http://145.38.204.52:8080/minerva/index.xhtml?id="+project_id, new=2)

@@ -1,27 +1,21 @@
 # credit: dynamic table selection adapted from https://mgei.github.io/post/dynamic-shinydashboard/
+## source files containing supporting functions and open python
 source(
-  "helpers.R"
+  "R/helpers.R"
 )
 source(
-  "open_python.R"
+  "R/open_python.R"
 )
 
 options(stringsAsFactors = FALSE)
 
-# dynamic sub menu
-update_submenu <- function(local) {
-  lapply(split(local$subitems, seq(nrow(local$subitems))), function(x) {
-    menuSubItem(x$name, tabName = paste0("tab_", x$id))
-  })
-}
-
-# ui
-ui <- dashboardPage(
+## ui
+ui <- dashboardPage(title = "ONTOX-PMDEP", 
   dashboardHeader(title = tags$p(tags$a(href='https://ontox-project.eu/',
                                  tags$img(src='ontox_logo.png',height='40',width='60')),
                                  " - Physiological Maps Data Entry Portal"), 
                   titleWidth = 500,
-                  tags$li(a(onclick = "onclick =window.open('https://github.com/xxx/xxx')",
+                  tags$li(a(onclick = "onclick =window.open('https://github.com/ontox-hu/ontox-pmdep')",
                             href = NULL,
                             icon("github"),
                             title = "GitHub",
@@ -39,7 +33,7 @@ ui <- dashboardPage(
   )
 )
 
-# server
+## server
 server <- function(input, output, session) {
   # dynamic sidebar menu 
   output$mysidebar <- renderMenu({
@@ -47,7 +41,7 @@ server <- function(input, output, session) {
       id = "tabs",
       menuItem(
         "Setup", tabName = "setup",
-        icon = icon("gear"), selected = TRUE
+        icon = icon("cog"), selected = TRUE
       ),
       menuItem(
         "Select tables", tabName = "select_tables", 
@@ -90,7 +84,8 @@ server <- function(input, output, session) {
     # make reactive dataframes out of table choices
     data = sbtab_tables_list,
     # create empty list for data upload
-    sbtabfile = list()
+    sbtabfile = list(),
+    minerva = list()
   )
   
   
@@ -104,7 +99,7 @@ server <- function(input, output, session) {
         actionButton("upload_sbtab", "Upload an SBtab object"),
         actionButton("upload_sbml", "Upload an SBML object")
       ),
-      # upload screen for SBtab file
+      # upload SBtab file page
       bsCollapsePanel("Upload SBtab",
         fileInput("sbtabfile_in", "Upload SBtab file (.tsv)",
                   multiple = FALSE,
@@ -113,6 +108,7 @@ server <- function(input, output, session) {
                              ".tsv")),
         actionButton("set_sbtab", "Click here to continue (required)")
       ),
+      # upload SBML file page
       bsCollapsePanel("Upload SBML",
         fileInput("sbmlfile_in", "Upload SBML file (.xml)",
                   multiple = FALSE,
@@ -121,17 +117,27 @@ server <- function(input, output, session) {
                              ".xml")),
         actionButton("set_sbml", "Click here to continue (required)")
       ),
+      # first setup page 
       bsCollapsePanel("First setup",
         textInput("set_documentname", "Please name your document", placeholder = "Documentname"),
         selectInput("sbtab_version", "Please enter which SBtab Version you need (1.0 default)", 
                     c("0.8", "0.9", "1.0"), selected = "1.0"),
         actionButton("set", "Save input")
       ),
+      # download page for SBtab/SBML
       bsCollapsePanel("Save and download",
         htmlOutput("text_download"),
         downloadButton("download_tsv", "Download SBtab (.tsv)"),
         downloadButton("download_xml", "Download SBML (.xml)"),
-        actionButton("open_minerva", "Open MINERVA", icon(progressBar(id = "open_m", value = 0, total = 5)))
+        br(),
+        br(),
+        htmlOutput("text_minerva"),
+        actionButton("open_minerva", 
+                     "Open MINERVA annotated", 
+                     icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE)),
+        actionButton("open_minerva_fast", 
+                     "Open MINERVA unannotated", 
+                     icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE))
       )
     )
   })
@@ -196,46 +202,38 @@ server <- function(input, output, session) {
       if(!(table %in% local$current_tabs)){
         local$empty_tabs <- local$empty_tabs[local$empty_tabs!=table]
         local$current_tabs <- append(local$current_tabs, table)
-        
         # tab name
         local$subitems <- rbind(local$subitems,
-                                data.frame(id = table, name = table))
-        
+                                data.frame(id = table, name = table)
+                                )
         # write table header for file
         local$headers <- append(local$headers,
                                 paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', table, '"',' TableName="', table, '"')
         )
-        
         # remove name of table from choices
         local$choices <- local$choices[local$choices!=table]
-        
         # render dynamic table and description corresponding to tab name
         output[[paste0("sub_", table)]] <- renderUI({
           upload_tableUI(table, local$sbtabfile)
         })
-        
         # save hot values to reactive dataframe
         observeEvent(input[[paste0(table, "_hot")]], {
           local$data[[table]] <- hot_to_r(input[[paste0(table, "_hot")]])
         })
-        
         # update dynamic content in the created table
         output[[paste0(table, "_hot")]] <- renderRHandsontable({
           rhandsontable(local$data[[table]], rowHeaders = NULL) %>%
             hot_cols(colWidths = 0.1) %>%
             hot_col(col = input[[paste0(table, "_cols")]], colWidths = "100%")
         })
-        
+        # output description table
+        output[[paste0("Description", table)]] <- outputTableDescription(table)
         # Head to save and download tab
         observeEvent(input[[paste0("goto_download_", table)]], {
           updateTabItems(session, "tabs", selected = "setup")
           updateCollapse(session, "homescreen", open = "Save and download")
         })
-        
-        # output description table
-        output[[paste0("Description", table)]] <- outputTableDescription(table)
       }
-      
       # If table was opened previously, open filled columns
       updateCheckboxGroupInput(session, paste0(table, "_cols"),
                                selected = c("ReferenceDOI",
@@ -250,7 +248,7 @@ server <- function(input, output, session) {
     updateCollapse(session, "homescreen", open = "First setup")
   })
   
-  # Open "configure map" panel when document name is set
+  # Open "Save and download" panel on homepage and switch to "Select tables" tab when document name is set
   observeEvent(input$set, {
     updateCollapse(session, "homescreen", open = "Save and download")
     updateTabItems(session, "tabs", selected = "select_tables")
@@ -269,7 +267,7 @@ server <- function(input, output, session) {
     )
   })
 
-  # add a tab
+  ## add a tab
   observeEvent(input$add, {
     req(input$add_subitem)
     req(length(local$empty_tabs) > 0)
@@ -281,47 +279,42 @@ server <- function(input, output, session) {
     # tab name
     subitem <- input$add_subitem
     local$subitems <- rbind(local$subitems,
-                            data.frame(id = id, name = subitem))
-
+                            data.frame(id = id, name = subitem)
+                            )
     # write table header for file
     local$headers <- append(local$headers,
                             paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
                             )
     names(local$headers) <- local$current_tabs
-
     # remove name of table from choices
     local$choices <- local$choices[local$choices!=subitem]
     updateTabItems(session, "tabs", selected = "select_tables")
-
     # render dynamic table and description corresponding to tab name
     output[[ paste0("sub_", subitem)]] <- renderUI ({
       add_tableUI(subitem)
     })
-    
     # save hot values to reactive dataframe
     observeEvent(input[[paste0(subitem, "_hot")]], {
       local$data[[subitem]] <- hot_to_r(input[[paste0(subitem, "_hot")]])
     })
-
     # update dynamic content in the created table
     output[[paste0(subitem, "_hot")]] <- renderRHandsontable({
       rhandsontable(local$data[[subitem]], rowHeaders = NULL) %>%
         hot_cols(colWidths = 0.1) %>%
         hot_col(col = input[[paste0(subitem, "_cols")]], colWidths = "100%")
     })
-    
-    # Head to save and download tab
+    # head to save and download tab
     observeEvent(input[[paste0("goto_download_", subitem)]], {
       updateTabItems(session, "tabs", selected = "setup")
       updateCollapse(session, "homescreen", open = "Save and download")
     })
-
     # output description table
     output[[paste0("Description", subitem)]] <- outputTableDescription(subitem)
   })
   
-  # write tsv and xml documents actively
+  ## write tsv and xml documents actively
   observeEvent(local$data, {
+    # set documentname header in SBtab output file
     documentname_set <-
       paste0('!!!SBtab Document="', 
              if(is_empty(input$set_documentname)){
@@ -332,16 +325,18 @@ server <- function(input, output, session) {
              '"') %>% 
       as.character()
     write_lines(documentname_set, file = "physmap.tsv")
+    # write tables into SBtab output file
     for(table in local$current_tabs){
       write_lines(local$headers[[table]], file = "physmap.tsv", append = TRUE)
       write_tsv(set_cols(local$data[[table]]), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
-      write_lines(" ", file = "physmap.tsv", append = TRUE)
+      write_lines("", file = "physmap.tsv", append = TRUE)
     }
-    # make it so that sbtab conversion errors don't crash the app 
-    # (incomplete sbtab document will cause the .py script to return error)
+    # write SBML output file
     tryCatch({
       sbtab_to_sbml("physmap.tsv")
       },
+      # make it so that sbtab conversion errors don't crash the app 
+      # (incomplete sbtab document will cause the .py script to return error)
       warning = function(warn){
         print("py.warn")
       },
@@ -390,13 +385,28 @@ server <- function(input, output, session) {
   output$download_xml <- downloadHandler(
     filename = "physmap.xml",
     content = function(file) {
-      write_file(sbml, file)
+      write_file(sbml_string, file)
     })
   
-  # open minerva on click
+  # render text for minerva in download tab
+  output$text_minerva <- renderText({
+    paste("<b>Opening Minerva with annotation may take significantly longer than without annotation</b>")
+  })
+  
+  # open minerva on click annotated
   observeEvent(input$open_minerva, {
     showNotification("Please wait a few seconds for the page to load")
-    source_python("minerva_upload.py")
+    source_python("py/minerva_upload.py")
+    Sys.sleep(3)
+    runjs(paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=", minerva_long, "', target: '_blank'})[0].click();"))
+  })
+  
+  # open minerva on click unannotated
+  observeEvent(input$open_minerva_fast, {
+    showNotification("Please wait a few seconds for the page to load")
+    source_python("py/minerva_upload_short.py")
+    Sys.sleep(3)
+    runjs(paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=", minerva_short, "', target: '_blank'})[0].click();"))
   })
   
   ## render help screen
@@ -406,12 +416,15 @@ server <- function(input, output, session) {
   
 }
 
-shinyApp(ui, server,
-onStart = function() {
-  rcmd_bg("docker-compose", "up", wd = "./docker",  supervise = TRUE)
-  
-  onStop(function() {
-    rcmd_bg("docker", c("stop", "docker_minerva_1"))
-    rcmd_bg("docker", c("stop", "docker_db_1"))
-  })
-})
+shinyApp(ui, server#,
+         # launch and stop docker container on app start/stop 
+         # (for dev version, only works locally)
+         # onStart = function() {
+         #   rcmd_bg("docker-compose", "up", wd = "./docker",  supervise = TRUE)
+         #   
+         #   onStop(function() {
+         #     rcmd_bg("docker", c("stop", "docker_minerva_1"))
+         #     rcmd_bg("docker", c("stop", "docker_db_1"))
+         #     })
+         #   })
+)

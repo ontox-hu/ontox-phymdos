@@ -1,0 +1,13 @@
+name: ontox-pmdep
+title: ONTOX-PMDEP
+username: daniel.roodzant
+account: daniel.roodzant
+server: rstudio-connect.hu.nl
+hostUrl: https://rstudio-connect.hu.nl/__api__
+appId: 12
+bundleId: 42
+url: https://rstudio-connect.hu.nl/pmdep/
+when: 1645450690.6401
+lastSyncTime: 1645450690.6401
+asMultiple: FALSE
+asStatic: FALSE
