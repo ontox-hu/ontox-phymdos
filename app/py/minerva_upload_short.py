@@ -74,6 +74,8 @@ print("Comment details:", create_comment_request.text)
 # GIVE PERMISSION to users to open the map
 grant_user_permission = session.patch(api_url+"/projects/"+project_id+":grantPrivileges", data = '[{"login":"anonymous", "privilegeType":"READ_PROJECT"}]')
 
-# OPEN the map in the webbrowser
-time.sleep(3)
-webbrowser.open("http://145.38.204.52:8080/minerva/index.xhtml?id="+project_id, new=2)
+# Create r-object telling app that the map is ready
+r.minerva_short = project_id
+# # OPEN the map in the webbrowser
+# time.sleep(3)
+# webbrowser.open("http://145.38.204.52:8080/minerva/index.xhtml?id="+project_id, new=2)
