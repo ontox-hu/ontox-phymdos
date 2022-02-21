@@ -15,7 +15,7 @@ ui <- dashboardPage(title = "ONTOX-PMDEP",
                                  tags$img(src='ontox_logo.png',height='40',width='60')),
                                  " - Physiological Maps Data Entry Portal"), 
                   titleWidth = 500,
-                  tags$li(a(onclick = "onclick =window.open('https://github.com/xxx/xxx')",
+                  tags$li(a(onclick = "onclick =window.open('https://github.com/ontox-hu/ontox-pmdep')",
                             href = NULL,
                             icon("github"),
                             title = "GitHub",
@@ -84,7 +84,8 @@ server <- function(input, output, session) {
     # make reactive dataframes out of table choices
     data = sbtab_tables_list,
     # create empty list for data upload
-    sbtabfile = list()
+    sbtabfile = list(),
+    minerva = list()
   )
   
   
@@ -131,9 +132,12 @@ server <- function(input, output, session) {
         br(),
         br(),
         htmlOutput("text_minerva"),
-        actionButton("open_minerva", "Open MINERVA annotated", icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE)),
-        actionButton("open_minerva_fast", "Open MINERVA unannotated", icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE)),
-        actionButton("open_web", "Open webbrowser", icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE))
+        actionButton("open_minerva", 
+                     "Open MINERVA annotated", 
+                     icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE)),
+        actionButton("open_minerva_fast", 
+                     "Open MINERVA unannotated", 
+                     icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE))
       )
     )
   })
@@ -389,22 +393,20 @@ server <- function(input, output, session) {
     paste("<b>Opening Minerva with annotation may take significantly longer than without annotation</b>")
   })
   
-  # open minerva on click
+  # open minerva on click annotated
   observeEvent(input$open_minerva, {
     showNotification("Please wait a few seconds for the page to load")
     source_python("py/minerva_upload.py")
+    Sys.sleep(3)
+    runjs(paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=", minerva_long, "', target: '_blank'})[0].click();"))
   })
   
-  # open minerva on click
+  # open minerva on click unannotated
   observeEvent(input$open_minerva_fast, {
     showNotification("Please wait a few seconds for the page to load")
     source_python("py/minerva_upload_short.py")
-  })
-  
-  # open minerva on click
-  observeEvent(input$open_web, {
-    showNotification("Please wait a few seconds for the page to load")
-    source_python("py/webbrowser.py")
+    Sys.sleep(3)
+    runjs(paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=", minerva_short, "', target: '_blank'})[0].click();"))
   })
   
   ## render help screen
