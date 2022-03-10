@@ -5,9 +5,9 @@ account: daniel.roodzant
 server: rstudio-connect.hu.nl
 hostUrl: https://rstudio-connect.hu.nl/__api__
 appId: 12
-bundleId: 42
+bundleId: 47
 url: https://rstudio-connect.hu.nl/pmdep/
-when: 1645450690.6401
-lastSyncTime: 1645450690.6401
+when: 1645639325.48663
+lastSyncTime: 1645639325.48663
 asMultiple: FALSE
 asStatic: FALSE

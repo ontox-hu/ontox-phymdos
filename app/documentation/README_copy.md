@@ -1,4 +1,4 @@
-ONTOX-PMDEP - the ONTOX Physiological Map Data Entry Portal
+ONTOX Phymdos - the ONTOX Physiological maps documentation software 
 ============================================================
 
 <font size="+1">

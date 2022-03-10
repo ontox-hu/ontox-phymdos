@@ -10,24 +10,27 @@ source(
 options(stringsAsFactors = FALSE)
 
 ## ui
-ui <- dashboardPage(title = "ONTOX-PMDEP", 
-  dashboardHeader(title = tags$p(tags$a(href='https://ontox-project.eu/',
-                                 tags$img(src='ontox_logo.png',height='40',width='60')),
-                                 " - Physiological Maps Data Entry Portal"), 
-                  titleWidth = 500,
-                  tags$li(a(onclick = "onclick =window.open('https://github.com/ontox-hu/ontox-pmdep')",
+ui <- dashboardPage(title = "Phymdos", 
+  dashboardHeader(
+                  titleWidth = 0,
+                  tags$li(a(onclick = "onclick =window.open('https://github.com/ontox-hu/ontox-phymdos')",
                             href = NULL,
                             icon("github"),
                             title = "GitHub",
                             style = "cursor: pointer;"
-                            ),
-                          class = "dropdown"
-                          )
+                  ),
+                  class = "dropdown"
+                  )
                   ),
   dashboardSidebar(
+    tags$img(src='phymdos_logo.png',height='200',width='200', style='text-align: center;'),
+    width = 200,
     sidebarMenuOutput("mysidebar")
   ),
   dashboardBody(
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "stylesheet.css")
+      ),
     tab_list_ui(),
     useShinyjs()
   )
@@ -55,6 +58,10 @@ server <- function(input, output, session) {
       menuItem(
         "Help", tabName = "help",
         icon = icon("question")
+      ),
+      menuItem(
+        "Info and contact", tabName = "info",
+        icon = icon("info")
       )
     )
   })
@@ -85,7 +92,9 @@ server <- function(input, output, session) {
     data = sbtab_tables_list,
     # create empty list for data upload
     sbtabfile = list(),
-    minerva = list()
+    # create vectors for minerva upload status
+    minerva_status = character(),
+    minerva_progress = character()
   )
   
   
@@ -133,11 +142,12 @@ server <- function(input, output, session) {
         br(),
         htmlOutput("text_minerva"),
         actionButton("open_minerva", 
-                     "Open MINERVA annotated", 
-                     icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE)),
+                     "Open MINERVA annotated"), 
+                     #icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE)),
         actionButton("open_minerva_fast", 
-                     "Open MINERVA unannotated", 
-                     icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE))
+                     "Open MINERVA unannotated"),
+                     #icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE))
+        textOutput("status")
       )
     )
   })
@@ -396,26 +406,47 @@ server <- function(input, output, session) {
   # open minerva on click annotated
   observeEvent(input$open_minerva, {
     showNotification("Please wait a few seconds for the page to load")
-    source_python("py/minerva_upload.py")
+    source_python("python/minerva_upload.py")
     Sys.sleep(3)
-    runjs(paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=", minerva_long, "', target: '_blank'})[0].click();"))
+    runjs(
+      paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=", 
+             minerva_long, 
+             "', target: '_blank'})[0].click();"
+             )
+      )
   })
   
   # open minerva on click unannotated
   observeEvent(input$open_minerva_fast, {
     showNotification("Please wait a few seconds for the page to load")
-    source_python("py/minerva_upload_short.py")
-    Sys.sleep(3)
-    runjs(paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=", minerva_short, "', target: '_blank'})[0].click();"))
+    source_python("python/minerva_upload_short.py")
+    local$minerva_status <- minerva_status
+    local$minerva_progress <- minerva_progress
+    Sys.sleep()
+    # runjs(
+    #   paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=", 
+    #          minerva_short, 
+    #          "', target: '_blank'})[0].click();"
+    #          )
+    #   )
+  })
+  
+  output$status <- renderText({
+    paste(local$minerva_status, " ",
+          local$minerva_progress)
   })
   
   ## render help screen
   output$myhelp <- renderUI({
-    includeMarkdown("README_copy.md")
+    includeMarkdown("documentation/README_copy.md")
   })
   
-}
+  ## render info screen
+  output$myinfo <- renderUI({
+    includeMarkdown("documentation/contact_info.md")
+  })
 
+}
 shinyApp(ui, server#,
          # launch and stop docker container on app start/stop 
          # (for dev version, only works locally)

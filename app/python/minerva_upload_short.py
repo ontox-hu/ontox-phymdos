@@ -76,6 +76,23 @@ grant_user_permission = session.patch(api_url+"/projects/"+project_id+":grantPri
 
 # Create r-object telling app that the map is ready
 r.minerva_short = project_id
+
+# Get session status while uploading
+session_info = session.get(api_url+"/projects/"+project_id)
+text = json.loads(session_info.text)
+while text['progress'] < 100:
+  session_info = session.get(api_url+"/projects/"+project_id)
+  text = json.loads(session_info.text)
+  r.minerva_status = "Status: "+ text['status']    
+  r.minerva_progress = "Progress: "+ str(round(text['progress'], 2))+ "%"
+  text['progress'] = text['progress']+10
+  time.sleep(1)
+  print(r.minerva_progress, flush=True)
+  if text['progress'] >= 100: 
+    r.minerva_status = "Status: Ok"    
+    r.minerva_progress = "Progress: 100%"
+    break
+
 # # OPEN the map in the webbrowser
 # time.sleep(3)
 # webbrowser.open("http://145.38.204.52:8080/minerva/index.xhtml?id="+project_id, new=2)

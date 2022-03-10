@@ -37,6 +37,12 @@ tab_list_ui <- function() {
         tabName = "help",
         uiOutput("myhelp")
       )
+    ),
+    list(
+      tabItem(
+        tabName = "info",
+        uiOutput("myinfo")
+      )
     )
   )
   # render
@@ -173,3 +179,7 @@ upload_tableUI <- function(subitem, sbtabfile = list()){
     )
   )
 }
+
+## create vectors for minerva counters
+minerva_status = paste("Status: empty")
+minerva_progress = paste("Progress: empty")

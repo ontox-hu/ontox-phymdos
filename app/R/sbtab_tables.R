@@ -5,11 +5,13 @@ library(callr)
 library(markdown)
 library(data.table)
 library(rhandsontable)
-library(shinydashboard)
+library(bslib)
 library(shiny)
 library(shinyjs)
 library(shinyBS)
 library(shinyWidgets)
+library(shinydashboard)
+library(shinydashboardPlus)
 
 ## tables: 
 sbtab_definitions <- readr::read_tsv("definitions.tsv", 
