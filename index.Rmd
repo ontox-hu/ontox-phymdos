@@ -1,9 +1,4 @@
----
-title: "index"
-output: html_document
----
-
-ONTOX-PMDEP - the ONTOX Physiological Map Data Entry Portal
+Phymdos - the ONTOX Physiological Maps documentation software
 ============================================================
 
 This application was created to serve as a bridge between [sysrev.com](https://sysrev.com/) and [Celldesigner](http://www.celldesigner.org/). Its core functionality is to allow the user to easily create SBML style physiological maps from litarature by filling out easy to use datatables and converting them to the desired format by the click of a button. 
