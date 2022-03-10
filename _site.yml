@@ -1,0 +1,6 @@
+name: "phymdos"
+navbar:
+  title: "Phymdos"
+  left:
+    - text: "Home"
+      href: index.html
