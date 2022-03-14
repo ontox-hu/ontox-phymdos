@@ -11,7 +11,7 @@
 
 
 
-<title>index.knit</title>
+<title>Phymdos</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -268,25 +268,26 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">Phymdos</h1>
 
 </div>
 
 
-<div id="phymdos---the-ontox-physiological-maps-documentation-software" class="section level1">
-<h1>Phymdos - the ONTOX Physiological Maps documentation software</h1>
-This application was created to serve as a bridge between <a href="https://sysrev.com/">sysrev.com</a> and <a href="http://www.celldesigner.org/">Celldesigner</a>. Its core functionality is to allow the user to easily create SBML style physiological maps from litarature by filling out easy to use datatables and converting them to the desired format by the click of a button. The format used to create these datatables is SBtab, which is essentially a .tsv file containing several tables that together define a system. These tables can be filled out at sysrev.com and in this app and can then be converted to SBML files that are used by Celldesigner to build physiological maps. This workflow has been illustrated below. <br> <img src="www/app_workflow.png" alt="home" />
+<div id="the-ontox-physiological-maps-documentation-software" class="section level2">
+<h2>The ONTOX Physiological Maps documentation software</h2>
+This application was created to serve as a bridge between <a href="https://sysrev.com/">sysrev.com</a> and <a href="http://www.celldesigner.org/">Celldesigner</a>. Its core functionality is to allow the user to easily create SBML style physiological maps from literature by filling out easy to use data tables and converting them to the desired format by the click of a button. The format used to create these data tables is SBtab, which is essentially a .tsv file containing several tables that together define a system. These tables can be filled out on sysrev.com and in this app and can then be converted to SBML files which can be used by Celldesigner to build physiological maps. This workflow has been illustrated below. <br> <img src="www/app_workflow.png" alt="home" />
 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
 The MINERVA functionality is not yet operable on the web-version of the app.
 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
 <ol>
 <li>
-Upon opening the app, users will first be guided to the homescreen where they are presented with 3 choices.
+Upon opening the app, users will first be guided to the home screen where they are presented with 3 choices.
 </li>
 <p><br></p>
 <img src="www/home.png" title="fig:" alt="home" />
 <ol type="a">
 <li>
-Create new SBtab: <br> Creating a new SBtab will allow users to create their own SBtab from scratch. (For creating new maps, skip point 2)
+Create new SBtab: <br> Creating a new SBtab will allow users to create their own SBtab from scratch. (Continues from point 3)
 </li>
 <li>
 Upload an SBtab object: <br> Uploading an SBtab object will allow users to upload a .tsv containing an SBtab document. The tabs within the .tsv will be opened in the app.
@@ -313,7 +314,7 @@ Once the upload is complete and the continue button is clicked the app will open
 <p class="caption">setup</p>
 </div>
 <li>
-Clicking ‘save input’ will redirect users to the ‘select tables’ tab which can also be accessed from the menu on the left side of the screen. Here users can add or remove tables from the menu. Please note that removing a table from the menu deletes any data that is inside the table.
+Clicking ‘save input’ will redirect users to the ‘select tables’ tab which can also be accessed from the menu on the left side of the screen. Here users can add or remove tables from the menu. Please note that removing a table from the menu does <b><u>not</u></b> delete any data that is inside the table.
 </li>
 <p><br></p>
 <div class="figure">
@@ -349,7 +350,6 @@ When users are done filling out the tables they can click the button to go to th
 </ol>
 </div>
 
-<p>Copyright &copy; 2022 ONTOX project. All rights reserved.</p>
 
 
 

@@ -1,4 +1,5 @@
 name: "phymdos"
+title: "Phymdos"
 navbar:
   title: "Phymdos"
   type: inverse
@@ -16,3 +17,4 @@ output:
     include:
       after_body: footer.html
     css: styles.css
+    
