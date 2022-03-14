@@ -1,0 +1,33 @@
+.skin-blue .main-header .navbar, .skin-blue .main-header .logo, .skin-blue .main-header .logo:hover{
+  background-color: #1fa9ff;
+}
+
+.content-wrapper{
+  background: #353535;
+}
+
+.skin-blue .left-side, .skin-blue .main-sidebar, .skin-blue .wrapper, .panel-default>.panel-heading, .panel, .panel-default, .panel-default > .panel-heading + .panel-collapse > .panel-body {
+  background-color: #232323;
+  color: #ffffff;
+  border-color: #1fa9ff;
+  border-top-color: #1fa9ff;
+}
+
+.skin-blue .sidebar-menu>li.active>a, .skin-blue .sidebar-menu>li.menu-open>a, .skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu .treeview-menu > li > a{
+  color: #1fa9ff;
+  background: #353535;
+  border-left-color: #353535;
+}
+
+.skin-blue .sidebar a {
+  color: #1fa9ff;
+}
+
+.skin-blue .sidebar-menu>li>.treeview-menu {
+  background: #1fa9ff;
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle:hover, .skin-blue .main-header .navbar .nav>li>a:hover{
+  background-color: #1d99e7;
+}
+
