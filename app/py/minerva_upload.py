@@ -10,14 +10,12 @@ import requests
 import os
 import json
 import time
-# import pandas
-# from io import StringIO
 
 session = requests.Session()
 
 ### INPUT YOUR CREDENTIALS TO LOGIN to PD map instance
 login = "admin"
-password = "admin"
+password = "administrator"
 api_url = "http://145.38.204.52:8080/minerva/api"
 map_file = "physmap.xml"
 
@@ -38,7 +36,8 @@ if 'project_id' in locals():
 
 # UPLOAD FILE TO THE SYSTEM
 stat_info = os.stat(map_file)
-with open(map_file) as f: file_content = f.read()
+with open(map_file) as f: 
+  file_content = f.read()
 
 # Before creating a new project in MINERVA, source file 'map_file' must be uploaded to the instance (MANUAL: https://minerva.pages.uni.lu/doc/api/14.0/files/)
 # Allocate memory in the system for 'map_file', which length is 'stat_info.st_size' bytes
@@ -56,7 +55,7 @@ upload_content_request = session.post(api_url+"/files/"+str(file_id)+":uploadCon
 project_id = "physmap_"+str(file_id)
 r.project_id = "physmap_"+str(file_id)
 project_name = "Physmap"
-create_map_request = session.post(api_url+"/projects/"+project_id, data = {"file-id":file_id, "name": project_name , "version": "example", "mapCanvasType":"OPEN_LAYERS", "annotate":"false", "parser":"lcsb.mapviewer.converter.model.sbml.SbmlParser"})
+create_map_request = session.post(api_url+"/projects/"+project_id, data = {"file-id":file_id, "name": project_name , "version": "example", "mapCanvasType":"OPEN_LAYERS", "annotate":"true", "parser":"lcsb.mapviewer.converter.model.sbml.SbmlParser"})
 
 time.sleep(1)
 
@@ -75,23 +74,26 @@ print("Comment details:", create_comment_request.text)
 grant_user_permission = session.patch(api_url+"/projects/"+project_id+":grantPrivileges", data = '[{"login":"anonymous", "privilegeType":"READ_PROJECT"}]')
 
 # Create r-object telling app that the map is ready
-r.minerva_short = project_id
+r.minerva_long = project_id
 
-# Get session status while uploading
-session_info = session.get(api_url+"/projects/"+project_id)
-text = json.loads(session_info.text)
-while text['progress'] < 100:
-  session_info = session.get(api_url+"/projects/"+project_id)
-  text = json.loads(session_info.text)
-  r.minerva_status = "Status: "+ text['status']    
-  r.minerva_progress = "Progress: "+ str(round(text['progress'], 2))+ "%"
-  text['progress'] = text['progress']+10
-  time.sleep(1)
-  print(r.minerva_progress, flush=True)
-  if text['progress'] >= 100: 
-    r.minerva_status = "Status: Ok"    
-    r.minerva_progress = "Progress: 100%"
-    break
+# # Get session status while uploading
+# session_info = session.get(api_url+"/projects/"+project_id)
+# text = json.loads(session_info.text)
+# while text['progress'] < 100:
+#   session_info = session.get(api_url+"/projects/"+project_id)
+#   text = json.loads(session_info.text)
+#   r.progress_pure = round(text['progress'], 2)
+#   r.minerva_status = "Status: "+ text['status']
+#   r.minerva_progress = "Progress: "+ str(round(text['progress'], 2))+ "%"
+#   #text['progress'] = text['progress']+10
+#   time.sleep(1)
+#   print(r.minerva_progress, r.minerva_status, sep="\n", flush=True)
+#   if text['progress'] >= 100:
+#     r.progress_pure = 100
+#     r.minerva_status = "Status: Ok"
+#     r.minerva_progress = "Progress: 100%"
+#     print(r.minerva_progress, r.minerva_status, sep="\n", flush=True)
+#     break
 
 # # OPEN the map in the webbrowser
 # time.sleep(3)

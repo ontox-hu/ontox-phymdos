@@ -93,8 +93,8 @@ server <- function(input, output, session) {
     # create empty list for data upload
     sbtabfile = list(),
     # create vectors for minerva upload status
-    minerva_status = character(),
-    minerva_progress = character()
+    minerva_status = list("Status: empty", "Progress: empty", 0),
+    minerva_progress = " "
   )
   
   
@@ -143,11 +143,9 @@ server <- function(input, output, session) {
         htmlOutput("text_minerva"),
         actionButton("open_minerva", 
                      "Open MINERVA annotated"), 
-                     #icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE)),
         actionButton("open_minerva_fast", 
                      "Open MINERVA unannotated"),
-                     #icon(progressBar(id = "open_m", value = 0, total = 5), verify_fa = FALSE))
-        textOutput("status")
+        htmlOutput("status")
       )
     )
   })
@@ -406,34 +404,64 @@ server <- function(input, output, session) {
   # open minerva on click annotated
   observeEvent(input$open_minerva, {
     showNotification("Please wait a few seconds for the page to load")
-    source_python("python/minerva_upload.py")
-    Sys.sleep(3)
+    source_python("py/minerva_upload.py")
+    # Get minerva status for status counter
+    local$minerva_status <- get_status()
+    while(local$minerva_status[[3]] < 100 ){
+      local$minerva_status <- get_status()
+      local$minerva_progress <- paste("<b>", "MINERVA map status:", local$minerva_status[[1]], local$minerva_status[[2]], "</b>", sep = "<br/>")
+      # update text output 
+      html(id = "status", local$minerva_progress)
+      # display status in console
+      cat(paste(local$minerva_status[[1]], local$minerva_status[[2]], "", sep = "\n"))
+      Sys.sleep(1)
+      if(local$minerva_status[[3]] > 100){
+        local$minerva_status <- as.list(c("Status: ok", "Progress: 100.0%", 100))
+        # display status in console
+        cat(paste(local$minerva_status[[1]], local$minerva_status[[2]], "", sep = "\n"))
+      }
+    }
+    # open web page
     runjs(
-      paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=", 
-             minerva_long, 
+      paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=",
+             minerva_long,
              "', target: '_blank'})[0].click();"
-             )
       )
+    )
   })
   
   # open minerva on click unannotated
   observeEvent(input$open_minerva_fast, {
     showNotification("Please wait a few seconds for the page to load")
-    source_python("python/minerva_upload_short.py")
-    local$minerva_status <- minerva_status
-    local$minerva_progress <- minerva_progress
-    Sys.sleep()
-    # runjs(
-    #   paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=", 
-    #          minerva_short, 
-    #          "', target: '_blank'})[0].click();"
-    #          )
-    #   )
+    source_python("py/minerva_upload_short.py")
+    # Get minerva status for status counter
+    local$minerva_status <- get_status()
+    while(local$minerva_status[[3]] < 100 ){
+      local$minerva_status <- get_status()
+      local$minerva_progress <- paste("<b>", "MINERVA map status:", local$minerva_status[[1]], local$minerva_status[[2]], "</b>", sep = "<br/>")
+      # update text output 
+      html(id = "status", local$minerva_progress)
+      # display status in console
+      cat(paste(local$minerva_status[[1]], local$minerva_status[[2]], "", sep = "\n"))
+      Sys.sleep(1)
+      if(local$minerva_status[[3]] > 100){
+        local$minerva_status <- as.list(c("Status: ok", "Progress: 100.0%", 100))
+        # display status in console
+        cat(paste(local$minerva_status[[1]], local$minerva_status[[2]], "", sep = "\n"))
+      }
+    }
+    # open web page
+    runjs(
+      paste0("$('<a>', {href: 'http://145.38.204.52:8080/minerva/index.xhtml?id=",
+             minerva_short,
+             "', target: '_blank'})[0].click();"
+      )
+    )
   })
   
+  ## render minerva status text 
   output$status <- renderText({
-    paste(local$minerva_status, " ",
-          local$minerva_progress)
+    HTML(paste("<b>", "MINERVA map status:", local$minerva_status[[1]], local$minerva_status[[2]], "</b>", sep = "<br/>"))
   })
   
   ## render help screen

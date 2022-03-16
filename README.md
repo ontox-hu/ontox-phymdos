@@ -5,8 +5,6 @@ This application was created to serve as a bridge between [sysrev.com](https://s
 The format used to create these data tables is SBtab, which is essentially a .tsv file containing several tables that together define a system. These tables can be filled out on sysrev.com and in this app and can then be converted to SBML files which can be used by Celldesigner to build physiological maps. This workflow has been illustrated below. <br>
 ![home](./app//www/app_workflow.png) 
 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-The MINERVA functionality is not yet operable on the web-version of the app.
-<hr style="height:2px;border-width:0;color:gray;background-color:gray">
 <ol>
   <li>
   Upon opening the app, users will first be guided to the home screen where they are presented with 3 choices. 
