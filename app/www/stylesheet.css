@@ -1,0 +1,29 @@
+.skin-blue .main-header .navbar, .skin-blue .main-header .logo, .skin-blue .main-header .logo:hover{
+  background-color: #1fa9ff;
+}
+
+.content-wrapper{
+  background: #ffffff;
+}
+
+.skin-blue .left-side, .skin-blue .main-sidebar, .skin-blue .wrapper {
+  background-color: #dddddd;
+}
+
+.skin-blue .sidebar-menu>li.active>a, .skin-blue .sidebar-menu>li.menu-open>a, .skin-blue .sidebar-menu>li:hover>a, .skin-blue .sidebar-menu .treeview-menu > li > a{
+  color: #1fa9ff;
+  background: #ffffff;
+  border-left-color: #1fa9ff;
+}
+
+.skin-blue .sidebar a {
+  color: #1fa9ff;
+}
+
+.skin-blue .sidebar-menu>li>.treeview-menu {
+  background: #1fa9ff;
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle:hover, .skin-blue .main-header .navbar .nav>li>a:hover{
+  background-color: #1d99e7;
+}

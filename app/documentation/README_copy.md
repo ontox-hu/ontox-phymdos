@@ -1,16 +1,14 @@
-ONTOX-PMDEP - the ONTOX Physiological Map Data Entry Portal
+Phymdos <br> the ONTOX Physiological maps documentation software 
 ============================================================
 
 <font size="+1">
-This application was created to serve as a bridge between [sysrev.com](https://sysrev.com/) and [Celldesigner](http://www.celldesigner.org/). Its core functionality is to allow the user to easily create SBML style physiological maps from litarature by filling out easy to use datatables and converting them to the desired format by the click of a button. 
-The format used to create these datatables is SBtab, which is essentially a .tsv file containing several tables that together define a system. These tables can be filled out at sysrev.com and in this app and can then be converted to SBML files that are used by Celldesigner to build physiological maps. This workflow has been illustrated below. <br>
+This application was created to serve as a bridge between [sysrev.com](https://sysrev.com/) and [Celldesigner](http://www.celldesigner.org/). Its core functionality is to allow the user to easily create SBML style physiological maps from literature by filling out easy to use data tables and converting them to the desired format by the click of a button. 
+The format used to create these data tables is SBtab, which is essentially a .tsv file containing several tables that together define a system. These tables can be filled out on sysrev.com and in this app and can then be converted to SBML files which can be used by Celldesigner to build physiological maps. This workflow has been illustrated below. <br>
 <img src="app_workflow.png" width="80%" height="100%" />
-<hr style="height:2px;border-width:0;color:gray;background-color:gray">
-The MINERVA functionality is not yet operable on the web-version of the app.
 <hr style="height:2px;border-width:0;color:gray;background-color:gray">
 <ol>
   <li>
-  Upon opening the app, users will first be guided to the homescreen where they are presented with 3 choices. 
+  Upon opening the app, users will first be guided to the home screen where they are presented with 3 choices. 
   </li>
   <br>
   
@@ -20,7 +18,7 @@ The MINERVA functionality is not yet operable on the web-version of the app.
   <ol type=a>
     <li> 
       Create new SBtab: <br>
-      Creating a new SBtab will allow users to create their own SBtab from scratch. (For creating new maps, skip point 2)
+      Creating a new SBtab will allow users to create their own SBtab from scratch. (Continues from point 3)
       </li>
     <li> 
       Upload an SBtab object: <br>
@@ -49,7 +47,7 @@ The MINERVA functionality is not yet operable on the web-version of the app.
 
   <br> <br>
   <li>
-    Clicking 'save input' will redirect users to the 'select tables' tab which can also be accessed from the menu on the left side of the screen. Here users can add or remove tables from the menu. Please note that removing a table from the menu deletes any data that is inside the table.
+    Clicking 'save input' will redirect users to the 'select tables' tab which can also be accessed from the menu on the left side of the screen. Here users can add or remove tables from the menu. The app currently only features the three most important table types. Please also note that removing a table from the menu does <b>NOT</b> delete any data that is inside the table.
   </li>
   <br>
   
@@ -57,14 +55,14 @@ The MINERVA functionality is not yet operable on the web-version of the app.
 
   <br> <br>
   <li>
-    Once all the correct tables are selected users can start filling the new tables or adding to the uploaded tables however they see fit. 
+    Once all the correct tables are selected users can start filling the new tables or start adding to the uploaded tables however they see fit. 
   </li>
   <br> 
   
   <img src="table_upload.png" width="100%" height="100%" />
 
   <br> <br>
-  For empty tables the first step is to start adding colums to the table. This can also be done on existing tables to add information.
+  For empty tables the first step is to start adding columns to the table. This can also be done on existing tables to add information.
   <br> <br>
   
   <img src="column_choose.png" width="100%" height="100%" />
@@ -77,7 +75,7 @@ The MINERVA functionality is not yet operable on the web-version of the app.
 
   <br> <br>
   <li> 
-    When users are done filling out the tables they can click the button to go to the download screen or they can click back to Setup on the menu on the left. Here they can export the file to SBtab format as well as SBML. 
+    When users are done filling out the tables they can go to the download screen by clicking the button underneath the table or they can click Setup on the menu on the left. Here they can export the file to SBtab- and SBML format. 
   </li>
   <br>
   

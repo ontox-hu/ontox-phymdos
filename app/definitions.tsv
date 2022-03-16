@@ -1,30 +1,35 @@
 !!SBtab SBtabVersion='0.9.1' TableType='Definition' TableName='Allowed_types'
 !Name	!ComponentType	!Parent	!Format	!Description
-ID	Column	Reaction	string	Reaction shortname
-Name	Column	Reaction	string	Entity name
-Type	Column	Reaction	string	Biochemical type of entity
+ID	Column	Reaction	String	Reaction shortname
+Name	Column	Reaction	String	Entity name
+Type	Column	Reaction	String	Biochemical type of entity
 IsReversible	Column	Reaction	Boolean	Reaction should be treated as irreversible
-ReactionFormula	Column	Reaction	string	Reaction formula
-Modifier	Column	Reaction	string	Modifier of this reaction
-Regulator	Column	Reaction	string	Regulator controlling the reaction
-Location	Column	Reaction	string	Compartment for localised reaction
-KineticLaw	Column	Reaction	string	Kinetic law of the reaction
-SBOTerm	Column	Reaction	string	SBO term of the entity
-ID	Column	Compound	string	Compound shortname
-Name	Column	Compound	string	Entity name
-Type	Column	Compound	string	Biochemical type of entity
-Symbol	Column	Compound	string	Short symbol (e.g. gene symbol)
+ReactionFormula	Column	Reaction	String	Reaction formula
+Modifier	Column	Reaction	String	Modifier of this reaction
+Regulator	Column	Reaction	String	Regulator controlling the reaction
+Location	Column	Reaction	String	Compartment for localised reaction
+KineticLaw	Column	Reaction	String	Kinetic law of the reaction
+SBOTerm	Column	Reaction	String	SBO term of the entity
+ID	Column	Compound	String	Compound shortname
+Name	Column	Compound	String	Entity name
+Type	Column	Compound	String	Biochemical type of entity
+Symbol	Column	Compound	String	Short symbol (e.g. gene symbol)
 InitialValue	Column	Compound	float	Initial amount or concentration
-Unit	Column	Compound	string	Unit for initial value
-Location	Column	Compound	string	Compartment for localised entities
+Unit	Column	Compound	String	Unit for initial value
+Location	Column	Compound	String	Compartment for localised entities
 IsConstant	Column	Compound	Boolean	Substance with fixed concentrations
-InitialConcentration	Column	Compound	string	Initial amount or concentration
+InitialConcentration	Column	Compound	String	Initial amount or concentration
 HasOnlySubstanceUnits	Column	Compound	Boolean	SBML species attribute hasOnlySubstanceUnits
-SBOTerm	Column	Compound	string	SBO term of the entity
-ID	Column	Compartment	string	Compartment shortname
-Name	Column	Compartment	string	Entity name
-Type	Column	Compartment	string	Biochemical type of entity
-OuterCompartment	Column	Compartment	string	Surrounding compartment (short)
-Size	Column	Compartment	string	Compartment size
-Unit	Column	Compartment	string	Physical unit
-SBOTerm	Column	Compartment	string	SBO term of the entity
+SBOTerm	Column	Compound	String	SBO term of the entity
+Identifiers:ec-code	Column	Compound	String	Ec-code identifier
+Identifiers:uniprot	Column	Compound	String	Uniprot identifier
+Identifiers:kegg.compound	Column	Compound	String	Kegg compound identifier
+Identifiers:obo.chebi	Column	Compound	String	obo Chebi identifier
+Identifiers:kegg.orthology	column	Compound	String	Orthology Kegg identifier
+ID	Column	Compartment	String	Compartment shortname
+Name	Column	Compartment	String	Entity name
+Type	Column	Compartment	String	Biochemical type of entity
+OuterCompartment	Column	Compartment	String	Surrounding compartment (short)
+Size	Column	Compartment	String	Compartment size
+Unit	Column	Compartment	String	Physical unit
+SBOTerm	Column	Compartment	String	SBO term of the entity
