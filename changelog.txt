@@ -1,3 +1,12 @@
+1.03:
+  What's new:
+    - Added status counter for MINERVA visualization.
+    - Created CSS template for dashboard styling.
+    - Small update on README
+    - Files have been restructured 
+  Fixes:
+    - MINERVA now opens after the map has rendered so no more blank pages.
+    
 1.02:
   What's new:
     - Added MINERVA to the published version of the app .
