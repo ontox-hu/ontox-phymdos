@@ -18,7 +18,7 @@ library(shinydashboardPlus)
 ## tables: 
 sbtab_definitions <- readr::read_tsv("definitions.tsv", 
                                      skip = 1, col_names = TRUE, show_col_types = FALSE
-)
+                                     )
 
 ## recode `Type` column
 sbtab_definitions <- sbtab_definitions %>%

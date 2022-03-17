@@ -87,7 +87,7 @@ read_sbtab <- function(file, na = ""){
     } 
   }
   return(tables)
-}
+  }
 
 ## Check if a table is filled and open filled tables in the sidebar
 open_tabs <- function(table){
@@ -97,19 +97,19 @@ open_tabs <- function(table){
       TRUE
       }else{    
         FALSE
-        }
-}
+      }
+  }
 
 ## Output the table description with the tables
 outputTableDescription <- function(tableTitle){
   DT::renderDataTable({
     split_def_tables[[tableTitle]]%>%
-      dplyr::select(`!Name`,`!Description`) %>%#,`!Example`)%>%
+      dplyr::select(`!Name`,`!Description`,`!Example`) %>%
       dplyr::rename(Name = `!Name`,
-                    Description = `!Description`)#,
-                    #xample = `!Example`)
-  })
-}
+                    Description = `!Description`,
+                    Example = `!Example`)
+    })
+  }
 
 ## Create individual table pages for adding table by hand
 add_tableUI <- function(subitem){
@@ -123,7 +123,7 @@ add_tableUI <- function(subitem){
                                                     "ReactionID"
                                                     ),
                                        inline = TRUE)
-    ),
+                    ),
     tabItem(
       tabName = subitem,
       fluidRow(
@@ -141,9 +141,9 @@ add_tableUI <- function(subitem){
     bsCollapsePanel("Description of table elements",
                     DT::dataTableOutput(paste0("Description", subitem), 
                                         width = "100%")
+                    )
     )
-  )
-}
+  }
 
 ## Create individual table pages for adding table by upload
 upload_tableUI <- function(subitem, sbtabfile = list()){

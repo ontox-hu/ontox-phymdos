@@ -1,35 +1,35 @@
 !!SBtab SBtabVersion='0.9.1' TableType='Definition' TableName='Allowed_types'
-!Name	!ComponentType	!Parent	!Format	!Description
-ID	Column	Reaction	String	Reaction shortname
-Name	Column	Reaction	String	Entity name
-Type	Column	Reaction	String	Biochemical type of entity
-IsReversible	Column	Reaction	Boolean	Reaction should be treated as irreversible
-ReactionFormula	Column	Reaction	String	Reaction formula
-Modifier	Column	Reaction	String	Modifier of this reaction
-Regulator	Column	Reaction	String	Regulator controlling the reaction
-Location	Column	Reaction	String	Compartment for localised reaction
-KineticLaw	Column	Reaction	String	Kinetic law of the reaction
-SBOTerm	Column	Reaction	String	SBO term of the entity
-ID	Column	Compound	String	Compound shortname
-Name	Column	Compound	String	Entity name
-Type	Column	Compound	String	Biochemical type of entity
-Symbol	Column	Compound	String	Short symbol (e.g. gene symbol)
-InitialValue	Column	Compound	float	Initial amount or concentration
-Unit	Column	Compound	String	Unit for initial value
-Location	Column	Compound	String	Compartment for localised entities
-IsConstant	Column	Compound	Boolean	Substance with fixed concentrations
-InitialConcentration	Column	Compound	String	Initial amount or concentration
-HasOnlySubstanceUnits	Column	Compound	Boolean	SBML species attribute hasOnlySubstanceUnits
-SBOTerm	Column	Compound	String	SBO term of the entity
-Identifiers:ec-code	Column	Compound	String	Ec-code identifier
-Identifiers:uniprot	Column	Compound	String	Uniprot identifier
-Identifiers:kegg.compound	Column	Compound	String	Kegg compound identifier
-Identifiers:obo.chebi	Column	Compound	String	obo Chebi identifier
-Identifiers:kegg.orthology	column	Compound	String	Orthology Kegg identifier
-ID	Column	Compartment	String	Compartment shortname
-Name	Column	Compartment	String	Entity name
-Type	Column	Compartment	String	Biochemical type of entity
-OuterCompartment	Column	Compartment	String	Surrounding compartment (short)
-Size	Column	Compartment	String	Compartment size
-Unit	Column	Compartment	String	Physical unit
-SBOTerm	Column	Compartment	String	SBO term of the entity
+!Name	!ComponentType	!Parent	!Format	!Description	!Example
+ID	Column	Reaction	String	Unique ID for reaction	re1, re2, re3 etc.
+Name	Column	Reaction	String	Reaction name (optional)	
+Type	Column	Reaction	String	Type of reaction (unused)	state transition, transcription, translation, transport, heterodimer association, dissociation, truncation
+IsReversible	Column	Reaction	Boolean	Is the reaction reversible?	true, false
+ReactionFormula	Column	Reaction	String	Reaction formula using species ID's	(s1 <=> s2), (s3, s4 <=> s5) (do not include brackets)
+Modifier	Column	Reaction	String	Modifier of the reaction by species ID	s1, s2, s3 etc.
+Regulator	Column	Reaction	String	Regulator controlling the reaction by species ID	s1, s2, s3 etc.
+Location	Column	Reaction	String	Compartment where reaction is located	c1, c2, c3 etc.
+KineticLaw	Column	Reaction	String	Kinetic law of the reaction	not used at this moment
+SBOTerm	Column	Reaction	String	SBO term of the entity	alternative to Type. can be ignored for now
+ID	Column	Compound	String	Unique ID for species	s1, s2, s3 etc.
+Name	Column	Compound	String	Species name	PAX, Vit A, CYP26a etc.
+Type	Column	Compound	String	Type of compound (unused)	generic protein, receptor, ion channel, truncated protein, gene, RNA, antisense RNA, phenotype, ion, simple molecule, drug, unknown, complex, degraded
+Symbol	Column	Compound	String	Short symbol (e.g. gene symbol)	not used at this moment
+InitialValue	Column	Compound	float	Initial amount or concentration	
+Unit	Column	Compound	String	Unit for initial value	
+Location	Column	Compound	String	Compartment where species are located	c1, c2, c3 etc.
+IsConstant	Column	Compound	Boolean	Substance with fixed concentrations	true, false
+InitialConcentration	Column	Compound	String	Initial amount or concentration	
+HasOnlySubstanceUnits	Column	Compound	Boolean	SBML species attribute hasOnlySubstanceUnits	true, false
+SBOTerm	Column	Compound	String	SBO term of the entity	alternative to Type. can be ignored for now
+Identifiers:ec-code	Column	Compound	String	Ec-code identifier	
+Identifiers:uniprot	Column	Compound	String	Uniprot identifier	
+Identifiers:kegg.compound	Column	Compound	String	Kegg compound identifier	
+Identifiers:obo.chebi	Column	Compound	String	obo Chebi identifier	
+Identifiers:kegg.orthology	column	Compound	String	Orthology Kegg identifier	
+ID	Column	Compartment	String	Unique ID for compartment	c1, c2, c3 etc.
+Name	Column	Compartment	String	Compartment name	mesoderm, liver, mitochondion
+Type	Column	Compartment	String	Biochemical type of compartment (unused)	
+OuterCompartment	Column	Compartment	String	Surrounding compartment by ID	c1, c2, c3 etc.
+Size	Column	Compartment	String	Compartment size	1.0, 2.0 etc.
+Unit	Column	Compartment	String	Physical unit of compartment size	volume, litre
+SBOTerm	Column	Compartment	String	SBO term of the entity	alternative to Type. can be ignored for now

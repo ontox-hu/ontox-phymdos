@@ -1,1 +1,13 @@
-!!!SBtab Document="Documentname"
+!!!SBtab Document=""
+!!SBtab TableID="t_Reaction" SBtabVersion="1.0" Document="" TableType="Reaction" TableName="Reaction"
+!ID	!Name	!Type	!IsReversible	!ReactionFormula	!Modifier	!Regulator	!Location	!KineticLaw	!SBOTerm
+									
+
+!!SBtab TableID="t_Compound" SBtabVersion="1.0" Document="" TableType="Compound" TableName="Compound"
+!ID	!Name	!Type	!Symbol	!InitialValue	!Unit	!Location	!IsConstant	!InitialConcentration	!HasOnlySubstanceUnits	!SBOTerm	!Identifiers:ec-code	!Identifiers:uniprot	!Identifiers:kegg.compound	!Identifiers:obo.chebi	!Identifiers:kegg.orthology
+															
+
+!!SBtab TableID="t_Compartment" SBtabVersion="1.0" Document="" TableType="Compartment" TableName="Compartment"
+!ID	!Name	!Type	!OuterCompartment	!Size	!Unit	!SBOTerm
+						
+
