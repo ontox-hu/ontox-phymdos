@@ -170,22 +170,35 @@ server <- function(input, output, session) {
   
   # read input sbtab to dashboard
   observeEvent(input$sbtabfile_in, {
-    local$sbtabfile <- suppressWarnings(read_sbtab(input$sbtabfile_in$datapath))
-    # print names of tables in the file to console
-    print(paste("File", paste0("'",input$sbtabfile_in$name, "'"), "contains tabs:"))
-    print(names(local$sbtabfile))
-    local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
-      # make sure all columns start with uppercase letter
-      colnames(local$sbtabfile[[name]]) <- 
-        gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
-             colnames(local$sbtabfile[[name]]),
-             perl = TRUE)
-      local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+    # debug message
+    debug_msg("Uploading SBtabfile")
+    # return message when uploading wrong file
+    tryCatch({
+      # read the sbtab into list of tables
+      local$sbtabfile <- suppressWarnings(read_sbtab(input$sbtabfile_in$datapath))
+      # print names of tables in the file to console
+      print(paste("File", paste0("'",input$sbtabfile_in$name, "'"), "contains tabs:"))
+      print(names(local$sbtabfile))
+      local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
+        # make sure all columns start with uppercase letter
+        colnames(local$sbtabfile[[name]]) <- 
+          gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
+               colnames(local$sbtabfile[[name]]),
+               perl = TRUE)
+        local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+        })
+    }, error = function(e){
+      debug_msg(e$message)
     })
+    # debug message
+    debug_msg("SBtabfile uploaded succesfully")
   })
   
   # read input sbml to dashboard
   observeEvent(input$sbmlfile_in, {
+    # debug message
+    debug_msg("Uploading SBMLfile")
+    # convert sbml to sbtab and read into list of tables
     sbml_to_sbtab(input$sbmlfile_in$datapath)
     local$sbtabfile <- suppressWarnings(read_sbtab(sbtab_string))
     # print names of tables in the file to console
@@ -199,11 +212,15 @@ server <- function(input, output, session) {
              perl = TRUE)
       local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
     })
+    # debug message
+    debug_msg("SBMLfile uploaded succesfully")
   })  
   
   # open table tabs from uploaded files
   observeEvent(input$set_sbtab|input$set_sbml, {
     req(input$set_sbtab|input$set_sbml)
+    # debug message
+    debug_msg("Opening tables")
     # open tabs included in sbtab in the dashboard
     lapply(names(local$sbtabfile), function(table){
       # update empty/current tab lists if the table is not open yet
@@ -254,6 +271,8 @@ server <- function(input, output, session) {
     
     # open "First setup" panel after SBtab or SBML is uploaded and the continue button is pressed
     updateCollapse(session, "homescreen", open = "First setup")
+    # debug message
+    debug_msg("Tables opened succesfully")
   })
   
   # Open "Save and download" panel on homepage and switch to "Select tables" tab when document name is set
@@ -340,17 +359,17 @@ server <- function(input, output, session) {
       write_lines("", file = "physmap.tsv", append = TRUE)
     }
     # write SBML output file
-    tryCatch({
+    #tryCatch({
       sbtab_to_sbml("physmap.tsv")
-      },
+      #},
       # make it so that sbtab conversion errors don't crash the app 
       # (incomplete sbtab document will cause the .py script to return error)
-      warning = function(warn){
-        print("py.warn")
-      },
-      error = function(err){
-        print("py.err")
-      })
+      # warning = function(warn){
+      #   print("Warning:", warn)
+      # },
+      # error = function(err){
+      #   print("Error:", err)
+      # })
     })
   
   # remove a tab
@@ -403,7 +422,10 @@ server <- function(input, output, session) {
   
   # open minerva on click annotated
   observeEvent(input$open_minerva, {
-    showNotification("Please wait a few seconds for the page to load")
+    # debug message
+    debug_msg("Generating MINERVA map")
+    showNotification("Please wait a few moments for the page to load")
+    # source minerva script
     source_python("py/minerva_upload.py")
     # Get minerva status for status counter
     local$minerva_status <- get_status()
@@ -428,11 +450,16 @@ server <- function(input, output, session) {
              "', target: '_blank'})[0].click();"
       )
     )
+    # debug message
+    debug_msg("MINERVA opened succesfully")
   })
   
   # open minerva on click unannotated
   observeEvent(input$open_minerva_fast, {
+    # debug message
+    debug_msg("Generating MINERVA map")
     showNotification("Please wait a few seconds for the page to load")
+    # source minerva script
     source_python("py/minerva_upload_short.py")
     # Get minerva status for status counter
     local$minerva_status <- get_status()
@@ -457,6 +484,8 @@ server <- function(input, output, session) {
              "', target: '_blank'})[0].click();"
       )
     )
+    # debug message
+    debug_msg("MINERVA opened succesfully")
   })
   
   ## render minerva status text 
