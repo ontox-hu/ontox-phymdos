@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
-  <model id="physmap" name="physmap"/>
+  <model id="physmap" name="physmap">
+    <listOfCompartments>
+      <compartment id="Default_Compartment" name="Default_Compartment" size="1" constant="true"/>
+    </listOfCompartments>
+  </model>
 </sbml>

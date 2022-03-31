@@ -188,7 +188,17 @@ server <- function(input, output, session) {
         local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
         })
     }, error = function(e){
-      debug_msg(e$message)
+      shinyalert(
+        title = "Wrong file",
+        text = "Please select a correct SBtab file",
+        size = "xs", 
+        closeOnClickOutside = TRUE,
+        type = "warning",
+        showConfirmButton = TRUE,
+        confirmButtonText = "Continue",
+        confirmButtonCol = "#1fa9ff",
+        animation = FALSE
+      )
     })
     # debug message
     debug_msg("SBtabfile uploaded succesfully")
@@ -359,17 +369,17 @@ server <- function(input, output, session) {
       write_lines("", file = "physmap.tsv", append = TRUE)
     }
     # write SBML output file
-    #tryCatch({
+    tryCatch({
       sbtab_to_sbml("physmap.tsv")
-      #},
+      },
       # make it so that sbtab conversion errors don't crash the app 
       # (incomplete sbtab document will cause the .py script to return error)
-      # warning = function(warn){
-      #   print("Warning:", warn)
-      # },
-      # error = function(err){
-      #   print("Error:", err)
-      # })
+      warning = function(warn){
+        print(warn)
+      },
+      error = function(err){
+        print(err)
+      })
     })
   
   # remove a tab
