@@ -1,0 +1,18 @@
+---
+title: "Materials"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Table containing tools used in the creation of Phymdos
+
+```{r table, echo=FALSE, message=FALSE}
+materials <- read_tsv("phymdos_materials.tsv")
+knitr::kable(materials)
+
+```
