@@ -11,6 +11,7 @@ library(bslib)
 library(shiny)
 library(shinyjs)
 library(shinyBS)
+library(shinyalert)
 library(shinyWidgets)
 library(shinydashboard)
 library(shinydashboardPlus)
@@ -18,7 +19,7 @@ library(shinydashboardPlus)
 ## tables: 
 sbtab_definitions <- readr::read_tsv("definitions.tsv", 
                                      skip = 1, col_names = TRUE, show_col_types = FALSE
-)
+                                     )
 
 ## recode `Type` column
 sbtab_definitions <- sbtab_definitions %>%

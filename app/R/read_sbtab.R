@@ -1,24 +1,3 @@
----
-title: "Untitled"
-output: html_document
-editor_options: 
-  chunk_output_type: inline
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-```
-
-```{r}
-read_sbtab("_min_physmap-5.tsv")
-read_sbtab("_min_physmap-5_wrong.tsv")
-read_sbtab(sbtab_string)
-i <- sbtab[14]
-l <- tab_content[1]
-```
-
-```{r}
 ## read tables from sbtab file and convert to a list
 read_sbtab <- function(file, na = ""){
   # read in file and create empty list and name vector
@@ -116,4 +95,3 @@ read_sbtab <- function(file, na = ""){
   }
   return(tables)
 }
-```

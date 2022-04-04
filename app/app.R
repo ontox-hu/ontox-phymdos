@@ -103,6 +103,7 @@ server <- function(input, output, session) {
     bsCollapse(id = "homescreen", open = "Homescreen",
       # create home- choicescreen       
       bsCollapsePanel("Homescreen",
+        textInput("set_documentname", "Please name your document", placeholder = "Documentname"),
         htmlOutput("welcome"),
         actionButton("new_sbtab", "Create new SBtab"),
         actionButton("upload_sbtab", "Upload an SBtab object"),
@@ -126,13 +127,6 @@ server <- function(input, output, session) {
                              ".xml")),
         actionButton("set_sbml", "Click here to continue (required)")
       ),
-      # first setup page 
-      bsCollapsePanel("First setup",
-        textInput("set_documentname", "Please name your document", placeholder = "Documentname"),
-        selectInput("sbtab_version", "Please enter which SBtab Version you need (1.0 default)", 
-                    c("0.8", "0.9", "1.0"), selected = "1.0"),
-        actionButton("set", "Save input")
-      ),
       # download page for SBtab/SBML
       bsCollapsePanel("Save and download",
         htmlOutput("text_download"),
@@ -153,9 +147,10 @@ server <- function(input, output, session) {
   # Render homescreen text
   output$welcome <- renderText({paste("<b>What would you like to do?</b>")})
   
-  # Open "First setup" panel when "Create new SBtab" is selected
+  # Open "select_tables" panel when "Create new SBtab" is selected
   observeEvent(input$new_sbtab, {
-    updateCollapse(session, "homescreen", open = "First setup")
+    updateTabItems(session, "tabs", selected = "select_tables")
+    updateCollapse(session, "homescreen", open = "Save and download")
   })
   
   # Open "Upload SBtab" panel when "Upload an SBtab object" is selected
@@ -170,40 +165,86 @@ server <- function(input, output, session) {
   
   # read input sbtab to dashboard
   observeEvent(input$sbtabfile_in, {
-    local$sbtabfile <- suppressWarnings(read_sbtab(input$sbtabfile_in$datapath))
-    # print names of tables in the file to console
-    print(paste("File", paste0("'",input$sbtabfile_in$name, "'"), "contains tabs:"))
-    print(names(local$sbtabfile))
-    local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
-      # make sure all columns start with uppercase letter
-      colnames(local$sbtabfile[[name]]) <- 
-        gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
-             colnames(local$sbtabfile[[name]]),
-             perl = TRUE)
-      local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+    # debug message
+    debug_msg("Uploading SBtabfile")
+    # return message when uploading wrong file
+    tryCatch({
+      # read the sbtab into list of tables
+      local$sbtabfile <- read_sbtab(input$sbtabfile_in$datapath)
+      # print names of tables in the file to console
+      print(paste("File", paste0("'",input$sbtabfile_in$name, "'"), "contains tabs:"))
+      print(names(local$sbtabfile))
+      local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
+        # make sure all columns start with uppercase letter
+        colnames(local$sbtabfile[[name]]) <- 
+          gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
+               colnames(local$sbtabfile[[name]]),
+               perl = TRUE)
+        local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+        })
+      # debug message
+      debug_msg("SBtabfile uploaded succesfully")
+    }, error = function(e){
+      shinyalert(
+        title = "Error",
+        text = e$message,
+        size = "l", 
+        closeOnClickOutside = TRUE,
+        type = "warning",
+        showConfirmButton = TRUE,
+        confirmButtonText = "Continue",
+        confirmButtonCol = "#1fa9ff",
+        animation = FALSE
+      )
+      # debug message
+      debug_msg(paste("SBtabfile uploaded error:", e$message))
     })
   })
   
   # read input sbml to dashboard
   observeEvent(input$sbmlfile_in, {
-    sbml_to_sbtab(input$sbmlfile_in$datapath)
-    local$sbtabfile <- suppressWarnings(read_sbtab(sbtab_string))
-    # print names of tables in the file to console
-    print(paste("File", paste0("'",input$sbmlfile_in$name, "'"), "contains tabs:"))
-    print(names(local$sbtabfile))
-    local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
-      # make sure all columns start with uppercase letter
-      colnames(local$sbtabfile[[name]]) <- 
-        gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
-             colnames(local$sbtabfile[[name]]),
-             perl = TRUE)
-      local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+    # debug message
+    debug_msg("Uploading SBMLfile")
+    # return message when uploading wrong file
+    tryCatch({
+      # convert sbml to sbtab and read into list of tables
+      sbml_to_sbtab(input$sbmlfile_in$datapath)
+      local$sbtabfile <- suppressWarnings(read_sbtab(sbtab_string))
+      # print names of tables in the file to console
+      print(paste("File", paste0("'",input$sbmlfile_in$name, "'"), "contains tabs:"))
+      print(names(local$sbtabfile))
+      local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
+        # make sure all columns start with uppercase letter
+        colnames(local$sbtabfile[[name]]) <- 
+          gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
+               colnames(local$sbtabfile[[name]]),
+               perl = TRUE)
+        local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+      })
+      # debug message
+      debug_msg("SBMLfile uploaded succesfully")
+    }, error = function(e){
+      shinyalert(
+        title = "Error",
+        text = e$message,
+        size = "l", 
+        closeOnClickOutside = TRUE,
+        type = "warning",
+        showConfirmButton = TRUE,
+        confirmButtonText = "Continue",
+        confirmButtonCol = "#1fa9ff",
+        animation = FALSE
+      )
+      # debug message
+      debug_msg(paste("SBML uploaded error:", e$message))
     })
   })  
   
   # open table tabs from uploaded files
   observeEvent(input$set_sbtab|input$set_sbml, {
     req(input$set_sbtab|input$set_sbml)
+    # debug message
+    debug_msg("Opening tables")
     # open tabs included in sbtab in the dashboard
     lapply(names(local$sbtabfile), function(table){
       # update empty/current tab lists if the table is not open yet
@@ -216,7 +257,7 @@ server <- function(input, output, session) {
                                 )
         # write table header for file
         local$headers <- append(local$headers,
-                                paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', table, '"',' TableName="', table, '"')
+                                paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="1.0"', ' Document="', input$set_documentname, '"',' TableType="', table, '"',' TableName="', table, '"')
         )
         # remove name of table from choices
         local$choices <- local$choices[local$choices!=table]
@@ -252,14 +293,11 @@ server <- function(input, output, session) {
     })
     names(local$headers) <- local$current_tabs
     
-    # open "First setup" panel after SBtab or SBML is uploaded and the continue button is pressed
-    updateCollapse(session, "homescreen", open = "First setup")
-  })
-  
-  # Open "Save and download" panel on homepage and switch to "Select tables" tab when document name is set
-  observeEvent(input$set, {
-    updateCollapse(session, "homescreen", open = "Save and download")
+    # open "select_tables" panel after SBtab or SBML is uploaded and the continue button is pressed
     updateTabItems(session, "tabs", selected = "select_tables")
+    updateCollapse(session, "homescreen", open = "Save and download")
+    # debug message
+    debug_msg("Tables opened succesfully")
   })
   
   # render select_tables
@@ -291,7 +329,7 @@ server <- function(input, output, session) {
                             )
     # write table header for file
     local$headers <- append(local$headers,
-                            paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
+                            paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="1.0"', ' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
                             )
     names(local$headers) <- local$current_tabs
     # remove name of table from choices
@@ -346,10 +384,10 @@ server <- function(input, output, session) {
       # make it so that sbtab conversion errors don't crash the app 
       # (incomplete sbtab document will cause the .py script to return error)
       warning = function(warn){
-        print("py.warn")
+        print(warn)
       },
       error = function(err){
-        print("py.err")
+        print(err)
       })
     })
   
@@ -403,7 +441,10 @@ server <- function(input, output, session) {
   
   # open minerva on click annotated
   observeEvent(input$open_minerva, {
-    showNotification("Please wait a few seconds for the page to load")
+    # debug message
+    debug_msg("Generating MINERVA map")
+    showNotification("Please wait a few moments for the page to load")
+    # source minerva script
     source_python("py/minerva_upload.py")
     # Get minerva status for status counter
     local$minerva_status <- get_status()
@@ -428,11 +469,16 @@ server <- function(input, output, session) {
              "', target: '_blank'})[0].click();"
       )
     )
+    # debug message
+    debug_msg("MINERVA opened succesfully")
   })
   
   # open minerva on click unannotated
   observeEvent(input$open_minerva_fast, {
+    # debug message
+    debug_msg("Generating MINERVA map")
     showNotification("Please wait a few seconds for the page to load")
+    # source minerva script
     source_python("py/minerva_upload_short.py")
     # Get minerva status for status counter
     local$minerva_status <- get_status()
@@ -457,6 +503,8 @@ server <- function(input, output, session) {
              "', target: '_blank'})[0].click();"
       )
     )
+    # debug message
+    debug_msg("MINERVA opened succesfully")
   })
   
   ## render minerva status text 
@@ -475,15 +523,12 @@ server <- function(input, output, session) {
   })
 
 }
-shinyApp(ui, server#,
-         # launch and stop docker container on app start/stop 
-         # (for dev version, only works locally)
-         # onStart = function() {
-         #   rcmd_bg("docker-compose", "up", wd = "./docker",  supervise = TRUE)
-         #   
-         #   onStop(function() {
-         #     rcmd_bg("docker", c("stop", "docker_minerva_1"))
-         #     rcmd_bg("docker", c("stop", "docker_db_1"))
-         #     })
-         #   })
-)
+shinyApp(ui, server,
+         # clear clutter 
+         onStart = function() {
+           print("Launching server")
+           onStop(function() {
+             print("Shutting down, potential leftover warnings:")
+             })
+           })
+
