@@ -1,21 +1,4 @@
----
-title: "Untitled"
-output: html_document
-editor_options: 
-  chunk_output_type: inline
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-```
-
-```{r}
-read_sbtab("_min_physmap-5.tsv")
-read_sbtab("_min_physmap-5_wrong.tsv")
-```
-
-```{r}
+## read tables from sbtab file and convert to a list
 read_sbtab <- function(file, na = ""){
   # read in file and create empty list and name vector
   sbtab <- read_lines(file, lazy = FALSE)
@@ -48,7 +31,7 @@ read_sbtab <- function(file, na = ""){
             suppressWarnings(vector[1:length(vector)] <- unlist(strsplit(l, "\t")))
             vector <- vector %>% t() %>% as_tibble()
             tables[[c]][which(l == tab_content),] <- vector
-            }
+          }
           # remove "!" from column names
           names(tables[[c]]) <- str_remove_all(names(tables[[c]]), "!")
           c = c+1
@@ -59,54 +42,53 @@ read_sbtab <- function(file, na = ""){
       if(FALSE %in% str_detect(paste(names(sbtab_tables_list[["Reaction"]]), collapse = " "), names(tables[["Reaction"]])) ||
          FALSE %in% str_detect(paste(names(sbtab_tables_list[["Compound"]]), collapse = " "), names(tables[["Compound"]])) ||
          FALSE %in% str_detect(paste(names(sbtab_tables_list[["Compartment"]]), collapse = " "), names(tables[["Compartment"]]))
-         ){
+      ){
         # list wrong columns in reaction table
         if(FALSE %in% str_detect(paste(names(sbtab_tables_list[["Reaction"]]), collapse = " "), names(tables[["Reaction"]]))
-           ){
+        ){
           reactionError <- paste0("The Reaction table contains faulty collumns:", 
                                   " '",
                                   paste(suppressWarnings(
                                     names(tables[["Reaction"]])[
                                       which(names(tables[["Reaction"]]) != names(sbtab_tables_list[["Reaction"]]))
-                                      ]), collapse = "', '"), 
+                                    ]), collapse = "', '"), 
                                   "'. Please remove the columns to proceed."
-                                  )
-          }else{reactionError <- NULL}
+          )
+        }else{reactionError <- NULL}
         # list wrong columns in compound table
         if(FALSE %in% str_detect(paste(names(sbtab_tables_list[["Compound"]]), collapse = " "), names(tables[["Compound"]]))
-           ){
+        ){
           compoundError <- paste0("The Compound table contains faulty collumns:", 
                                   " '",
                                   paste(suppressWarnings(
                                     names(tables[["Compound"]])[
                                       which(names(tables[["Compound"]]) != names(sbtab_tables_list[["Compound"]]))
-                                      ]), collapse = "', '"), 
+                                    ]), collapse = "', '"), 
                                   "'. Please remove the columns to proceed."
-                                  )
-          }else{compoundError <- NULL}
+          )
+        }else{compoundError <- NULL}
         # list wrong columns in compartment table
         if(FALSE %in% str_detect(paste(names(sbtab_tables_list[["Compartment"]]), collapse = " "), names(tables[["Compartment"]]))
-          ){
+        ){
           compartmentError <- paste0("The Compartment table contains faulty collumns:", 
                                      " '",
                                      paste(suppressWarnings(
                                        names(tables[["Compartment"]])[
                                          which(names(tables[["Compartment"]]) != names(sbtab_tables_list[["Compartment"]]))
-                                         ]), collapse = "', '"), 
+                                       ]), collapse = "', '"), 
                                      "'. Please remove the columns to proceed."
-                                     )
-          }else{compartmentError <- NULL}
+          )
+        }else{compartmentError <- NULL}
         # stop on wrong columns
         stop(paste("\n", reactionError, "\n", compoundError, "\n", compartmentError))
-        }
-      }else{
-        # stop on incorrect tables
-        stop("This SBtab file does not contain the correct tables. Please make sure the file contains a Reaction, a Compound, and a Compartment table.")
-        }
+      }
+    }else{
+      # stop on incorrect tables
+      stop("This SBtab file does not contain the correct tables. Please make sure the file contains a Reaction, a Compound, and a Compartment table.")
+    }
   }else{
     # stop on incorrect file 
     stop("This is not an SBtab file. Please make sure the file uses the SBtab format.")
   }
   return(tables)
-  }
-```
+}

@@ -103,6 +103,7 @@ server <- function(input, output, session) {
     bsCollapse(id = "homescreen", open = "Homescreen",
       # create home- choicescreen       
       bsCollapsePanel("Homescreen",
+        textInput("set_documentname", "Please name your document", placeholder = "Documentname"),
         htmlOutput("welcome"),
         actionButton("new_sbtab", "Create new SBtab"),
         actionButton("upload_sbtab", "Upload an SBtab object"),
@@ -126,13 +127,6 @@ server <- function(input, output, session) {
                              ".xml")),
         actionButton("set_sbml", "Click here to continue (required)")
       ),
-      # first setup page 
-      bsCollapsePanel("First setup",
-        textInput("set_documentname", "Please name your document", placeholder = "Documentname"),
-        selectInput("sbtab_version", "Please enter which SBtab Version you need (1.0 default)", 
-                    c("0.8", "0.9", "1.0"), selected = "1.0"),
-        actionButton("set", "Save input")
-      ),
       # download page for SBtab/SBML
       bsCollapsePanel("Save and download",
         htmlOutput("text_download"),
@@ -153,9 +147,10 @@ server <- function(input, output, session) {
   # Render homescreen text
   output$welcome <- renderText({paste("<b>What would you like to do?</b>")})
   
-  # Open "First setup" panel when "Create new SBtab" is selected
+  # Open "select_tables" panel when "Create new SBtab" is selected
   observeEvent(input$new_sbtab, {
-    updateCollapse(session, "homescreen", open = "First setup")
+    updateTabItems(session, "tabs", selected = "select_tables")
+    updateCollapse(session, "homescreen", open = "Save and download")
   })
   
   # Open "Upload SBtab" panel when "Upload an SBtab object" is selected
@@ -175,7 +170,7 @@ server <- function(input, output, session) {
     # return message when uploading wrong file
     tryCatch({
       # read the sbtab into list of tables
-      local$sbtabfile <- suppressWarnings(read_sbtab(input$sbtabfile_in$datapath))
+      local$sbtabfile <- read_sbtab(input$sbtabfile_in$datapath)
       # print names of tables in the file to console
       print(paste("File", paste0("'",input$sbtabfile_in$name, "'"), "contains tabs:"))
       print(names(local$sbtabfile))
@@ -187,11 +182,13 @@ server <- function(input, output, session) {
                perl = TRUE)
         local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
         })
+      # debug message
+      debug_msg("SBtabfile uploaded succesfully")
     }, error = function(e){
       shinyalert(
-        title = "Wrong file",
-        text = "Please select a correct SBtab file",
-        size = "xs", 
+        title = "Error",
+        text = e$message,
+        size = "l", 
         closeOnClickOutside = TRUE,
         type = "warning",
         showConfirmButton = TRUE,
@@ -199,9 +196,9 @@ server <- function(input, output, session) {
         confirmButtonCol = "#1fa9ff",
         animation = FALSE
       )
+      # debug message
+      debug_msg(paste("SBtabfile uploaded error:", e$message))
     })
-    # debug message
-    debug_msg("SBtabfile uploaded succesfully")
   })
   
   # read input sbml to dashboard
@@ -243,7 +240,7 @@ server <- function(input, output, session) {
                                 )
         # write table header for file
         local$headers <- append(local$headers,
-                                paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', table, '"',' TableName="', table, '"')
+                                paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="1.0"', ' Document="', input$set_documentname, '"',' TableType="', table, '"',' TableName="', table, '"')
         )
         # remove name of table from choices
         local$choices <- local$choices[local$choices!=table]
@@ -279,16 +276,11 @@ server <- function(input, output, session) {
     })
     names(local$headers) <- local$current_tabs
     
-    # open "First setup" panel after SBtab or SBML is uploaded and the continue button is pressed
-    updateCollapse(session, "homescreen", open = "First setup")
+    # open "select_tables" panel after SBtab or SBML is uploaded and the continue button is pressed
+    updateTabItems(session, "tabs", selected = "select_tables")
+    updateCollapse(session, "homescreen", open = "Save and download")
     # debug message
     debug_msg("Tables opened succesfully")
-  })
-  
-  # Open "Save and download" panel on homepage and switch to "Select tables" tab when document name is set
-  observeEvent(input$set, {
-    updateCollapse(session, "homescreen", open = "Save and download")
-    updateTabItems(session, "tabs", selected = "select_tables")
   })
   
   # render select_tables
@@ -320,7 +312,7 @@ server <- function(input, output, session) {
                             )
     # write table header for file
     local$headers <- append(local$headers,
-                            paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="', input$sbtab_version, '"',' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
+                            paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="1.0"', ' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
                             )
     names(local$headers) <- local$current_tabs
     # remove name of table from choices
