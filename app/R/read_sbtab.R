@@ -26,6 +26,8 @@ read_sbtab <- function(file, na = ""){
           names(tables[[c]]) <- tables[[c]][1,] %>% as.character()
           # get table content and write to table
           tab_content <- sbtab[(which(i==sbtab)+1):(which(""==sbtab)[c]-1)]
+          # paste a whitespace at the end of each tab_content element to get correct length for vector
+          tab_content <- sapply(tab_content, function(x){paste0(x, " ")})
           for(l in tab_content){
             vector <- tables[[c]][1,] %>% unlist
             suppressWarnings(vector[1:length(vector)] <- unlist(strsplit(l, "\t")))
