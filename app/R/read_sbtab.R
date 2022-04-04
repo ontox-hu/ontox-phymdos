@@ -3,11 +3,11 @@ read_sbtab <- function(file, na = ""){
   # read in file and create empty list and name vector
   sbtab <- read_lines(file, lazy = FALSE)
   # check if the uploaded file is an SBtab file
-  if(startsWith(sbtab[1], "!!!SBtab Document=")){
+  if(startsWith(sbtab[1], "!!!SBtab Document")){
     # check if the sbtab file contains the correct tables
-    if(str_detect(paste(sbtab, collapse = " "),  '!!SBtab TableID="t_Compound"') &&
-       str_detect(paste(sbtab, collapse = " "),  '!!SBtab TableID="t_Reaction"') &&
-       str_detect(paste(sbtab, collapse = " "),  '!!SBtab TableID="t_Compartment"')){
+    if(str_detect(paste(sbtab, collapse = " "),  '!!SBtab TableID="t_Compound"|!!SBtab TableID=\'compound\'') &&
+       str_detect(paste(sbtab, collapse = " "),  '!!SBtab TableID="t_Reaction"|!!SBtab TableID=\'reaction\'') &&
+       str_detect(paste(sbtab, collapse = " "),  '!!SBtab TableID="t_Compartment"|!!SBtab TableID=\'compartment\'')){
       # make sure every table has an empty line below it
       sbtab <- append(sbtab, "") 
       # create empty table list and table name vector
@@ -34,8 +34,9 @@ read_sbtab <- function(file, na = ""){
             vector <- vector %>% t() %>% as_tibble()
             tables[[c]][which(l == tab_content),] <- vector
           }
-          # remove "!" from column names
-          names(tables[[c]]) <- str_remove_all(names(tables[[c]]), "!")
+          # remove "!" from column names and make sure they start capitalised
+          names(tables[[c]]) <- str_remove_all(names(tables[[c]]), "!") 
+          names(tables[[c]]) <- gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2", names(tables[[c]]), perl = TRUE)
           c = c+1
           closeAllConnections()
         } 

@@ -205,22 +205,39 @@ server <- function(input, output, session) {
   observeEvent(input$sbmlfile_in, {
     # debug message
     debug_msg("Uploading SBMLfile")
-    # convert sbml to sbtab and read into list of tables
-    sbml_to_sbtab(input$sbmlfile_in$datapath)
-    local$sbtabfile <- suppressWarnings(read_sbtab(sbtab_string))
-    # print names of tables in the file to console
-    print(paste("File", paste0("'",input$sbmlfile_in$name, "'"), "contains tabs:"))
-    print(names(local$sbtabfile))
-    local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
-      # make sure all columns start with uppercase letter
-      colnames(local$sbtabfile[[name]]) <- 
-        gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
-             colnames(local$sbtabfile[[name]]),
-             perl = TRUE)
-      local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+    # return message when uploading wrong file
+    tryCatch({
+      # convert sbml to sbtab and read into list of tables
+      sbml_to_sbtab(input$sbmlfile_in$datapath)
+      local$sbtabfile <- suppressWarnings(read_sbtab(sbtab_string))
+      # print names of tables in the file to console
+      print(paste("File", paste0("'",input$sbmlfile_in$name, "'"), "contains tabs:"))
+      print(names(local$sbtabfile))
+      local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
+        # make sure all columns start with uppercase letter
+        colnames(local$sbtabfile[[name]]) <- 
+          gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
+               colnames(local$sbtabfile[[name]]),
+               perl = TRUE)
+        local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+      })
+      # debug message
+      debug_msg("SBMLfile uploaded succesfully")
+    }, error = function(e){
+      shinyalert(
+        title = "Error",
+        text = e$message,
+        size = "l", 
+        closeOnClickOutside = TRUE,
+        type = "warning",
+        showConfirmButton = TRUE,
+        confirmButtonText = "Continue",
+        confirmButtonCol = "#1fa9ff",
+        animation = FALSE
+      )
+      # debug message
+      debug_msg(paste("SBML uploaded error:", e$message))
     })
-    # debug message
-    debug_msg("SBMLfile uploaded succesfully")
   })  
   
   # open table tabs from uploaded files
@@ -506,15 +523,12 @@ server <- function(input, output, session) {
   })
 
 }
-shinyApp(ui, server#,
-         # launch and stop docker container on app start/stop 
-         # (for dev version, only works locally)
-         # onStart = function() {
-         #   rcmd_bg("docker-compose", "up", wd = "./docker",  supervise = TRUE)
-         #   
-         #   onStop(function() {
-         #     rcmd_bg("docker", c("stop", "docker_minerva_1"))
-         #     rcmd_bg("docker", c("stop", "docker_db_1"))
-         #     })
-         #   })
-)
+shinyApp(ui, server,
+         # clear clutter 
+         onStart = function() {
+           print("Launching server")
+           onStop(function() {
+             print("Shutting down, potential leftover warnings:")
+             })
+           })
+

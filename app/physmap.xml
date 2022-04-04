@@ -22,7 +22,7 @@
             <rdf:Description rdf:about="#s1_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s1"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -35,7 +35,7 @@
             <rdf:Description rdf:about="#s2_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s2"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -48,7 +48,7 @@
             <rdf:Description rdf:about="#s3_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s3"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -61,7 +61,7 @@
             <rdf:Description rdf:about="#s4_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s4"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -74,7 +74,7 @@
             <rdf:Description rdf:about="#s5_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s5"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -87,7 +87,7 @@
             <rdf:Description rdf:about="#s6_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s6"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -100,7 +100,7 @@
             <rdf:Description rdf:about="#s7_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s7"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -113,7 +113,7 @@
             <rdf:Description rdf:about="#s8_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s8"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -126,7 +126,7 @@
             <rdf:Description rdf:about="#s9_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s9"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -139,7 +139,7 @@
             <rdf:Description rdf:about="#s10_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s10"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -152,7 +152,7 @@
             <rdf:Description rdf:about="#s11_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s11"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -165,7 +165,7 @@
             <rdf:Description rdf:about="#s12_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s12"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -178,7 +178,7 @@
             <rdf:Description rdf:about="#s13_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s13"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -191,7 +191,7 @@
             <rdf:Description rdf:about="#s14_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s14"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -204,7 +204,7 @@
             <rdf:Description rdf:about="#s15_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s15"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -217,7 +217,7 @@
             <rdf:Description rdf:about="#s16_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s16"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -230,7 +230,7 @@
             <rdf:Description rdf:about="#s17_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s17"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -243,7 +243,7 @@
             <rdf:Description rdf:about="#s18_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s18"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -256,7 +256,7 @@
             <rdf:Description rdf:about="#s19_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s19"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -269,7 +269,7 @@
             <rdf:Description rdf:about="#s20_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s20"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -282,7 +282,7 @@
             <rdf:Description rdf:about="#s21_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s21"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -295,7 +295,7 @@
             <rdf:Description rdf:about="#s22_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s22"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -308,7 +308,7 @@
             <rdf:Description rdf:about="#s23_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s23"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -321,7 +321,7 @@
             <rdf:Description rdf:about="#s24_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s24"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -334,7 +334,7 @@
             <rdf:Description rdf:about="#s25_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s25"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -347,7 +347,7 @@
             <rdf:Description rdf:about="#s26_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s26"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -360,7 +360,7 @@
             <rdf:Description rdf:about="#s27_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s27"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -373,7 +373,7 @@
             <rdf:Description rdf:about="#s28_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s28"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -386,7 +386,7 @@
             <rdf:Description rdf:about="#s29_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s29"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
@@ -399,7 +399,7 @@
             <rdf:Description rdf:about="#s36_meta">
               <bqbiol:is>
                 <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/s36"/>
+                  <rdf:li rdf:resource="http://identifiers.org/kegg.orthology/ "/>
                 </rdf:Bag>
               </bqbiol:is>
             </rdf:Description>
