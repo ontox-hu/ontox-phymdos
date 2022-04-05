@@ -523,12 +523,12 @@ server <- function(input, output, session) {
   })
 
 }
-shinyApp(ui, server,
-         # clear clutter 
-         onStart = function() {
-           print("Launching server")
-           onStop(function() {
-             print("Shutting down, potential leftover warnings:")
-             })
-           })
+shinyApp(ui, server)#,
+         # # clear clutter 
+         # onStart = function() {
+         #   print("Launching server")
+         #   onStop(function() {
+         #     print("Shutting down, potential leftover warnings:")
+         #     })
+         #   })
 

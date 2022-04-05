@@ -1,5 +1,6 @@
 ## define rhandsontables for SBTab app
 
+library(rsr)
 library(here)
 library(callr)
 library(markdown)

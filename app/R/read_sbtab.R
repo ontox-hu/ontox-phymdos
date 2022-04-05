@@ -5,9 +5,9 @@ read_sbtab <- function(file, na = ""){
   # check if the uploaded file is an SBtab file
   if(startsWith(sbtab[1], "!!!SBtab Document")){
     # check if the sbtab file contains the correct tables
-    if(str_detect(paste(sbtab, collapse = " "),  '!!SBtab TableID="t_Compound"|!!SBtab TableID=\'compound\'') &&
-       str_detect(paste(sbtab, collapse = " "),  '!!SBtab TableID="t_Reaction"|!!SBtab TableID=\'reaction\'') &&
-       str_detect(paste(sbtab, collapse = " "),  '!!SBtab TableID="t_Compartment"|!!SBtab TableID=\'compartment\'')){
+    if(str_detect(paste(sbtab, collapse = " "),  'TableType="Compound"|TableType=\'Compound\'') &&
+       str_detect(paste(sbtab, collapse = " "),  'TableType="Reaction"|TableType=\'Reaction\'') &&
+       str_detect(paste(sbtab, collapse = " "),  'TableType="Compartment"|TableType=\'Compartment\'')){
       # make sure every table has an empty line below it
       sbtab <- append(sbtab, "") 
       # create empty table list and table name vector
@@ -25,7 +25,7 @@ read_sbtab <- function(file, na = ""){
           tables[[c]] <- as_tibble(tables[[c]], .name_repair = "minimal") %>% t() %>% as_tibble(.name_repair = "minimal")
           names(tables[[c]]) <- tables[[c]][1,] %>% as.character()
           # get table content and write to table
-          tab_content <- sbtab[(which(i==sbtab)+1):(which(""==sbtab)[c]-1)]
+          tab_content <- sbtab[(which(i==sbtab)+1):(which(("" == sbtab)|(" " == sbtab))[c]-1)]
           # paste a whitespace at the end of each tab_content element to get correct length for vector
           tab_content <- sapply(tab_content, function(x){paste0(x, " ")})
           for(l in tab_content){

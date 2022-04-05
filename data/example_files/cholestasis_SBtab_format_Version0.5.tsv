@@ -39,7 +39,7 @@ s30	Bil					c2
 s31	GSGG					c2		
 
 !!SBtab TableID="t_1" SBtabVersion="1.0" Document="cholestasis_example" TableType="Reaction" TableName="Reaction"
-!ID	!Name	!Type	!IsReversible	!ReactionFormula	!Modifier	!Location	!KinteticLaw	!SBOTerm
+!ID	!Name	!Type	!IsReversible	!ReactionFormula	!Modifier	!Location	!KineticLaw	!SBOTerm
 re1				s2 <=> s3	s1, s4			
 re2				s5 <=> s6	s1			
 re3				s7 <=> s8	s3			
