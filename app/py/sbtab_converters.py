@@ -1,3 +1,4 @@
+# function to convert sbtab files to sbml
 def sbtab_to_sbml(file):
   import sbtab
   import libsbml
@@ -6,12 +7,12 @@ def sbtab_to_sbml(file):
   from sbtab import sbtab2sbml
   from pathlib import Path
   
-  # Read in TSV file containing SBtab info and definitions file
+  # read in TSV file containing SBtab info and definitions file
   sbtab_file   = open("physmap.tsv",'r')
   file_content = sbtab_file.read()
   sbtab_file.close()
   
-  # Make SBtab object
+  # make SBtab object
   Sd = SBtab.SBtabDocument()
   Sd.set_filename('physmap.tsv')
   Sd.set_name('physmap')
@@ -22,17 +23,18 @@ def sbtab_to_sbml(file):
   warnings = ValidateDocument.validate_document()
   print(warnings)
   
-  # Convert SBtab file to SBML
+  # convert SBtab file to SBML
   Cd = sbtab2sbml.SBtabDocument(Sd)
   (sbml, warnings) = Cd.convert_to_sbml('24')
   
   r.sbml_string = sbml
   
-  # Save SBML xml file (overwrites existing file with the same name)
+  # save SBML xml file (overwrites existing file with the same name)
   myfile = open("physmap.xml", "w")
   myfile.write(sbml)
   myfile.close()
 
+# function to convert sbml files to sbtab
 def sbml_to_sbtab(file):
   import sbtab
   import libsbml

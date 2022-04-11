@@ -3,6 +3,20 @@ source(
   "R/sbtab_tables.R"
 )
 
+source(
+  "R/read_sbtab.R"
+)
+
+## display debugging messages in R (if local) 
+# and in the console log (if running in shiny)
+debug_msg <- function(...) {
+  is_local <- Sys.getenv('SHINY_PORT') == ""
+  in_shiny <- !is.null(shiny::getDefaultReactiveDomain())
+  txt <- toString(list(...))
+  if (is_local) message(txt)
+  if (in_shiny) shinyjs::runjs(sprintf("console.debug(\"%s\")", txt))
+}
+
 ## create dynamic sub menu
 update_submenu <- function(local) {
   lapply(split(local$subitems, seq(nrow(local$subitems))), function(x) {
@@ -55,40 +69,6 @@ set_cols <- function(x){
   x <- rlang::set_names(x, names)
 }
 
-## read tables from sbtab file and convert to a list
-read_sbtab <- function(file, na = ""){
-  # read in file and create empty list and name vector
-  sbtab <- read_lines(file, lazy = FALSE)
-  sbtab <- append(sbtab, "") # every table needs an empty line below it
-  tables <- list()
-  name <- vector()
-  c = 1 # counter for list item
-  for(i in sbtab){
-    # detect column name line
-    if(str_detect(i, "^\\!(?!\\!)")){
-      # set table name and create table with column names
-      name <- append(name, table_names[which(table_names == str_extract(sbtab[which(i == sbtab)-1], table_names))])
-      tables <- append(tables, list(str_split(i, "\t")))
-      names(tables) <- name
-      tables[[c]] <- as_tibble(tables[[c]], .name_repair = "minimal") %>% t() %>% as_tibble(.name_repair = "minimal")
-      names(tables[[c]]) <- tables[[c]][1,] %>% as.character()
-      # get table content and write to table
-      tab_content <- sbtab[(which(i==sbtab)+1):(which(""==sbtab)[c]-1)]
-      for(l in tab_content){
-        vector <- tables[[c]][1,] %>% unlist
-        vector[1:length(vector)] <- unlist(strsplit(l, "\t"))
-        vector <- vector %>% t() %>% as_tibble()
-        tables[[c]][which(l == tab_content),] <- vector
-      }
-      # remove "!" from column names
-      names(tables[[c]]) <- str_remove_all(names(tables[[c]]), "!")
-      c = c+1
-      closeAllConnections()
-    } 
-  }
-  return(tables)
-}
-
 ## Check if a table is filled and open filled tables in the sidebar
 open_tabs <- function(table){
   if(length(is.na(table)) == length(table)){
@@ -97,19 +77,19 @@ open_tabs <- function(table){
       TRUE
       }else{    
         FALSE
-        }
-}
+      }
+  }
 
 ## Output the table description with the tables
 outputTableDescription <- function(tableTitle){
   DT::renderDataTable({
     split_def_tables[[tableTitle]]%>%
-      dplyr::select(`!Name`,`!Description`) %>%#,`!Example`)%>%
+      dplyr::select(`!Name`,`!Description`,`!Example`) %>%
       dplyr::rename(Name = `!Name`,
-                    Description = `!Description`)#,
-                    #xample = `!Example`)
-  })
-}
+                    Description = `!Description`,
+                    Example = `!Example`)
+    })
+  }
 
 ## Create individual table pages for adding table by hand
 add_tableUI <- function(subitem){
@@ -123,7 +103,7 @@ add_tableUI <- function(subitem){
                                                     "ReactionID"
                                                     ),
                                        inline = TRUE)
-    ),
+                    ),
     tabItem(
       tabName = subitem,
       fluidRow(
@@ -141,9 +121,9 @@ add_tableUI <- function(subitem){
     bsCollapsePanel("Description of table elements",
                     DT::dataTableOutput(paste0("Description", subitem), 
                                         width = "100%")
+                    )
     )
-  )
-}
+  }
 
 ## Create individual table pages for adding table by upload
 upload_tableUI <- function(subitem, sbtabfile = list()){
