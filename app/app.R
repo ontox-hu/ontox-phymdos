@@ -170,7 +170,7 @@ server <- function(input, output, session) {
     # return message when uploading wrong file
     tryCatch({
       # read the sbtab into list of tables
-      local$sbtabfile <- read_sbtab(input$sbtabfile_in$datapath)
+      local$sbtabfile <- read_sbtab(input$sbtabfile_in$datapath, "definitions.tsv")
       # print names of tables in the file to console
       print(paste("File", paste0("'",input$sbtabfile_in$name, "'"), "contains tabs:"))
       print(names(local$sbtabfile))
@@ -208,8 +208,8 @@ server <- function(input, output, session) {
     # return message when uploading wrong file
     tryCatch({
       # convert sbml to sbtab and read into list of tables
-      sbml_to_sbtab(input$sbmlfile_in$datapath)
-      local$sbtabfile <- suppressWarnings(read_sbtab(sbtab_string))
+      local$sbtabfile <- read_sbml(input$sbmlfile_in$datapath)
+      #local$sbtabfile <- suppressWarnings(read_sbtab(sbtab_string))
       # print names of tables in the file to console
       print(paste("File", paste0("'",input$sbmlfile_in$name, "'"), "contains tabs:"))
       print(names(local$sbtabfile))
@@ -236,7 +236,7 @@ server <- function(input, output, session) {
         animation = FALSE
       )
       # debug message
-      debug_msg(paste("SBML uploaded error:", e$message))
+      debug_msg(paste("SBML upload error:", e$message))
     })
   })  
   
@@ -377,9 +377,10 @@ server <- function(input, output, session) {
       write_tsv(set_cols(local$data[[table]]), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
       write_lines("", file = "physmap.tsv", append = TRUE)
     }
-    # write SBML output file
+    # write SBML output file and string
     tryCatch({
-      sbtab_to_sbml("physmap.tsv")
+      sbml_string <- write_sbml(read_sbtab("physmap.tsv", "definitions.tsv"))
+      write_xml(sbml_string, "physmap.xml")
       },
       # make it so that sbtab conversion errors don't crash the app 
       # (incomplete sbtab document will cause the .py script to return error)
@@ -431,7 +432,7 @@ server <- function(input, output, session) {
   output$download_xml <- downloadHandler(
     filename = "physmap.xml",
     content = function(file) {
-      write_file(sbml_string, file)
+      write_xml(sbml_string, file)
     })
   
   # render text for minerva in download tab
@@ -523,6 +524,7 @@ server <- function(input, output, session) {
   })
 
 }
+
 shinyApp(ui, server)#,
          # # clear clutter 
          # onStart = function() {

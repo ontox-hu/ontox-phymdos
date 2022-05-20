@@ -1,6 +1,7 @@
 ## define rhandsontables for SBTab app
 
 library(rsr)
+library(xml2)
 library(here)
 library(callr)
 library(markdown)
@@ -17,10 +18,9 @@ library(shinyWidgets)
 library(shinydashboard)
 library(shinydashboardPlus)
 
-## tables: 
+## define tables: 
 sbtab_definitions <- readr::read_tsv("definitions.tsv", 
-                                     skip = 1, col_names = TRUE, show_col_types = FALSE
-                                     )
+                                     skip = 1, col_names = TRUE, show_col_types = FALSE)
 
 ## recode `Type` column
 sbtab_definitions <- sbtab_definitions %>%
@@ -32,7 +32,7 @@ sbtab_definitions <- sbtab_definitions %>%
 split_def_tables <- split(sbtab_definitions, as_factor(sbtab_definitions$`!Parent`))
 split_def_tables <- split_def_tables[names(split_def_tables) != "SBtab"]
 
-## define tablenames to vector and dataframe
+## define tablen ames to vector and dataframe
 table_names <- names(split_def_tables)
 table_names_df <- tibble(names(split_def_tables))
 names(table_names_df) <- "name"

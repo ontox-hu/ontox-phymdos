@@ -1,1 +1,38 @@
-!!!SBtab Document="Documentname"
+!!!SBtab Document=""
+!!SBtab TableID="t_Species" SBtabVersion="1.0" Document="" TableType="Species" TableName="Species"
+!ID	!Name	!Type	!PositionToCompartment	!InitialValue	!Unit	!Location	!IsConstant	!InitialConcentration	!HasOnlySubstanceUnits	!SBOTerm	!Identifiers:ec-code	!Identifiers:uniprot	!Identifiers:kegg.compound	!Identifiers:obo.chebi	!Identifiers:kegg.orthology
+s1	ATRA	Simple molecule	Inside			c1		0							
+s3	Vit.A	Simple molecule	Inside			c1		0							
+s4	RDH10	Protein	Inside			c1		0							
+s6	DHRS3	Protein	Inside			c1		0							
+s8	RDH10_g	Gene	Inside			c1		0							
+s10	Vit.A_e	Simple molecule	Inside			default		0							
+s12	STRA6	Protein	Transmembrane			c1		0							
+s7	RALDH2_g	Gene	Inside			c1		0							
+s13	RALDH2	Protein	Inside			c1		0							
+s14	DHRS3_g	Gene	Inside			c1		0							
+s15	ATRA_i	Simple molecule	Inside			c1		0							
+s16	CYP26A1_g	Gene	Inside			c1		0							
+s17	CYP26A1	Protein	Inside			c1		0							
+s2	Retinaldehyde	Simple molecule	Inside			c1		0							
+															
+
+!!SBtab TableID="t_Reaction" SBtabVersion="1.0" Document="" TableType="Reaction" TableName="Reaction"
+!ID	!Name	!Type	!IsReversible	!Reactants	!Products	!Modifiers	!ModifierType	!Regulator	!Location	!KineticLaw	!SBOTerm
+re1		State transition		s2	s1	s13					
+re2		State transition		s3	s2	s4					
+re3		State transition		s2	s3	s6					
+re5		Translation		s8	s4	s1					
+re6		Translation		s14	s6	s1					
+re8		Transport		s10	s3	s12					
+re9		Translation		s7	s13	s1					
+re10		State transition		s1	s15	s17					
+re11		Translation		s16	s17	s1					
+											
+
+!!SBtab TableID="t_Compartment" SBtabVersion="1.0" Document="" TableType="Compartment" TableName="Compartment"
+!ID	!Name	!OuterCompartment	!Size	!Unit
+default			1	volume
+c1	Mesoderm	default	1	volume
+				
+

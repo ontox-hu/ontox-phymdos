@@ -1,20 +1,3 @@
----
-title: "Testfile"
-output: html_document
-editor_options: 
-  chunk_output_type: inline
----
-
-This file is used for backtesting functions and code before integration in Phymdos.
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-library(rsr)
-library(xml2)
-```
-
-```{r rsr_fix function}
 ## function to fix table output of rsr::list_answers()
 fix_tables <- function(df){
   # unlist all column items
@@ -45,43 +28,15 @@ fix_tables <- function(df){
   df <- df |> mutate_all(na_if,"")
 }
 
-## clean Sysrev tables, optionally filter by aid
+## get answer data from Sysrev, optionally filter by aid
 # input pid_data is output of rsr::get_answers()
 rsr_as_tables <- function(pid_data, p_aid = NULL, token){
   # if provided, filter data on specific aid
   if(!is.null(p_aid)){
     pid_data <- pid_data |> filter(aid == aid[which(aid == p_aid)])
-    }
+  }
   # extract SBtab labelled answers from data
   pid_data |> rsr::list_answers(token = token) |>
-  # clean inconsistent data from tables
-  lapply(function(x){fix_tables(x)})
+    # clean inconsistent data from tables
+    lapply(function(x){fix_tables(x)})
 }
-
-df3 <- rsr::get_answers(pid, token = token) %>% 
-    # filter data on specific aid
-    .[which(.["aid"] == aid),] %>%
-    # extract SBtab labelled answers from data
-    rsr::list_answers(token = token)#, concordance = T, collapse = T)
-view(df3[[3]])
-```
-
-```{r}
-# Use when getting token related errors
-Sys.setenv(SYSREV_TOKEN = token)
-
-# sysrev wp1 project: compartment, species and reaction tables
-token <- rstudioapi::askForSecret("sysrev token w/ ontox access")
-pid <- 117883
-p_aid <- 14352862
-pid_data <- list(answers = rsr::get_answers(pid, token = token), labels = get_labels(pid, token = token))
-
-rsr_tables <- rsr_as_tables(pid_data, p_aid, token)
-rsr_table <- rsr_tables[["Reaction"]]
-sbml <- rsr_tables |> write_sbml()
-sbtab <- write_sbtab(sbml)
-```
-
-```{r}
-
-```

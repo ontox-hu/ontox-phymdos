@@ -1,43 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
-  <model id="physmap" name="physmap">
+  <model metaid="documentname" id="documentname">
     <listOfCompartments>
-      <compartment id="c1" name="Intra-cellular" constant="true"/>
-      <compartment id="c2" name="Blood-serum" constant="true"/>
+      <compartment metaid="default" id="default" size="1" name="" units="volume"/>
+      <compartment metaid="c1" id="c1" size="1" name="Mesoderm" units="volume"/>
     </listOfCompartments>
     <listOfSpecies>
-      <species id="s1" name="Clav" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s2" name="NRF2.L" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s3" name="NRF2.H" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s4" name="ROS" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s5" name="FXR.H" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s6" name="FXR.L" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s7" name="NTCP.A" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s8" name="NTCP.I" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s9" name="BSEP.A" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s10" name="BSEP.I" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s11" name="MDR2.I" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s12" name="MDR2.H" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s13" name="MDR2.:L" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s14" name="OSTa.A" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s15" name="OSTa.I" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s16" name="ABCG5.A" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s17" name="ABCG5.I" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s18" name="MRP2.i" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s19" name="MRP2.A" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s20" name="BSEP.H" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s21" name="BSEP.L" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s22" name="ABCG5.H" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s23" name="ABCG5.L" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s24" name="MRP2.L" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s25" name="MRP2.H" compartment="c1" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s26" name="PL" compartment="c2" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s27" name="BA" compartment="c2" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s28" name="Chol" compartment="c2" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s29" name="GS-Conj" compartment="c2" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s30" name="Bil" compartment="c2" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species id="s31" name="GSGG" compartment="c2" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
-      <species name="26" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species metaid="s1" id="s1" name="ATRA" compartment="c1" initialAmount="0" sboTerm="SBO:0000247"/>
+      <species metaid="s3" id="s3" name="Vit.A" compartment="c1" initialAmount="0" sboTerm="SBO:0000247"/>
+      <species metaid="s4" id="s4" name="RDH10" compartment="c1" initialAmount="0" sboTerm="SBO:0000252"/>
+      <species metaid="s6" id="s6" name="DHRS3" compartment="c1" initialAmount="0" sboTerm="SBO:0000252"/>
+      <species metaid="s8" id="s8" name="RDH10_g" compartment="c1" initialAmount="0" sboTerm="SBO:0000243"/>
+      <species metaid="s10" id="s10" name="Vit.A_e" compartment="default" initialAmount="0" sboTerm="SBO:0000247"/>
+      <species metaid="s12" id="s12" name="STRA6" compartment="c1" initialAmount="0" sboTerm="SBO:0000252"/>
+      <species metaid="s7" id="s7" name="RALDH2_g" compartment="c1" initialAmount="0" sboTerm="SBO:0000243"/>
+      <species metaid="s13" id="s13" name="RALDH2" compartment="c1" initialAmount="0" sboTerm="SBO:0000252"/>
+      <species metaid="s14" id="s14" name="DHRS3_g" compartment="c1" initialAmount="0" sboTerm="SBO:0000243"/>
+      <species metaid="s15" id="s15" name="ATRA_i" compartment="c1" initialAmount="0" sboTerm="SBO:0000247"/>
+      <species metaid="s16" id="s16" name="CYP26A1_g" compartment="c1" initialAmount="0" sboTerm="SBO:0000243"/>
+      <species metaid="s17" id="s17" name="CYP26A1" compartment="c1" initialAmount="0" sboTerm="SBO:0000252"/>
+      <species metaid="s2" id="s2" name="Retinaldehyde" compartment="c1" initialAmount="0" sboTerm="SBO:0000247"/>
     </listOfSpecies>
+    <listOfReactions>
+      <reaction metaid="re1" id="re1" reversible="" sboTerm="SBO:0000176">
+        <listOfReactants>
+          <speciesReference metaid="CDMT1" species="s2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference metaid="CDMT2" species="s1"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference metaid="CDMT3" species="s13" sboTerm="SBO:0000013"/>
+        </listOfModifiers>
+      </reaction>
+      <reaction metaid="re10" id="re10" reversible="" sboTerm="SBO:0000176">
+        <listOfReactants>
+          <speciesReference metaid="CDMT4" species="s1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference metaid="CDMT5" species="s15"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference metaid="CDMT6" species="s17" sboTerm="SBO:0000013"/>
+        </listOfModifiers>
+      </reaction>
+      <reaction metaid="re11" id="re11" reversible="" sboTerm="SBO:0000184">
+        <listOfReactants>
+          <speciesReference metaid="CDMT7" species="s16"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference metaid="CDMT8" species="s17"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference metaid="CDMT9" species="s1" sboTerm="SBO:0000013"/>
+        </listOfModifiers>
+      </reaction>
+      <reaction metaid="re2" id="re2" reversible="" sboTerm="SBO:0000176">
+        <listOfReactants>
+          <speciesReference metaid="CDMT10" species="s3"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference metaid="CDMT11" species="s2"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference metaid="CDMT12" species="s4" sboTerm="SBO:0000013"/>
+        </listOfModifiers>
+      </reaction>
+      <reaction metaid="re3" id="re3" reversible="" sboTerm="SBO:0000176">
+        <listOfReactants>
+          <speciesReference metaid="CDMT13" species="s2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference metaid="CDMT14" species="s3"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference metaid="CDMT15" species="s6" sboTerm="SBO:0000013"/>
+        </listOfModifiers>
+      </reaction>
+      <reaction metaid="re5" id="re5" reversible="" sboTerm="SBO:0000184">
+        <listOfReactants>
+          <speciesReference metaid="CDMT16" species="s8"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference metaid="CDMT17" species="s4"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference metaid="CDMT18" species="s1" sboTerm="SBO:0000013"/>
+        </listOfModifiers>
+      </reaction>
+      <reaction metaid="re6" id="re6" reversible="" sboTerm="SBO:0000184">
+        <listOfReactants>
+          <speciesReference metaid="CDMT19" species="s14"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference metaid="CDMT20" species="s6"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference metaid="CDMT21" species="s1" sboTerm="SBO:0000013"/>
+        </listOfModifiers>
+      </reaction>
+      <reaction metaid="re8" id="re8" reversible="" sboTerm="SBO:0000185">
+        <listOfReactants>
+          <speciesReference metaid="CDMT22" species="s10"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference metaid="CDMT23" species="s3"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference metaid="CDMT24" species="s12" sboTerm="SBO:0000013"/>
+        </listOfModifiers>
+      </reaction>
+      <reaction metaid="re9" id="re9" reversible="" sboTerm="SBO:0000184">
+        <listOfReactants>
+          <speciesReference metaid="CDMT25" species="s7"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference metaid="CDMT26" species="s13"/>
+        </listOfProducts>
+        <listOfModifiers>
+          <modifierSpeciesReference metaid="CDMT27" species="s1" sboTerm="SBO:0000013"/>
+        </listOfModifiers>
+      </reaction>
+    </listOfReactions>
   </model>
 </sbml>
