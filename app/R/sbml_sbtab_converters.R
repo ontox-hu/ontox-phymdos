@@ -133,7 +133,7 @@ write_sbml <- function(sbtablist){
     # remove empty names
     reaction_names <- reaction_names[nzchar(reaction_names)]
     # give individual reactions corresponding reaction name
-    reactions <-set_names(reactions, reaction_names)
+    reactions <- set_names(reactions, reaction_names)
   
   # listOfReactions - reactions have [metaid id reversible]
   # reformat types and fill empty spots 

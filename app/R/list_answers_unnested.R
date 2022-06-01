@@ -45,18 +45,28 @@ list_answers_unnested <- function(pid, filter = NULL, filter_type = c("aid", "sh
   # tidy answers (json to dataframe list)
   pid_answers <- pid_answers |> 
     tidy_answers()
+  
   # convert answers to individual tables
   pid_answer_tables <- lapply(pid_answers$answer, function(x){
     # check if answer is a list
     if(is.list(x)){
-      right_join(pid_labels, x) |>
+      x <- right_join(pid_labels, x) |>
         select(row, short_label, value) |> 
-        mutate(value = apply(x["value"], 1, function(x){paste(unname(unlist(x)), collapse = ", ")})) |>
+        mutate(value = sapply(value, function(y){paste(unname(unlist(y)), collapse = ", ")})) |>
         unique() |>
         pivot_wider(names_from = short_label)
+      x <- x[-which(names(x) == "row")]
     }
   })
   # change names of tables to match label
   names(pid_answer_tables) <- pid_answers$short_label
+  # switch name "Compound" to "Species" if present
+  if("Compound" %in% names(pid_answer_tables)){
+    names(pid_answer_tables)[which(names(pid_answer_tables) == "Compound")] <- "Species"
+  }
+  # remove "Include" item from list of tables
+  if("Include" %in% names(pid_answer_tables)){
+    pid_answer_tables <- pid_answer_tables[-which(names(pid_answer_tables) == "Include")]
+  }
   return(pid_answer_tables)
 }

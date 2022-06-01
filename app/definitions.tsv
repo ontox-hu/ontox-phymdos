@@ -23,6 +23,7 @@ IsConstant	Column	Species	Boolean	Substance with fixed concentrations	true, fals
 InitialConcentration	Column	Species	String	Initial amount or concentration	
 HasOnlySubstanceUnits	Column	Species	Boolean	SBML species attribute hasOnlySubstanceUnits	true, false
 SBOTerm	Column	Species	String	SBO term of the entity	alternative to Type. can be ignored for now
+Resolver	Column	Species	String	Resolver for database	CHEBI:15367, uniprot:O94788, ensembl:ENSG00000121039
 Identifiers:ec-code	Column	Species	String	(temporarily unused)Ec-code identifier	
 Identifiers:uniprot	Column	Species	String	(temporarily unused)Uniprot identifier	
 Identifiers:kegg.compound	Column	Species	String	(temporarily unused)Kegg compound identifier	

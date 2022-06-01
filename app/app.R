@@ -105,7 +105,10 @@ server <- function(input, output, session) {
       bsCollapsePanel("Homescreen",
         textInput("set_documentname", "Please name your document", placeholder = "Documentname"),
         htmlOutput("welcome"),
+        tags$br(),
         actionButton("new_sbtab", "Create new SBtab"),
+        actionButton("upload_sysrev", "Source data from Sysrev"),
+        tags$br(), tags$br(),
         actionButton("upload_sbtab", "Upload an SBtab object"),
         actionButton("upload_sbml", "Upload an SBML object")
       ),
@@ -126,6 +129,13 @@ server <- function(input, output, session) {
                              "text/plain",
                              ".xml")),
         actionButton("set_sbml", "Click here to continue (required)")
+      ),
+      # Source data from a Sysrev project
+      bsCollapsePanel("Upload Sysrev",
+        textInput("set_pid", "Please provide the pid of the Sysrev project", placeholder = "pid"),
+        textInput("set_aid", "Please provide the aid of the article", placeholder = "aid"),
+        passwordInput("sr_token", "Please provide your Sysrev developer token", placeholder = "Token"),
+        actionButton("set_sysrev", "Click here to continue (required)")
       ),
       # download page for SBtab/SBML
       bsCollapsePanel("Save and download",
@@ -153,6 +163,11 @@ server <- function(input, output, session) {
     updateCollapse(session, "homescreen", open = "Save and download")
   })
   
+  # Open "Upload Sysrev" panel when "Source data from Sysrev" is selected
+  observeEvent(input$upload_sysrev, {
+    updateCollapse(session, "homescreen", open = "Upload Sysrev")
+  })
+  
   # Open "Upload SBtab" panel when "Upload an SBtab object" is selected
   observeEvent(input$upload_sbtab, {
     updateCollapse(session, "homescreen", open = "Upload SBtab")
@@ -163,13 +178,13 @@ server <- function(input, output, session) {
     updateCollapse(session, "homescreen", open = "Upload SBML")
   })
   
-  # read input sbtab to dashboard
+  # read input SBtab to dashboard
   observeEvent(input$sbtabfile_in, {
     # debug message
     debug_msg("Uploading SBtabfile")
     # return message when uploading wrong file
     tryCatch({
-      # read the sbtab into list of tables
+      # read the SBtab into list of tables
       local$sbtabfile <- read_sbtab(input$sbtabfile_in$datapath, "definitions.tsv")
       # print names of tables in the file to console
       print(paste("File", paste0("'",input$sbtabfile_in$name, "'"), "contains tabs:"))
@@ -207,9 +222,8 @@ server <- function(input, output, session) {
     debug_msg("Uploading SBMLfile")
     # return message when uploading wrong file
     tryCatch({
-      # convert sbml to sbtab and read into list of tables
+      # convert sbml to SBtab and read into list of tables
       local$sbtabfile <- read_sbml(input$sbmlfile_in$datapath)
-      #local$sbtabfile <- suppressWarnings(read_sbtab(sbtab_string))
       # print names of tables in the file to console
       print(paste("File", paste0("'",input$sbmlfile_in$name, "'"), "contains tabs:"))
       print(names(local$sbtabfile))
@@ -240,12 +254,12 @@ server <- function(input, output, session) {
     })
   })  
   
-  # open table tabs from uploaded files
+  # open table tabs from uploaded SBtab/SBML files
   observeEvent(input$set_sbtab|input$set_sbml, {
     req(input$set_sbtab|input$set_sbml)
     # debug message
     debug_msg("Opening tables")
-    # open tabs included in sbtab in the dashboard
+    # open tabs included in SBtab in the dashboard
     lapply(names(local$sbtabfile), function(table){
       # update empty/current tab lists if the table is not open yet
       if(!(table %in% local$current_tabs)){
@@ -294,6 +308,118 @@ server <- function(input, output, session) {
     names(local$headers) <- local$current_tabs
     
     # open "select_tables" panel after SBtab or SBML is uploaded and the continue button is pressed
+    updateTabItems(session, "tabs", selected = "select_tables")
+    updateCollapse(session, "homescreen", open = "Save and download")
+    # debug message
+    debug_msg("Tables opened succesfully")
+  })
+  
+  # open tables from sourced Sysrev project data
+  observeEvent(input$set_sysrev, {
+    # debug message
+    debug_msg("Sourcing Sysrev")
+    # return message when uploading wrong file
+    tryCatch({
+      # source Sysrev project and write into list of tables
+      local$sbtabfile <- list_answers_unnested(input$set_pid, input$set_aid, "aid", input$sr_token)
+      # fix Sysrev names to match definitions file
+      # Modifier to Modifiers in Reaction table
+      if("Modifier" %in% names(local$sbtabfile$Reaction)){
+        local$sbtabfile$Reaction <- local$sbtabfile$Reaction %>% rename(Modifiers = Modifier)
+      } # IsReversible? to IsReversible in Reaction table
+      if("IsReversible?" %in% names(local$sbtabfile$Reaction)){
+        local$sbtabfile$Reaction <- local$sbtabfile$Reaction %>% rename(IsReversible = `IsReversible?`)
+      } # IsConstant? to Isconstant in Species table
+      if("IsConstant?" %in% names(local$sbtabfile$Species)){
+        local$sbtabfile$Species <- local$sbtabfile$Species %>% rename(IsConstant = `IsConstant?`)
+      } # remove Symbol from Species table
+      if("Symbol" %in% names(local$sbtabfile$Species)){
+        local$sbtabfile$Species <- local$sbtabfile$Species[-which(names(local$sbtabfile$Species) == "Symbol")]
+      } # remove Type from Compartment table
+      if("Type" %in% names(local$sbtabfile$Compartment)){
+        local$sbtabfile$Compartment <- local$sbtabfile$Compartment[-which(names(local$sbtabfile$Compartment) == "Type")]
+      } # remove SBOTerm from Compartment table
+      if("SBOTerm" %in% names(local$sbtabfile$Compartment)){
+        local$sbtabfile$Compartment <- local$sbtabfile$Compartment[-which(names(local$sbtabfile$Compartment) == "SBOTerm")]
+      }
+      # print names of tables in the file to console
+      print(paste("Project contains tabs:"))
+      print(names(local$sbtabfile))
+      local$data[names(local$sbtabfile)] <- lapply(names(local$sbtabfile), function(name){
+        # make sure all columns start with uppercase letter
+        colnames(local$sbtabfile[[name]]) <- 
+          gsub("(^|[[:space:]])([[:alpha:]])", "\\1\\U\\2",
+               colnames(local$sbtabfile[[name]]),
+               perl = TRUE)
+        local$data[[name]] <- add_row(local$data[[name]], local$sbtabfile[[name]], .after = 0)
+      })
+    }, error = function(e){
+      shinyalert(
+        title = "Error",
+        text = e$message,
+        size = "l", 
+        closeOnClickOutside = TRUE,
+        type = "warning",
+        showConfirmButton = TRUE,
+        confirmButtonText = "Continue",
+        confirmButtonCol = "#1fa9ff",
+        animation = FALSE
+      )
+      # debug message
+      debug_msg(paste("Sysrev upload error:", e$message))
+    })
+    
+    # debug message
+    debug_msg("Opening tables")
+    # open tabs included in SBtab in the dashboard
+    lapply(names(local$sbtabfile), function(table){
+      # update empty/current tab lists if the table is not open yet
+      if(!(table %in% local$current_tabs)){
+        local$empty_tabs <- local$empty_tabs[local$empty_tabs!=table]
+        local$current_tabs <- append(local$current_tabs, table)
+        # tab name
+        local$subitems <- rbind(local$subitems,
+                                data.frame(id = table, name = table)
+        )
+        # write table header for file
+        local$headers <- append(local$headers,
+                                paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="1.0"', ' Document="', input$set_documentname, '"',' TableType="', table, '"',' TableName="', table, '"')
+        )
+        # remove name of table from choices
+        local$choices <- local$choices[local$choices!=table]
+        # render dynamic table and description corresponding to tab name
+        output[[paste0("sub_", table)]] <- renderUI({
+          upload_tableUI(table, local$sbtabfile)
+        })
+        # save hot values to reactive dataframe
+        observeEvent(input[[paste0(table, "_hot")]], {
+          local$data[[table]] <- hot_to_r(input[[paste0(table, "_hot")]])
+        })
+        # update dynamic content in the created table
+        output[[paste0(table, "_hot")]] <- renderRHandsontable({
+          rhandsontable(local$data[[table]], rowHeaders = NULL) %>%
+            hot_cols(colWidths = 0.1) %>%
+            hot_col(col = input[[paste0(table, "_cols")]], colWidths = "100%")
+        })
+        # output description table
+        output[[paste0("Description", table)]] <- outputTableDescription(table)
+        # Head to save and download tab
+        observeEvent(input[[paste0("goto_download_", table)]], {
+          updateTabItems(session, "tabs", selected = "setup")
+          updateCollapse(session, "homescreen", open = "Save and download")
+        })
+      }
+      # If table was opened previously, open filled columns
+      updateCheckboxGroupInput(session, paste0(table, "_cols"),
+                               selected = c("ReferenceDOI",
+                                            "ID",
+                                            "ReactionID",
+                                            names(local$sbtabfile[[table]][which(local$sbtabfile[[table]][1,] != "")]))
+      )
+    })
+    names(local$headers) <- local$current_tabs
+    
+    # open "select_tables" panel after sourcing is complete and the continue button is pressed
     updateTabItems(session, "tabs", selected = "select_tables")
     updateCollapse(session, "homescreen", open = "Save and download")
     # debug message
@@ -382,8 +508,8 @@ server <- function(input, output, session) {
       sbml_string <- write_sbml(read_sbtab("physmap.tsv", "definitions.tsv"))
       write_xml(sbml_string, "physmap.xml")
       },
-      # make it so that sbtab conversion errors don't crash the app 
-      # (incomplete sbtab document will cause the .py script to return error)
+      # make it so that SBtab conversion errors don't crash the app 
+      # (incomplete SBtab document will cause the .py script to return error)
       warning = function(warn){
         print(warn)
       },
