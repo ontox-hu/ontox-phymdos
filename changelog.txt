@@ -1,0 +1,32 @@
+1.04:
+  What's new:
+    - Extra description and examples on table elements in the description tables
+    - Added error handlers for SBtab and SBML upload
+    - Added some test SBtab files to repository
+    - SBtab version selection is no longer an option
+  Fixes:
+    - Fixed bug where last column of tables contains same input as first column upon SBtab upload
+    - App won't crash as much with the new error handlers
+
+1.03:
+  What's new:
+    - Added status counter for MINERVA visualization.
+    - Created CSS template for dashboard styling.
+    - Small update on README
+    - Files have been restructured 
+  Fixes:
+    - MINERVA now opens after the map has rendered so no more blank pages.
+    
+1.02:
+  What's new:
+    - Added MINERVA to the published version of the app .
+    - Users can now choose to load MINERVA without annotation which can be significantly faster than with annotation. 
+  Fixes:
+    - Bug intefering with SBTab -> SBML converter.
+    - Minor bugs.
+    - File structuring.
+    
+1.01:
+  What's new:
+    - Added a minimal version of the definitions file out of which the tables are created. Only 3 tables remain: Reaction, Compound and Compartment.
+    

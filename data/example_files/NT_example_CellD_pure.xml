@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
+<model metaid="Ex" id="Ex">
+<annotation/>
+<listOfUnitDefinitions>
+<unitDefinition metaid="substance" id="substance" name="substance">
+<listOfUnits>
+<unit metaid="CDMT00010" kind="mole"/>
+</listOfUnits>
+</unitDefinition>
+<unitDefinition metaid="volume" id="volume" name="volume">
+<listOfUnits>
+<unit metaid="CDMT00011" kind="litre"/>
+</listOfUnits>
+</unitDefinition>
+<unitDefinition metaid="area" id="area" name="area">
+<listOfUnits>
+<unit metaid="CDMT00012" kind="metre" exponent="2"/>
+</listOfUnits>
+</unitDefinition>
+<unitDefinition metaid="length" id="length" name="length">
+<listOfUnits>
+<unit metaid="CDMT00020" kind="metre"/>
+</listOfUnits>
+</unitDefinition>
+<unitDefinition metaid="time" id="time" name="time">
+<listOfUnits>
+<unit metaid="CDMT00021" kind="second"/>
+</listOfUnits>
+</unitDefinition>
+</listOfUnitDefinitions>
+<listOfCompartments>
+<compartment metaid="default" id="default" size="1" units="volume"/>
+<compartment metaid="c1" id="c1" name="Mesoderm" size="1" units="volume" outside="default">
+<annotation/>
+</compartment>
+</listOfCompartments>
+<listOfSpecies>
+<species metaid="s1" id="s1" name="ATRA" compartment="c1" initialAmount="0">
+<annotation/>
+</species>
+<species metaid="s2" id="s2" name="Ret.ald." compartment="c1" initialAmount="0">
+<annotation/>
+</species>
+<species metaid="s3" id="s3" name="Vit.A" compartment="c1" initialAmount="0">
+<annotation/>
+</species>
+<species metaid="s4" id="s4" name="RDH10" compartment="c1" initialAmount="0">
+<annotation/>
+</species>
+<species metaid="s6" id="s6" name="DHRS3" compartment="c1" initialAmount="0">
+<annotation/>
+</species>
+<species metaid="s7" id="s7" name="DHRS3_g" compartment="c1" initialAmount="0">
+<annotation/>
+</species>
+<species metaid="s8" id="s8" name="RDH10_g" compartment="c1" initialAmount="0">
+<annotation/>
+</species>
+<species metaid="s9" id="s9" name="ATRA_e" compartment="default" initialAmount="0">
+<annotation/>
+</species>
+</listOfSpecies>
+<listOfReactions>
+<reaction metaid="re1" id="re1" reversible="false">
+<annotation/>
+<listOfReactants>
+<speciesReference metaid="CDMT00001" species="s2"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00002" species="s1"/>
+</listOfProducts>
+</reaction>
+<reaction metaid="re2" id="re2" reversible="false">
+<annotation/>
+<listOfReactants>
+<speciesReference metaid="CDMT00003" species="s3"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00004" species="s2"/>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00005" species="s4"/>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re3" id="re3" reversible="false">
+<annotation/>
+<listOfReactants>
+<speciesReference metaid="CDMT00006" species="s2"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00007" species="s3"/>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00013" species="s6"/>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re5" id="re5" reversible="false">
+<annotation/>
+<listOfReactants>
+<speciesReference metaid="CDMT00014" species="s8"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00015" species="s4"/>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00016" species="s1"/>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re6" id="re6" reversible="false">
+<annotation/>
+<listOfReactants>
+<speciesReference metaid="CDMT00017" species="s7"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00018" species="s6"/>
+</listOfProducts>
+<listOfModifiers>
+<modifierSpeciesReference metaid="CDMT00019" species="s1"/>
+</listOfModifiers>
+</reaction>
+<reaction metaid="re7" id="re7" reversible="false">
+<annotation/>
+<listOfReactants>
+<speciesReference metaid="CDMT00008" species="s1"/>
+</listOfReactants>
+<listOfProducts>
+<speciesReference metaid="CDMT00009" species="s9"/>
+</listOfProducts>
+</reaction>
+</listOfReactions>
+</model>
+</sbml>
