@@ -1,6 +1,5 @@
 ## helpers to app
 source("R/sbtab_tables.R")
-source("R/read_sbtab.R")
 source("R/sbml_sbtab_converters.R")
 source("R/list_answers_unnested.R")
 

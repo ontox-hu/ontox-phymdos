@@ -7,14 +7,8 @@ re3		STATE_TRANSITION	FALSE	s2	s5	s6
 re4		TRANSLATION	FALSE	s7	s4	s1					
 re5		TRANSLATION	FALSE	s8	s6	s1					
 re6		TRANSPORT	FALSE	s9	s5	s10					
-re7		TRANSLATION	FALSE	s22	s3	s1					
+re7		TRANSLATION	FALSE	s11	s3	s1					
 											
-
-!!SBtab TableID="t_Compartment" SBtabVersion="1.0" Document="" TableType="Compartment" TableName="Compartment"
-!ID	!Name	!OuterCompartment	!Size	!Unit
-c2	c2		1.0	volume
-c1	Mesoderm		1.0	volume
-				
 
 !!SBtab TableID="t_Species" SBtabVersion="1.0" Document="" TableType="Species" TableName="Species"
 !ID	!Name	!Type	!PositionToCompartment	!InitialValue	!Unit	!Location	!IsConstant	!InitialConcentration	!HasOnlySubstanceUnits	!SBOTerm	!Resolver	!Identifiers:ec-code	!Identifiers:uniprot	!Identifiers:kegg.compound	!Identifiers:obo.chebi	!Identifiers:kegg.orthology
@@ -30,4 +24,10 @@ s9	Vit.A_e	SIMPLE_MOLECULE				c2	FALSE	0.0	FALSE		CHEBI:12777
 s10	STRA6	PROTEIN				c1	FALSE	0.0	FALSE		uniprot:Q9BX79					
 s11	RALDH2_g	GENE				c1	FALSE	0.0	FALSE		ensembl:ENSG00000128918					
 																
+
+!!SBtab TableID="t_Compartment" SBtabVersion="1.0" Document="" TableType="Compartment" TableName="Compartment"
+!ID	!Name	!OuterCompartment	!Size	!Unit
+c2	c2		1.0	volume
+c1	Mesoderm		1.0	volume
+				
 

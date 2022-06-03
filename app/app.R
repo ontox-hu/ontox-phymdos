@@ -86,8 +86,6 @@ server <- function(input, output, session) {
     current_tabs = list(),
     subitems = data.frame(id = integer(), name = character()),
     choices = table_names,
-    # create empty list for table headers (for exporting)
-    headers = list(),
     # make reactive dataframes out of table choices
     data = sbtab_tables_list,
     # create empty list for data upload
@@ -269,10 +267,6 @@ server <- function(input, output, session) {
         local$subitems <- rbind(local$subitems,
                                 data.frame(id = table, name = table)
                                 )
-        # write table header for file
-        local$headers <- append(local$headers,
-                                paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="1.0"', ' Document="', input$set_documentname, '"',' TableType="', table, '"',' TableName="', table, '"')
-        )
         # remove name of table from choices
         local$choices <- local$choices[local$choices!=table]
         # render dynamic table and description corresponding to tab name
@@ -305,7 +299,6 @@ server <- function(input, output, session) {
                                             names(local$sbtabfile[[table]][which(local$sbtabfile[[table]][1,] != "")]))
       )
     })
-    names(local$headers) <- local$current_tabs
     
     # open "select_tables" panel after SBtab or SBML is uploaded and the continue button is pressed
     updateTabItems(session, "tabs", selected = "select_tables")
@@ -334,13 +327,13 @@ server <- function(input, output, session) {
         local$sbtabfile$Species <- local$sbtabfile$Species %>% rename(IsConstant = `IsConstant?`)
       } # remove Symbol from Species table
       if("Symbol" %in% names(local$sbtabfile$Species)){
-        local$sbtabfile$Species <- local$sbtabfile$Species[-which(names(local$sbtabfile$Species) == "Symbol")]
+        local$sbtabfile$Species <- local$sbtabfile$Species[names(local$sbtabfile$Species) != "Symbol"]
       } # remove Type from Compartment table
       if("Type" %in% names(local$sbtabfile$Compartment)){
-        local$sbtabfile$Compartment <- local$sbtabfile$Compartment[-which(names(local$sbtabfile$Compartment) == "Type")]
+        local$sbtabfile$Compartment <- local$sbtabfile$Compartment[names(local$sbtabfile$Compartment) != "Type"]
       } # remove SBOTerm from Compartment table
       if("SBOTerm" %in% names(local$sbtabfile$Compartment)){
-        local$sbtabfile$Compartment <- local$sbtabfile$Compartment[-which(names(local$sbtabfile$Compartment) == "SBOTerm")]
+        local$sbtabfile$Compartment <- local$sbtabfile$Compartment[names(local$sbtabfile$Compartment) != "SBOTerm"]
       }
       # print names of tables in the file to console
       print(paste("Project contains tabs:"))
@@ -381,10 +374,6 @@ server <- function(input, output, session) {
         local$subitems <- rbind(local$subitems,
                                 data.frame(id = table, name = table)
         )
-        # write table header for file
-        local$headers <- append(local$headers,
-                                paste0('!!SBtab TableID="t_', table, '"', ' SBtabVersion="1.0"', ' Document="', input$set_documentname, '"',' TableType="', table, '"',' TableName="', table, '"')
-        )
         # remove name of table from choices
         local$choices <- local$choices[local$choices!=table]
         # render dynamic table and description corresponding to tab name
@@ -417,7 +406,6 @@ server <- function(input, output, session) {
                                             names(local$sbtabfile[[table]][which(local$sbtabfile[[table]][1,] != "")]))
       )
     })
-    names(local$headers) <- local$current_tabs
     
     # open "select_tables" panel after sourcing is complete and the continue button is pressed
     updateTabItems(session, "tabs", selected = "select_tables")
@@ -453,11 +441,6 @@ server <- function(input, output, session) {
     local$subitems <- rbind(local$subitems,
                             data.frame(id = id, name = subitem)
                             )
-    # write table header for file
-    local$headers <- append(local$headers,
-                            paste0('!!SBtab TableID="t_', subitem, '"', ' SBtabVersion="1.0"', ' Document="', input$set_documentname, '"',' TableType="', subitem, '"',' TableName="', subitem, '"')
-                            )
-    names(local$headers) <- local$current_tabs
     # remove name of table from choices
     local$choices <- local$choices[local$choices!=subitem]
     updateTabItems(session, "tabs", selected = "select_tables")
@@ -486,26 +469,10 @@ server <- function(input, output, session) {
   
   ## write tsv and xml documents actively
   observeEvent(local$data, {
-    # set documentname header in SBtab output file
-    documentname_set <-
-      paste0('!!!SBtab Document="', 
-             if(is_empty(input$set_documentname)){
-               "Documentname"
-               }else{
-                 input$set_documentname
-                 }, 
-             '"') %>% 
-      as.character()
-    write_lines(documentname_set, file = "physmap.tsv")
-    # write tables into SBtab output file
-    for(table in local$current_tabs){
-      write_lines(local$headers[[table]], file = "physmap.tsv", append = TRUE)
-      write_tsv(set_cols(local$data[[table]]), file = "physmap.tsv", col_names = TRUE, append = TRUE, na = "")
-      write_lines("", file = "physmap.tsv", append = TRUE)
-    }
+    write_sbtab(local$data, input$set_documentname)
     # write SBML output file and string
     tryCatch({
-      sbml_string <- write_sbml(read_sbtab("physmap.tsv", "definitions.tsv"))
+      sbml_string <- write_sbml(local$data)
       write_xml(sbml_string, "physmap.xml")
       },
       # make it so that SBtab conversion errors don't crash the app 
@@ -558,7 +525,7 @@ server <- function(input, output, session) {
   output$download_xml <- downloadHandler(
     filename = "physmap.xml",
     content = function(file) {
-      write_xml(sbml_string, file)
+      write_xml(write_sbml(local$data), file)
     })
   
   # render text for minerva in download tab

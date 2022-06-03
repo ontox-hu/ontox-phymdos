@@ -27,7 +27,7 @@
           <speciesReference metaid="CDMT2" species="s1"/>
         </listOfProducts>
         <listOfModifiers>
-          <modifierSpeciesReference metaid="CDMT3" species="s3" sboTerm="SBO:0000013"/>
+          <modifierSpeciesReference metaid="CDMT3" species="s3" sboTerm="NA"/>
         </listOfModifiers>
       </reaction>
       <reaction metaid="re2" id="re2" reversible="false" sboTerm="SBO:0000176">
@@ -38,7 +38,7 @@
           <speciesReference metaid="CDMT5" species="s2"/>
         </listOfProducts>
         <listOfModifiers>
-          <modifierSpeciesReference metaid="CDMT6" species="s4" sboTerm="SBO:0000013"/>
+          <modifierSpeciesReference metaid="CDMT6" species="s4" sboTerm="NA"/>
         </listOfModifiers>
       </reaction>
       <reaction metaid="re3" id="re3" reversible="false" sboTerm="SBO:0000176">
@@ -49,7 +49,7 @@
           <speciesReference metaid="CDMT8" species="s5"/>
         </listOfProducts>
         <listOfModifiers>
-          <modifierSpeciesReference metaid="CDMT9" species="s6" sboTerm="SBO:0000013"/>
+          <modifierSpeciesReference metaid="CDMT9" species="s6" sboTerm="NA"/>
         </listOfModifiers>
       </reaction>
       <reaction metaid="re4" id="re4" reversible="false" sboTerm="SBO:0000184">
@@ -60,7 +60,7 @@
           <speciesReference metaid="CDMT11" species="s4"/>
         </listOfProducts>
         <listOfModifiers>
-          <modifierSpeciesReference metaid="CDMT12" species="s1" sboTerm="SBO:0000013"/>
+          <modifierSpeciesReference metaid="CDMT12" species="s1" sboTerm="NA"/>
         </listOfModifiers>
       </reaction>
       <reaction metaid="re5" id="re5" reversible="false" sboTerm="SBO:0000184">
@@ -71,7 +71,7 @@
           <speciesReference metaid="CDMT14" species="s6"/>
         </listOfProducts>
         <listOfModifiers>
-          <modifierSpeciesReference metaid="CDMT15" species="s1" sboTerm="SBO:0000013"/>
+          <modifierSpeciesReference metaid="CDMT15" species="s1" sboTerm="NA"/>
         </listOfModifiers>
       </reaction>
       <reaction metaid="re6" id="re6" reversible="false" sboTerm="SBO:0000185">
@@ -82,18 +82,18 @@
           <speciesReference metaid="CDMT17" species="s5"/>
         </listOfProducts>
         <listOfModifiers>
-          <modifierSpeciesReference metaid="CDMT18" species="s10" sboTerm="SBO:0000013"/>
+          <modifierSpeciesReference metaid="CDMT18" species="s10" sboTerm="NA"/>
         </listOfModifiers>
       </reaction>
       <reaction metaid="re7" id="re7" reversible="false" sboTerm="SBO:0000184">
         <listOfReactants>
-          <speciesReference metaid="CDMT19" species="s22"/>
+          <speciesReference metaid="CDMT19" species="s11"/>
         </listOfReactants>
         <listOfProducts>
           <speciesReference metaid="CDMT20" species="s3"/>
         </listOfProducts>
         <listOfModifiers>
-          <modifierSpeciesReference metaid="CDMT21" species="s1" sboTerm="SBO:0000013"/>
+          <modifierSpeciesReference metaid="CDMT21" species="s1" sboTerm="NA"/>
         </listOfModifiers>
       </reaction>
     </listOfReactions>

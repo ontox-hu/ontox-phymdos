@@ -32,7 +32,7 @@ sbtab_definitions <- sbtab_definitions %>%
 split_def_tables <- split(sbtab_definitions, as_factor(sbtab_definitions$`!Parent`))
 split_def_tables <- split_def_tables[names(split_def_tables) != "SBtab"]
 
-## define tablen ames to vector and dataframe
+## define table names to vector and dataframe
 table_names <- names(split_def_tables)
 table_names_df <- tibble(names(split_def_tables))
 names(table_names_df) <- "name"
