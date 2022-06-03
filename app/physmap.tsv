@@ -1,62 +1,33 @@
 !!!SBtab Document=""
 !!SBtab TableID="t_Reaction" SBtabVersion="1.0" Document="" TableType="Reaction" TableName="Reaction"
-!ID	!Name	!Type	!IsReversible	!ReactionFormula	!Modifier	!Regulator	!Location	!KineticLaw	!SBOTerm
-re1		reaction	FALSE	s1 <=>s4			c1		 
-re2		reaction	TRUE	s2 <=> s3		s4	c1		 
-re3		reaction	TRUE	s5 <=> s6		s1	c2		 
-re4		reaction	TRUE	s36 <=>  s11		s1	c2		 
-re5		reaction	TRUE	s7 <=> s8		s3	c2		 
-re6		reaction	TRUE	s9 <=> s10		s3	c2		 
-re7		reaction	TRUE	s14 <=> s15		s3	c2		 
-re8		reaction	TRUE	s16 <=> s17	s3	c2			 
-re9		reaction	TRUE	s18 <=> s19		s3	c2		 
-re10		reaction	TRUE	s12 <=> s13		s11	c3		 
-re11		reaction	TRUE	s20 <=> s21		s10	c3		 
-re12		reaction	TRUE	s22 <=> s23		s17	c3		 
-re13		reaction	TRUE	s24 <=> s25		s19	c3		 
-re14		reaction	TRUE	s26 <=> s27		s8	c4		 
-re15		reaction	TRUE	s28 <=> s29		s15	c4		 
-									
+!ID	!Name	!Type	!IsReversible	!Reactants	!Products	!Modifiers	!ModifierType	!Regulator	!Location	!KineticLaw	!SBOTerm
+re1		STATE_TRANSITION	FALSE	s2	s1	s3					
+re2		STATE_TRANSITION	FALSE	s5	s2	s4					
+re3		STATE_TRANSITION	FALSE	s2	s5	s6					
+re4		TRANSLATION	FALSE	s7	s4	s1					
+re5		TRANSLATION	FALSE	s8	s6	s1					
+re6		TRANSPORT	FALSE	s9	s5	s10					
+re7		TRANSLATION	FALSE	s11	s3	s1					
+											
 
-!!SBtab TableID="t_Compound" SBtabVersion="1.0" Document="" TableType="Compound" TableName="Compound"
-!ID	!Name	!Type	!Symbol	!InitialValue	!Unit	!Location	!IsConstant	!InitialConcentration	!HasOnlySubstanceUnits	!SBOTerm	!Identifiers:ec-code	!Identifiers:uniprot	!Identifiers:kegg.compound	!Identifiers:obo.chebi	!Identifiers:kegg.orthology
-s1	Clav	SIMPLE_MOLECULE			mM	c1		1.1							 
-s2	NRF2.L	PROTEIN				c1									 
-s3	NRF2.H	PROTEIN				c1									 
-s4	ROS	SIMPLE_MOLECULE				c1									 
-s5	FXR.H	PROTEIN				c2									 
-s6	FXR.L	PROTEIN				c2									 
-s7	NTCP.A	GENE				c2									 
-s8	NTCP.I	GENE				c2									 
-s9	BSEP.A	GENE				c2									 
-s10	BSEP.I	GENE				c2									 
-s11	MDR2.I	GENE				c2									 
-s12	MDR2.H	PROTEIN				c3									 
-s13	MDR2.:L	PROTEIN				c3									 
-s14	OSTa.A	GENE				c2									 
-s15	OSTa.I	GENE				c2									 
-s16	ABCG5.A	GENE				c2									 
-s17	ABCG5.I	GENE				c2									 
-s18	MRP2.I	GENE				c2									 
-s19	MRP2.A	GENE				c2									 
-s20	BSEP.H	PROTEIN				c3									 
-s21	BSEP.L	PROTEIN				c3									 
-s22	ABCG5.H	PROTEIN				c3									 
-s23	ABCG5.L	PROTEIN				c3									 
-s24	MRP2.L	PROTEIN				c3									 
-s25	MRP2.H	PROTEIN				c3									 
-s26	NTCP.H	PROTEIN				c4									 
-s27	NTCP.L	PROTEIN				c4									 
-s28	OSTa.H	PROTEIN				c4									 
-s29	OSTa.L	PROTEIN				c4									 
-s36	Cholestetol	SIMPLE_MOLECULE				c1									 
-															
+!!SBtab TableID="t_Species" SBtabVersion="1.0" Document="" TableType="Species" TableName="Species"
+!ID	!Name	!Type	!PositionToCompartment	!InitialValue	!Unit	!Location	!IsConstant	!InitialConcentration	!HasOnlySubstanceUnits	!SBOTerm	!Resolver	!Identifiers:ec-code	!Identifiers:uniprot	!Identifiers:kegg.compound	!Identifiers:obo.chebi	!Identifiers:kegg.orthology
+s1	ATRA	SIMPLE_MOLECULE				c1	FALSE	0.0	FALSE		CHEBI:15367					
+s2	Retinaldehyde	SIMPLE_MOLECULE				c1	FALSE	0.0	FALSE		CHEBI:17898					
+s3	RALDH2	PROTEIN				c1	FALSE	0.0	FALSE		uniprot:O94788					
+s5	Vit.A	SIMPLE_MOLECULE				c1	FALSE	0.0	FALSE		CHEBI:12777					
+s4	RDH10	PROTEIN				c1	FALSE	0.0	FALSE		uniprot:Q8IZV5					
+s6	DHRS3	PROTEIN				c1	FALSE	0.0	FALSE		uniprot:O75911					
+s7	RDH10_g	GENE				c1	FALSE	0.0	FALSE		ensembl:ENSG00000121039					
+s8	DHRS3_g	GENE				c1	FALSE	0.0	FALSE		ensembl:ENSG00000162496					
+s9	Vit.A_e	SIMPLE_MOLECULE				c2	FALSE	0.0	FALSE		CHEBI:12777					
+s10	STRA6	PROTEIN				c1	FALSE	0.0	FALSE		uniprot:Q9BX79					
+s11	RALDH2_g	GENE				c1	FALSE	0.0	FALSE		ensembl:ENSG00000128918					
+																
 
 !!SBtab TableID="t_Compartment" SBtabVersion="1.0" Document="" TableType="Compartment" TableName="Compartment"
-!ID	!Name	!Type	!OuterCompartment	!Size	!Unit	!SBOTerm
-c1	Cytosol					 
-c2	Nucleus					 
-c3	Plasma membrane	apical				 
-c4	Plasma membrane	basolateral				 
-						
+!ID	!Name	!OuterCompartment	!Size	!Unit
+c2	c2		1.0	volume
+c1	Mesoderm		1.0	volume
+				
 

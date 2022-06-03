@@ -5,9 +5,9 @@ account: daniel.roodzant
 server: rstudio-connect.hu.nl
 hostUrl: https://rstudio-connect.hu.nl/__api__
 appId: 12
-bundleId: 65
+bundleId: 151
 url: https://rstudio-connect.hu.nl/phymdos/
-when: 1647441833.95008
-lastSyncTime: 1647441833.95008
+when: 1649930586.26597
+lastSyncTime: 1649930586.26597
 asMultiple: FALSE
 asStatic: FALSE

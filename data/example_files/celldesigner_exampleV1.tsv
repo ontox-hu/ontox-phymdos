@@ -1,35 +1,34 @@
 !!!SBtab Document="celldesigner_defs_1"
-!!SBtab TableID="t_Species" SBtabVersion="1.0" Document="" TableType="Species" TableName="Species"
-!ID	!Name	!Class	!SpeciesType	!Compartment	!PositionToCompartment	!Included	!QuantityType	!InitialQuantity	!SubstanceUnits	!HasOnlySubstanceUnits	!BoundaryCondition	!Costants	!Hypothetical	!Homomultimer	!ReferenceDatabase	!ReferenceID
-s1	ATRA	Simple molecule		c1	Inside			0								
-s3	Vit.A	Simple molecule		c1	Inside			0								
-s4	RDH10	Protein		c1	Inside			0								
-s6	DHRS3	Protein		c1	Inside			0								
-s8	RDH10_g	Gene		c1	Inside			0								
-s10	Vit.A_e	Simple molecule		default	Inside			0								
-s12	STRA6	Protein		c1	Transmembrane			0								
-s7	RALDH2_g	Gene		c1	Inside			0								
-s13	RALDH2	Protein		c1	Inside			0								
-s14	DHRS3_g	Gene		c1	Inside			0								
-s15	ATRA_i	Simple molecule		c1	Inside			0								
-s16	CYP26A1_g	Gene		c1	Inside			0								
-s17	CYP26A1	Protein		c1	Inside			0								
-s2	Retinaldehyde	Simple molecule		c1	Inside			0								
+!!SBtab TableID="t_Compound" SBtabVersion="1.0" Document="" TableType="Compound" TableName="Compound"
+!ID	!Name	!Type	!Location	!PositionToCompartment	!Unit	!InitialConcentration	!HasOnlySubstanceUnits
+s1	ATRA	Simple molecule	c1	Inside		0	
+s3	Vit.A	Simple molecule	c1	Inside		0	
+s4	RDH10	Protein	c1	Inside		0	
+s6	DHRS3	Protein	c1	Inside		0	
+s8	RDH10_g	Gene	c1	Inside		0	
+s10	Vit.A_e	Simple molecule	default	Inside		0	
+s12	STRA6	Protein	c1	Transmembrane		0	
+s7	RALDH2_g	Gene	c1	Inside		0	
+s13	RALDH2	Protein	c1	Inside		0	
+s14	DHRS3_g	Gene	c1	Inside		0	
+s15	ATRA_i	Simple molecule	c1	Inside		0	
+s16	CYP26A1_g	Gene	c1	Inside		0	
+s17	CYP26A1	Protein	c1	Inside		0	
+s2	Retinaldehyde	Simple molecule	c1	Inside		0	
  
-!!SBtab TableID="t_Reactions" SBtabVersion="1.0" Document="" TableType="Reactions" TableName="Reactions"
-!ID	!Name	!Type	!IsReversible	!Fast	!Reactants	!Products	!Modifiers	!Math
-re1		State transition			s2	s1	s13	
-re2		State transition			s3	s2	s4	
-re3		State transition			s2	s3	s6	
-re5		Translation			s8	s4	s1	
-re6		Translation			s14	s6	s1	
-re8		Transport			s10	s3	s12	
-re9		Translation			s7	s13	s1	
-re10		State transition			s1	s15	s17	
-re11		Translation			s16	s17	s1	
+!!SBtab TableID="t_Reaction" SBtabVersion="1.0" Document="" TableType="Reaction" TableName="Reaction"
+!ID	!Name	!Type	!IsReversible	!Reactants	!Products	!Modifiers
+re1		State transition		s2	s1	s13
+re2		State transition		s3	s2	s4
+re3		State transition		s2	s3	s6
+re5		Translation		s8	s4	s1
+re6		Translation		s14	s6	s1
+re8		Transport		s10	s3	s12
+re9		Translation		s7	s13	s1
+re10		State transition		s1	s15	s17
+re11		Translation		s16	s17	s1
  
-!!SBtab TableID="t_Compatments" SBtabVersion="1.0" Document="" TableType="Compartments" TableName="Compartments"
-!ID	!Name	!CompartmentType	!SpatialDimensions	!Size	!Units	!Outside	!Constant
-default				1	volume		
-c1	Mesoderm			1	volume	default	
- 
+!!SBtab TableID="t_Compatment" SBtabVersion="1.0" Document="" TableType="Compartment" TableName="Compartment"
+!ID	!Name	!Size	!Unit	!OuterCompartment
+default		1	volume	
+c1	Mesoderm	1	volume	default

@@ -1,25 +1,25 @@
 !!!SBtab Document="NT_example_CellD_pure"
 !!SBtab TableID="t_Compartment" SBtabVersion="1.0" Document="" TableType="Compartment" TableName="Compartment"
-!ID	!Name	!Type	!OuterCompartment	!Size	!Unit	!SBOTerm
-default	default			1.0		
-c1	Mesoderm		default	1.0		
+!ID	!Name	!OuterCompartment	!Size	!Unit
+default	default		1.0	
+c1	Mesoderm	default	1.0	
 
 !!SBtab TableID="t_Compound" SBtabVersion="1.0" Document="" TableType="Compound" TableName="Compound"
-!ID	!Name	!Type	!Symbol	!InitialValue	!Unit	!Location	!IsConstant	!InitialConcentration	!HasOnlySubstanceUnits	!SBOTerm
-s1	ATRA					c1	False	0.0	False	
-s2	Ret.ald.					c1	False	0.0	False	
-s3	Vit.A					c1	False	0.0	False	
-s4	RDH10					c1	False	0.0	False	
-s6	DHRS3					c1	False	0.0	False	
-s7	DHRS3_g					c1	False	0.0	False	
-s8	RDH10_g					c1	False	0.0	False	
-s9	ATRA_e					default	False	0.0	False	
+!ID	!Name	!Type	!InitialValue	!Unit	!Location	!IsConstant	!InitialConcentration	!HasOnlySubstanceUnits	!SBOTerm
+s1	ATRA	Simple molecule			c1	False	0.0	False	
+s2	Ret.ald.	Simple molecule			c1	False	0.0	False	
+s3	Vit.A	Simple molecule			c1	False	0.0	False	
+s4	RDH10	Protein			c1	False	0.0	False	
+s6	DHRS3	Protein			c1	False	0.0	False	
+s7	DHRS3_g	Gene			c1	False	0.0	False	
+s8	RDH10_g	Gene			c1	False	0.0	False	
+s9	ATRA_e	Simple molecule			default	False	0.0	False	
 
 !!SBtab TableID="t_Reaction" SBtabVersion="1.0" Document="" TableType="Reaction" TableName="Reaction"
-!ID	!Name	!Type	!IsReversible	!ReactionFormula	!Modifier	!Regulator	!Location	!KineticLaw	!SBOTerm
-re1			False	s2 <=> s1					
-re2			False	s3 <=> s2	s4				
-re3			False	s2 <=> s3	s6				
-re5			False	s8 <=> s4	s1				
-re6			False	s7 <=> s6	s1				
-re7			False	s1 <=> s9					
+!ID	!Name	!Type	!IsReversible	!ReactionFormula	!Modifiers	!Regulator	!Location	!KineticLaw	!SBOTerm
+re1		State transition	False	s2 <=> s1					
+re2		State transition	False	s3 <=> s2	s4				
+re3		State transition	False	s2 <=> s3	s6				
+re5		Translation	False	s8 <=> s4	s1				
+re6		Translation	False	s7 <=> s6	s1				
+re7		Transport	False	s1 <=> s9					

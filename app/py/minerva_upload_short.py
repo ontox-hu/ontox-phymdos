@@ -52,16 +52,16 @@ create_map_request = session.post(api_url+"/projects/"+project_id, data = {"file
 
 time.sleep(1)
 
-# GET LIST of all (sub)maps in the project
-get_submaps_request = session.get(api_url+"/projects/"+project_id+"/models/")
-content  = json.loads(get_submaps_request.text)
-# In this example there is only one map uploaded
-submap_id = content[0]['idObject']
-
-# PUT A COMMENT to the map pinned to the coordinates (100.00,100.00)
-create_comment_request = session.post(api_url+"/projects/"+project_id+"/comments/models/"+str(submap_id)+"/points/100.00,100.00", data = {"name":"Your Name", "email":"your_email@dot.com", "content":"automatically generated content","pinned":"true"})
-
-print("Comment details:", create_comment_request.text)
+# # GET LIST of all (sub)maps in the project
+# get_submaps_request = session.get(api_url+"/projects/"+project_id+"/models/")
+# content  = json.loads(get_submaps_request.text)
+# # In this example there is only one map uploaded
+# submap_id = content[0]['idObject']
+# 
+# # PUT A COMMENT to the map pinned to the coordinates (100.00,100.00)
+# create_comment_request = session.post(api_url+"/projects/"+project_id+"/comments/models/"+str(submap_id)+"/points/100.00,100.00", data = {"name":"Your Name", "email":"your_email@dot.com", "content":"automatically generated content","pinned":"true"})
+# 
+# print("Comment details:", create_comment_request.text)
 
 # GIVE PERMISSION to users to open the map
 grant_user_permission = session.patch(api_url+"/projects/"+project_id+":grantPrivileges", data = '[{"login":"anonymous", "privilegeType":"READ_PROJECT"}]')

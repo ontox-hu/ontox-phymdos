@@ -1,11 +1,7 @@
 ## helpers to app
-source(
-  "R/sbtab_tables.R"
-)
-
-source(
-  "R/read_sbtab.R"
-)
+source("R/sbtab_tables.R")
+source("R/sbml_sbtab_converters.R")
+source("R/list_answers_unnested.R")
 
 ## display debugging messages in R (if local) 
 # and in the console log (if running in shiny)
